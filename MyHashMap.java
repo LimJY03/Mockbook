@@ -1,12 +1,14 @@
+import java.util.ArrayList;
+
 public class MyHashMap<K, V> {
 
-	private static final int SIZE = 5;
+	private static final int TABLESIZE = 5;
 	private Entry<K, V>[] table;
 	private int size;
 	
 	
 	public MyHashMap() {
-		table = new Entry[SIZE];
+		table = new Entry[TABLESIZE];
 		size=0;
 	}
 
@@ -76,7 +78,7 @@ public class MyHashMap<K, V> {
 
 	public boolean containsKey(K key)
 	{
-		int hash = key.hashCode()%SIZE;
+		int hash = key.hashCode()%TABLESIZE;
 		
 		Entry<K,V> e = table[hash];
 		
@@ -97,7 +99,7 @@ public class MyHashMap<K, V> {
 	
 	
 	public void put(K key, V value) {
-		int hash = key.hashCode() % SIZE;
+		int hash = key.hashCode() % TABLESIZE;
 
 		Entry<K, V> e = table[hash];
 
@@ -125,7 +127,7 @@ public class MyHashMap<K, V> {
 	}
 
 	public V get(K key) {
-		int hash = key.hashCode() % SIZE;
+		int hash = key.hashCode() % TABLESIZE;
 
 		Entry<K, V> e = table[hash];
 
@@ -144,7 +146,7 @@ public class MyHashMap<K, V> {
 	}
 
 	public Entry<K, V> remove(K key) {
-		int hash = key.hashCode() % SIZE;
+		int hash = key.hashCode() % TABLESIZE;
 
 		Entry<K, V> e = table[hash];
 
@@ -179,7 +181,7 @@ public class MyHashMap<K, V> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < SIZE; i++) {
+		for (int i = 0; i < TABLESIZE; i++) {
 			if (table[i] != null) {
 				sb.append(i + " " + table[i] + "\n");
 			} else {
@@ -191,8 +193,21 @@ public class MyHashMap<K, V> {
 
 	}
 	
-//	public ArrayList<K> keySet()
-//	{
-//		
-//	}
+	public ArrayList<K> keySet()
+	{
+		ArrayList<K> keys = new ArrayList<>();
+		
+		for(int i=0;i<TABLESIZE;i++)
+		{
+			Entry<K,V> e = table[i];
+			
+			while(e!=null)
+			{
+				keys.add(e.getKey());
+				e=e.next;
+			}
+		}
+		
+		return keys;
+	}
 }
