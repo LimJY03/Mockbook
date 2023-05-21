@@ -1,3 +1,4 @@
+package MyHashMap;
 import java.util.ArrayList;
 
 public class MyHashMap<K, V> {
@@ -8,7 +9,7 @@ public class MyHashMap<K, V> {
 	
 	
 	public MyHashMap() {
-		table = new Entry[TABLESIZE];
+		table = (Entry<K,V>[])new Entry[TABLESIZE];
 		size=0;
 	}
 
@@ -78,7 +79,9 @@ public class MyHashMap<K, V> {
 
 	public boolean containsKey(K key)
 	{
-		int hash = key.hashCode()%TABLESIZE;
+//		int hash = key.hashCode()%TABLESIZE;
+		int hash = getHash(key);
+
 		
 		Entry<K,V> e = table[hash];
 		
@@ -99,7 +102,8 @@ public class MyHashMap<K, V> {
 	
 	
 	public void put(K key, V value) {
-		int hash = key.hashCode() % TABLESIZE;
+//		int hash = key.hashCode() % TABLESIZE;
+		int hash = getHash(key);
 
 		Entry<K, V> e = table[hash];
 
@@ -127,7 +131,8 @@ public class MyHashMap<K, V> {
 	}
 
 	public V get(K key) {
-		int hash = key.hashCode() % TABLESIZE;
+//		int hash = key.hashCode() % TABLESIZE;
+		int hash = getHash(key);
 
 		Entry<K, V> e = table[hash];
 
@@ -146,7 +151,8 @@ public class MyHashMap<K, V> {
 	}
 
 	public Entry<K, V> remove(K key) {
-		int hash = key.hashCode() % TABLESIZE;
+//		int hash = key.hashCode() % TABLESIZE;
+		int hash = getHash(key);
 
 		Entry<K, V> e = table[hash];
 
@@ -209,5 +215,16 @@ public class MyHashMap<K, V> {
 		}
 		
 		return keys;
+	}
+	
+	
+	private int getHash(K k)
+	{
+		int hash = k.hashCode()%TABLESIZE;
+		
+		if (hash < 0) 
+			  hash+= TABLESIZE;
+
+		return hash;
 	}
 }
