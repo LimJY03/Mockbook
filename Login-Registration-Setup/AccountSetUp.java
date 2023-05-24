@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 public class AccountSetUp {
     private String name, gender, job;
-    private int birthDay, birthMonth, birthYear;
+    private int birthDay, birthMonth, birthYear,age;
 
     public AccountSetUp() {
         // We can implement The CLI here if u want " or we can do it in on other file by using the functions of this class (more control) ".
@@ -194,7 +194,14 @@ public class AccountSetUp {
         LocalDate today = LocalDate.now(); // Today's date so we can combare between
         LocalDate birth = LocalDate.of(birthyear, birthmonth, birthday); // Birth date
         Period age = Period.between(birth, today); // gets the period between the birthdate and the date of today
+        this.age = age.getYears();
         return age.getYears(); // gets only the years. " no days or months" 
+       
+    }
+    
+    public int getAge()
+    {
+        return this.age;
     }
     
     
