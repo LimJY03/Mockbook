@@ -1,4 +1,3 @@
-package MyHashMap;
 import java.util.ArrayList;
 
 public class MyHashMap<K, V> {
