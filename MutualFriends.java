@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-// import java.util.Collection;
-// import java.util.Collections;
 import java.util.PriorityQueue;
 
 public class MutualFriends {
@@ -8,18 +6,6 @@ public class MutualFriends {
     public static ArrayList<String> getMutualFriends(String list1, String list2) {
         
         ArrayList<String> mutualFriends = new ArrayList<>();
-
-        // ArrayList<String> friendList1 = new ArrayList<>();
-        // ArrayList<String> friendList2 = new ArrayList<>();
-        
-        // Collections.addAll(friendList1, (list1.split(",")));
-        // Collections.addAll(friendList2, (list2.split(",")));
-        
-        // Collections.sort(friendList1);
-        // Collections.sort(friendList2);
-        
-        // friendList1.retainAll(friendList2);
-        // return friendList1;
 
         PriorityQueue<String> pq = new PriorityQueue<>((a, b) -> a.compareTo(b) > 0 ? 1 : -1);
         String[] friends = (list1 + "," + list2).split(",");
