@@ -1,5 +1,3 @@
-package assignmentds;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.sql.Connection;

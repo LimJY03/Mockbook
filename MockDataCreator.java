@@ -1,5 +1,3 @@
-package assignmentds;
-
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.Period;
