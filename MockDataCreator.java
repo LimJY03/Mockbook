@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.Period;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -111,9 +110,9 @@ public class MockDataCreator {
     StringBuilder addressBuilder = new StringBuilder();
     addressBuilder.append(houseNumber).append(" ");
     addressBuilder.append(roadName).append(", ");
-    addressBuilder.append(city).append(", ");
-    addressBuilder.append(postalCode).append(", ");
     addressBuilder.append(district).append(", ");
+    addressBuilder.append(postalCode).append(", ");
+    addressBuilder.append(city).append(", ");
     addressBuilder.append(country);
 
     return addressBuilder.toString();
