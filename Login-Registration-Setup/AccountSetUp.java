@@ -5,31 +5,72 @@
 
 
 import com.mycompany.project.DB.*;
+import java.awt.AWTException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  *
  * @author HuSSon
  */
-public class AccountSetUp {
-    private String name, gender, job;
+public class AccountSetUp extends TraceBack{
+    private String name, gender, job, hobbies,username, Address;
     private int birthDay, birthMonth, birthYear,age;
 
-    public AccountSetUp() {
+    public AccountSetUp(String user) {
         // We can implement The CLI here if u want " or we can do it in on other file by using the functions of this class (more control) ".
         // I can add a choice if the person doesn't want to answer some of the questions to make it in the DB as null instead if u want. 
+        setUsername(user); 
+    }
+   
+    
+    
+    public TraceBack Main() throws InterruptedException, AWTException
+    {
+        System.out.println("New Member Alert!");
+        System.out.println("Redirecting you to Setup your Account!");
+        setName();
+        Thread.sleep(500);
+        setGender();
+        Thread.sleep(500);
+        while(true)
+        {
+            boolean flag = setBirthday();
+            Thread.sleep(500);
+            if(flag== true)
+                break;
+        }
+        
+        setJob();
+        Thread.sleep(500);
+        setHobbies(addHobbies());
+        Thread.sleep(500);
+        setAddress();
+        
+        return new EnterMockBook();
     }
 
-        
-    public void setName(String name, String username) {
-        // no need to check if in the system since it's for show only not the username for making the account.
-        this.name = username;
+    public void setUsername(String user)
+    {
+        this.username = user;
+    }
+    public void setName() {
         DBFactory tableManager = new DBFactory();
+        System.out.println("\n\n");
+        System.out.println("--------------------------------------");
+        System.out.print("Enter your Display name: ");
+        Scanner i = new Scanner(System.in);
+        String in = i.nextLine();
+        System.out.println("");
         tableManager.columnAdder("Name", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        tableManager.updateTable("Name", name, username); // update the table if there is one with the new name for the username
+        tableManager.updateTable("Name", in, this.username); // update the table if there is one with the new name for the username
+        System.out.println("Your Display name Has been SetUP!");
+        System.out.println("--------------------------------------");
+        
+
     }
     
     public String getName()
@@ -40,15 +81,17 @@ public class AccountSetUp {
     public void setGender() {
         // Validate Gender:
         Scanner inStream = new Scanner(System.in);
-        System.out.println("Please Provide Your Gender: Male, Female and Other: ");
+        System.out.println("\n\n");
+        System.out.print("Please Provide Your Gender: Male, Female or Other: ");
         String gender = inStream.nextLine();
-        
+        System.out.println("");
         
         while(true){
             if(!(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("other")))
             {
-                System.out.println("Please Enter an Appropiate Gender: Male , Female or Other: ");
+                System.out.print("Please Enter an Appropiate Gender: Male , Female or Other: ");
                 gender = inStream.nextLine();
+                System.out.println("");
             }
             else
                 break;
@@ -57,8 +100,9 @@ public class AccountSetUp {
         
         DBFactory tableManager = new DBFactory();
         tableManager.columnAdder("Gender", "varchar(255)"); // checks if there is a table for the Gender if not make one.
-        tableManager.updateTable("Gender", this.gender, this.name); // update the table if there is one with the new gender for the username
-        
+        tableManager.updateTable("Gender", this.gender, this.username); // update the table if there is one with the new gender for the username
+        System.out.println("Gender has been registerd!");
+        System.out.println("--------------------------------------");
     }
     
     public String getGender()
@@ -66,26 +110,38 @@ public class AccountSetUp {
         return this.gender;
     }
 
-    public void setBirthday() {
+    public boolean setBirthday() {
         Scanner inStream = new Scanner(System.in);
-        System.out.println("Please Provide Your Birthday in this format: day/month/year All in integers");
+        System.out.println("\n\n");
+        System.out.print("Please Provide Your Birthday in this format: day/month/year All in integers: ");
         String holder = inStream.nextLine();
-        int birthday = Integer.parseInt(holder.substring(0, holder.indexOf("/"))); // takes the first integers before the first / 
-        int birthmonth = Integer.parseInt(holder.substring(holder.indexOf("/"), holder.lastIndexOf("/"))); // takes the integers between the first / and the second /
-        int birthyear = Integer.parseInt(holder.substring(holder.lastIndexOf("/"))); // takes the integers after the second //
+        System.out.println("");
+        String bd = holder.substring(0, holder.indexOf("/"));
+        String by = holder.substring(holder.lastIndexOf("/")+1);
+        String bm = holder.substring(holder.indexOf("/")+1, holder.lastIndexOf("/"));
+        
+        int birthday = Integer.parseInt(bd); // takes the first integers before the first / 
+        int birthyear = Integer.parseInt(by); // takes the integers after the second //
+        int birthmonth = Integer.parseInt(bm); // takes the integers between the first / and the second /
+        this.birthDay = birthday;
+        this.birthMonth = birthmonth;
+        this.birthYear = birthyear;
+        
 
-        if(!birthValidator(birthday , birthmonth , birthyear)) // check function below
+        if(!birthValidator(bd , bm , by)) // check function below
         {
             System.out.println("There is an issue with your birthday ! try again");
-            return;
+            return false;
         }
         
         int age = ageCalc(this.birthDay,this.birthMonth,this.birthYear); // check function below
         
         DBFactory tableManager = new DBFactory();
         tableManager.columnAdder("Age", "INT"); // checks if there is a table for the Age if not make one.
-        tableManager.updateTable("Age", age, this.name); // update the table if there is one with the new age for the username
-        
+        tableManager.updateTable("Age", age, this.username); // update the table if there is one with the new age for the username
+        System.out.println("Birthday has been Calculated and Registerd!");
+        System.out.println("--------------------------------------");
+        return true;
     }
     
     public String getBirthday()
@@ -106,11 +162,18 @@ public class AccountSetUp {
 //    }
 
 
-    public void setJob(String jobs) {
+    public void setJob() {
         DBFactory tableManager = new DBFactory();
         tableManager.columnAdder("Job", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        tableManager.updateTable("Job", jobs, this.name); // update the table if there is one with the new job for the username
-        this.job = jobs;
+        Scanner i = new Scanner(System.in);
+        System.out.println("\n\n");
+        System.out.print("Input Your Job: ");
+        String getString = i.nextLine();
+        
+        tableManager.updateTable("Job", getString, this.username); // update the table if there is one with the new job for the username
+        this.job = getString;
+        System.out.println("Job has Been Registerd!");
+        System.out.println("--------------------------------------");
     }
     
     public String getJob()
@@ -119,13 +182,15 @@ public class AccountSetUp {
     }
     
     
-    public boolean birthValidator(int birthday, int birthmonth, int birthyear)
+    public boolean birthValidator(String birthday, String birthmonth, String birthyear)
     {
         //Scanner inStream = new Scanner(System.in);
         try{
-            if(birthmonth < 10){ // if birth month is bigger than 10 we don't add 0 before the month. ex: 01 02 but not 011
-                LocalDate valid = LocalDate.parse(birthyear+"-0"+ birthmonth + "-"+birthday);
-            }
+            if(Integer.parseInt(birthmonth) < 10)
+                birthmonth = "0" + birthmonth;
+            if(Integer.parseInt(birthday) < 10)
+                birthday = "0"+birthday;
+                
             LocalDate valid = LocalDate.parse(birthyear+"-"+ birthmonth + "-"+birthday);
             return true;
         }
@@ -135,64 +200,13 @@ public class AccountSetUp {
         }
         return false;
         
-        // this is another implementaion that i did but i didn't finish the days . if u want we can use this instead ?
-        
-        // Month Validation
-//        while(true)
-//        {
-//            
-//            if(birthmonth > 12 || birthmonth < 1)
-//            {
-//                System.out.println("Please Enter an Valid Number for Your Month Between 1 and 12");
-//                birthmonth = inStream.nextInt();
-//            }
-//            else
-//                break;
-//        }        
-//       
-//        
-//        // year validation
-//        while(true)
-//        {
-//            
-//            if(birthyear > 2023 || birthyear < 1907)
-//            {
-//                System.out.println("Please Enter an Valid Number for Your Year Between 1907 and 2023");
-//                birthyear = inStream.nextInt();
-//            }
-//            else
-//                break;
-//        }        
-//        
-//        // day validation
-//        LocalDate year = LocalDate.ofYearDay(birthyear, birthday);
-//        while(true)
-//        {
-//            if(birthday < 0 || birthday > 31)
-//            {
-//                System.out.println("Please Enter an Valid Number for Your Day Between 1 and 31");
-//                birthday = inStream.nextInt();
-//            }
-//            else if(birthday > 28 && birthmonth == 2 && !year.isLeapYear())
-//            {
-//                System.out.println("Please Enter an Valid Number for Your Month Between 1 and 28");
-//                birthday = inStream.nextInt();
-//            }
-//            else if(!(birthday < 30) && birthmonth == 2 && year.isLeapYear())
-//            {
-//                System.out.println("Please Enter an Valid Number for Your Month Between 1 and 29");
-//                birthday = inStream.nextInt();
-//            }
-//            else
-//                break;
-//        }
     }
  
     
     public int ageCalc(int birthday, int birthmonth, int birthyear)
     {
         LocalDate today = LocalDate.now(); // Today's date so we can combare between
-        LocalDate birth = LocalDate.of(birthyear, birthmonth, birthday); // Birth date
+        LocalDate birth = LocalDate.of(birthyear, birthmonth, birthday);
         Period age = Period.between(birth, today); // gets the period between the birthdate and the date of today
         this.age = age.getYears();
         return age.getYears(); // gets only the years. " no days or months" 
@@ -203,6 +217,65 @@ public class AccountSetUp {
     {
         return this.age;
     }
+    
+    public String addHobbies(){
+        ArrayList<String> hobbie = new ArrayList<String>();
+        System.out.println("\n\n");
+        System.out.println("Input your hobbies: ");
+        while(true)
+        {
+            Scanner i = new Scanner(System.in);
+            System.out.println("Write your hobbies one after the other, q to stop");
+            String h = i.nextLine();
+            if(h.equalsIgnoreCase("q"))
+                break;
+            hobbie.add(h);
+        }
+        String hobby = "";
+        for(int i = 0; i < hobbie.size();i++)
+        {
+            hobby+= hobbie.get(i) +",";
+        }
+        hobby = hobby.substring(0, hobby.length() - 1); 
+        System.out.println("Hobbies Have been Registerd!");
+        System.out.println("--------------------------------------");
+        return hobby;
+    }
+    
+    public void setHobbies(String hobbies)
+    {
+        DBFactory tableManager = new DBFactory();
+        tableManager.columnAdder("Hobbies", "varchar(255)"); // checks if there is a table for the Name if not make one.
+        tableManager.updateTable("Hobbies", hobbies, this.username); // update the table if there is one with the new job for the username
+        this.hobbies = hobbies;
+    }
+    
+    public String getHobbies()
+    {
+        return this.hobbies;
+    }
+    
+    public void setAddress()
+    {
+        DBFactory tableManager = new DBFactory();
+        System.out.println("\n\n");
+        System.out.println("--------------------------------------");
+        System.out.print("Enter your Address: ");
+        Scanner i = new Scanner(System.in);
+        String in = i.nextLine();
+        System.out.println("");
+        System.out.println("Your Address Has Been Setup!");
+        System.out.println("--------------------------------------");
+        tableManager.columnAdder("Address", "varchar(255)"); // checks if there is a table for the Name if not make one.
+        tableManager.updateTable("Address", in, this.username); // update the table if there is one with the new job for the username
+        this.Address = in;
+    }
+    
+    public String getAddress()
+    {
+        return this.Address;
+    }
+    
     
     
     

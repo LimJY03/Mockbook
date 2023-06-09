@@ -12,6 +12,7 @@ public class Registration extends TraceBack{
 
     // Properties
     private String username, emailAddress, phoneNumber, password;
+    private boolean flag;
 
     // Constructor
     public Registration() {
@@ -19,7 +20,7 @@ public class Registration extends TraceBack{
 
     // Methods
     public void setUserName() {
-        
+        PostFeature pf = new PostFeature();
         DBFactory db = new DBFactory();
         Scanner sc = new Scanner(System.in);
         boolean firstPass = true;
@@ -56,7 +57,9 @@ public class Registration extends TraceBack{
         
         System.out.println("Username Accepted !");
         db.addNewUser(userName);
+        pf.addNewUserToPost(userName);
         this.username = userName;
+        System.out.println(this.username);
     }
     
     private boolean isValidUsername(String Username) {
@@ -145,7 +148,7 @@ public class Registration extends TraceBack{
                 System.out.println("Is the phone number Valid ? " + number.matches(regex));
                 System.out.println("is the phone number in the system? " + db.searchTable("PhoneNumber", number));
                 
-                if(!number.matches(regex))
+                if(!number.matches(regex) || db.searchTable("PhoneNumber", number))
                 {
                     System.out.println("Try Again");
                     continue;
@@ -240,40 +243,27 @@ public class Registration extends TraceBack{
         return isValid;
     }
 
-    // Main
-    public static void main(String[] args) throws InterruptedException, AWTException {
-        
-//        Scanner sc = new Scanner(System.in);
-//        Registration u1 = new Registration();
-//
-//        u1.setPassword("xdfcgvhbjnk543i9&(&)", "xdfcgvhbjnk543i9&(&)");
-//
-//        sc.close();
-    Registration r = new Registration();
-    r.Main();
-    r.clsNetbeans();
-            
-    
+    public String getUsername()
+    {
+        return this.username;
     }
     
-    @Override
-    public void Main()
+    public TraceBack Main() throws InterruptedException, AWTException
     {
+        boolean f = false;
         Scanner sc = new Scanner(System.in);
         Registration register = new Registration();
         System.out.println("Welcome to The Register Page!");
-        System.out.println("Please Provide The following Informations :D");
+        System.out.println("Please Provide The following Informations :D so we can register you as a new member!");
         register.setUserName();
         register.setPassword();
         register.setEmailAddress();
         register.setPhoneNumber();
-        
-        
-        
-        
-        
-        
-    
+        System.out.println("Done! Going Back to The previous page.....");
+        System.out.println(register.getUsername());
+        AccountSetUp setUpAccount = new AccountSetUp(register.getUsername());
+        return setUpAccount;
         
     }
+    
 }
