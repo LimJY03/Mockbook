@@ -1,5 +1,3 @@
-package assignmentds;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
