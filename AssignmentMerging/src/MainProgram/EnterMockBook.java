@@ -11,7 +11,6 @@ import Registration.Registration;
 import TraceBack.TraceBack;
 import javafx.application.Platform;
 import Display.Display;
-import AdminGUI.MainApplication;
 
 public class EnterMockBook extends TraceBack{
 	
@@ -23,6 +22,7 @@ public class EnterMockBook extends TraceBack{
         Entring: while(true)
         {
         	Display.displayUserOption("Login","Register","Admin");
+        	System.out.println("Type 4 to Create Mock Data");
             String getOption = sc.nextLine();
             switch(getOption)
             {
@@ -47,10 +47,13 @@ public class EnterMockBook extends TraceBack{
                          Platform.runLater(() -> MainApplication.stage.setOpacity(1));
                      }
                      break;
+                case "4":
+                	
                 	
                 case "0":
                     System.out.println("Closing ....");
                     MainProgram.sc.close();
+                    Platform.exit();
 				try {
 					MainProgram.connection.close();
 				} catch (SQLException e) {
