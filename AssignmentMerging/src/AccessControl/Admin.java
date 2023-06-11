@@ -1,7 +1,8 @@
 package AccessControl;
 import java.sql.*;
-import MyDataBase.MyDataBase;
+//import MyDataBase.MyDataBase;
 import MyHashMap.MyHashMap;
+import MainProgram.MainProgram;
 
 public class Admin extends User{
 
@@ -26,8 +27,8 @@ public class Admin extends User{
 	
 	
 	public static boolean isValidAdminId(String adminId) {
-	    try (Connection conn = MyDataBase.establishConnection();
-	         PreparedStatement stmt = conn.prepareStatement("SELECT Admin_id FROM Admin WHERE Admin_id = ?")) {
+	    try (
+	        PreparedStatement stmt = MainProgram.connection.prepareStatement("SELECT Admin_id FROM Admin WHERE Admin_id = ?")) {
 
 	        stmt.setString(1, adminId);
 	        ResultSet rs = stmt.executeQuery();
@@ -43,8 +44,9 @@ public class Admin extends User{
 	
 
 	public static boolean isValidPassword(String adminId, String password) {
-	    try (Connection conn = MyDataBase.establishConnection();
-	         PreparedStatement stmt = conn.prepareStatement("SELECT Password FROM Admin WHERE Admin_id = ?")) {
+	    try (
+	    		
+	        PreparedStatement stmt = MainProgram.connection.prepareStatement("SELECT Password FROM Admin WHERE Admin_id = ?")) {
 
 	        stmt.setString(1, adminId);
 	        ResultSet rs = stmt.executeQuery();
@@ -66,8 +68,9 @@ public class Admin extends User{
 	
 	public int guiAddUser(String username,String userEmail,String userContact,String userPassword)
 	{
-		try (Connection conn = MyDataBase.establishConnection();
-	             PreparedStatement stmt = conn.prepareStatement("INSERT INTO User(Username, Email, Contact, Password) VALUES (?, ?, ?, ?)")) {
+		try (
+				
+	            PreparedStatement stmt = MainProgram.connection.prepareStatement("INSERT INTO User(Username, Email, Contact, Password) VALUES (?, ?, ?, ?)")) {
 	            stmt.setString(1, username);
 	            stmt.setString(2, userEmail);
 	            stmt.setString(3, userContact);
@@ -89,11 +92,10 @@ public class Admin extends User{
 	
 	public int guiDeleteUser(String attribute,String valueToDelete)
 	{
-		Connection conn = MyDataBase.establishConnection();
 		try
 		{
 			String query = "DELETE FROM USER WHERE "+attribute+"= ?";
-			PreparedStatement stmt = conn.prepareStatement(query);
+			PreparedStatement stmt = MainProgram.connection.prepareStatement(query);
 			
 			stmt.setString(1, valueToDelete);
 			
@@ -113,7 +115,6 @@ public class Admin extends User{
 	
 	public int guiUpdateUser(String username,MyHashMap<String,String>map)
 	{
-		Connection conn = MyDataBase.establishConnection();
 		try
 		{
 			String query = "UPDATE User SET ";
@@ -123,7 +124,7 @@ public class Admin extends User{
 			query = query.substring(0, query.length()-1); 
 			query += " WHERE Username = '" + username.trim() + "'";
 
-			PreparedStatement stmt = conn.prepareStatement(query);
+			PreparedStatement stmt = MainProgram.connection.prepareStatement(query);
 			
 			int rowAffected = stmt.executeUpdate();
 			
