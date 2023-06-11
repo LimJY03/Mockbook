@@ -1,0 +1,43 @@
+#exitButton:hover {
+    -fx-cursor: hand;
+    -fx-opacity: 0.6;
+    
+}
+
+#loginButton:hover {
+    -fx-cursor: hand;
+}
+
+
+.button:pressed
+{
+	-fx-opacity: 0.6;
+}
+
+.button:hover{
+	-fx-cursor:hand;
+}
+
+   
+.table-view .column-header-background{
+	
+        -fx-background-color:  #4267B2;
+        
+}
+    
+.table-view .column-header, .table-view .filler{
+	
+        -fx-size:50px;
+        -fx-background-color:transparent;
+        
+}
+    
+    
+.table-view .column-header .label {
+        -fx-text-fill:white;
+    }
+    
+    
+.table-row-cell{
+	-fx-background-color: #FFFFFF; 
+}
