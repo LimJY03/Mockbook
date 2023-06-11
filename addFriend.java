@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
-package stack8;
-
-import java.util.*;
-
 /**
- *
  * @author zahra  
  */
+import java.util.*;
+
 public class addFriend {
     
     public static Stack<String> getFriendRecommendation(ArrayList<String> list1, ArrayList<String> list2, String username) {
@@ -17,8 +10,7 @@ public class addFriend {
         //declare stack
         Stack<String> friendRecommendation = new Stack<>();
 
-        //push additional elements into stack
-        //find friend recommendations based on list1 or for user1
+        // push additional elements into stack find friend recommendations based on list1 or for user1
         
         if(list2.contains(username)){
             list1.add(username);
