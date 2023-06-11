@@ -51,7 +51,7 @@ public class PostLinkedList<String> {
 	}
 
 	public String getFirst() {
-		if (size == 0)
+		if (size == 0 || this.head == null)
 			return null;
 		return this.head.content;
 	}
@@ -93,53 +93,82 @@ public class PostLinkedList<String> {
 		removeFirst();
 	}
 
-	public void printfirst() {
-
-		if (this.head == null) {
-			return;
+//	public void printfirst() {
+//
+//		if (this.head == null) {
+//			return;
+//		}
+//		Node<String> current = head;
+//		for (int i = 0; i < this.size && i < 3; i++) {
+//                    if(current == null)
+//                    {
+//                        System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
+//                    }
+//			System.out.println(current.username);
+//			System.out.println("   "+current.content);
+//                        System.out.println("--");
+//			current = current.next;
+//			removeFirst();
+//			this.index++;
+//		}
+//	}
+//
+//	public int getIndex() {
+//		return this.index;
+//	}
+//
+//	public void printthree(int index) {
+//		if (index < 0 || index >= size) {
+//			System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
+//			return;
+//		}
+//		if (head == null)
+//			return;
+//		Node<String> current = head;
+//		for (int i = 0; i < index - 1; i++) {
+//			if (current == null) {
+//				System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
+//				return;
+//			}
+//			current = current.next;
+//			removeFirst();
+//		}
+//
+//		for (int i = 0; i < 3; i++) {
+//			if (current == null) {
+//				System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
+//				return;
+//			}
+//			System.out.println(current.username);
+//			System.out.println("   " + current.content);
+//                        System.out.println("--");
+//			current = current.next;
+//                        removeFirst();
+//
+//		}
+//	}
+//        
+        public void printPosts()
+        {
+            if (this.head == null) {
+                    System.out.println("There are no Posts");
+                    return;
 		}
+            
 		Node<String> current = head;
 		for (int i = 0; i < this.size && i < 3; i++) {
-			System.out.println("username: " + current.username);
-			System.out.println("content: " + current.content);
+                    if(current == null)
+                    {
+                        System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
+                    }
+			System.out.println(current.username);
+			System.out.println("   "+current.content);
+                        System.out.println("--");
 			current = current.next;
 			removeFirst();
 			this.index++;
 		}
-	}
-
-	public int getIndex() {
-		return this.index;
-	}
-
-	public void printthree(int index) {
-		if (index < 0 || index >= size) {
-			System.out.println("That's it ! You reached the End of the Feed :D! Please go back");
-			return;
-		}
-		if (head == null)
-			return;
-		Node<String> current = head;
-		for (int i = 0; i < index - 1; i++) {
-			if (current == null) {
-				System.out.println("That's it ! You reached the End of the Feed :D! Please go back");
-				return;
-			}
-			current = current.next;
-			removeFirst();
-		}
-
-		for (int i = 0; i < 3; i++) {
-			if (current == null) {
-				System.out.println("That's it ! You reached the End of the Feed :D! Please go back");
-				return;
-			}
-			System.out.println("username: " + current.username);
-			System.out.println("content: " + current.content);
-			current = current.next;
-
-		}
-	}
+        }
 
 	public boolean isEmpty() {
 		return size == 0;
@@ -254,8 +283,9 @@ public class PostLinkedList<String> {
 			return;
 		Node<String> current = head;
 		for (int i = 0; i < this.size; i++) {
-			System.out.println("username: " + current.username);
-			System.out.println("content: " + current.content);
+			System.out.println(current.username);
+			System.out.println("   " + current.content);
+                        System.out.println("--");
 			current = current.next;
 		}
 	}

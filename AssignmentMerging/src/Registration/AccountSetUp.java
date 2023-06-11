@@ -5,14 +5,13 @@ package Registration;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-import MyDataBase.*;
+import Display.Display;
+import MainProgram.MainProgram;
 import java.awt.AWTException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import MainProgram.EnterMockBook;
 import TraceBack.TraceBack;
 
@@ -21,7 +20,7 @@ import TraceBack.TraceBack;
  * @author HuSSon
  */
 public class AccountSetUp extends TraceBack{
-    private String name, gender, job, hobbies,username, Address;
+    private String gender, job, hobbies,username, Address;
     private int birthDay, birthMonth, birthYear,age;
 
     public AccountSetUp(String user) {
@@ -34,26 +33,21 @@ public class AccountSetUp extends TraceBack{
     
     public TraceBack Main() throws InterruptedException, AWTException
     {
-        System.out.println("New Member Alert!");
-        System.out.println("Redirecting you to Setup your Account!");
-        setName();
-        Thread.sleep(500);
+        Display.displayProgramPage("Account Setup Page");
         setGender();
-        Thread.sleep(500);
         while(true)
         {
             boolean flag = setBirthday();
-            Thread.sleep(500);
             if(flag== true)
                 break;
         }
         
         setJob();
-        Thread.sleep(500);
         setHobbies(addHobbies());
-        Thread.sleep(500);
         setAddress();
-        
+        System.out.println("Redirecting You to The Entrance Page! ...");
+        Thread.sleep(250);
+        clearConsole();
         return new EnterMockBook();
     }
 
@@ -61,40 +55,18 @@ public class AccountSetUp extends TraceBack{
     {
         this.username = user;
     }
-    public void setName() {
-        DBFactory tableManager = new DBFactory();
-        System.out.println("\n\n");
-        System.out.println("--------------------------------------");
-        System.out.print("Enter your Display name: ");
-        Scanner i = new Scanner(System.in);
-        String in = i.nextLine();
-        System.out.println("");
-        tableManager.columnAdder("Name", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        tableManager.updateTable("Name", in, this.username); // update the table if there is one with the new name for the username
-        System.out.println("Your Display name Has been SetUP!");
-        System.out.println("--------------------------------------");
-        
-
-    }
-    
-    public String getName()
-    {
-        return this.name;
-    }
 
     public void setGender() {
         // Validate Gender:
-        Scanner inStream = new Scanner(System.in);
-        System.out.println("\n\n");
         System.out.print("Please Provide Your Gender: Male, Female or Other: ");
-        String gender = inStream.nextLine();
+        String gender = MainProgram.sc.nextLine();
         System.out.println("");
         
         while(true){
             if(!(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("other")))
             {
                 System.out.print("Please Enter an Appropiate Gender: Male , Female or Other: ");
-                gender = inStream.nextLine();
+                gender = MainProgram.sc.nextLine();
                 System.out.println("");
             }
             else
@@ -102,24 +74,33 @@ public class AccountSetUp extends TraceBack{
         }
         this.gender = gender;
         
-        DBFactory tableManager = new DBFactory();
-        tableManager.columnAdder("Gender", "varchar(255)"); // checks if there is a table for the Gender if not make one.
-        tableManager.updateTable("Gender", this.gender, this.username); // update the table if there is one with the new gender for the username
+        // MainProgram.db.columnAdder("Gender", "varchar(255)"); // checks if there is a table for the Gender if not make one.
+        MainProgram.db.updateTable("Gender", this.gender, this.username); // update the table if there is one with the new gender for the username
         System.out.println("Gender has been registerd!");
-        System.out.println("--------------------------------------");
+        System.out.println("---------------------------------------");
     }
     
     public String getGender()
     {
         return this.gender;
     }
-
+    
     public boolean setBirthday() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\n\n");
-        System.out.print("Please Provide Your Birthday in this format: day/month/year All in integers: ");
-        String holder = sc.nextLine();
+        System.out.print("Please Provide Your Birthday in this format: day/month/year (ALL IN INTEGERS): ");
+        String holder = MainProgram.sc.nextLine();
         System.out.println("");
+        
+        while(true)
+        {
+            if(!holder.matches("\\d{1,2}/\\d{1,2}/\\d{4}"))
+            {
+                System.out.print("Invalid Foramt! Correct Formate is Day/Month/Year. Try Again");
+                holder = MainProgram.sc.nextLine();
+                continue;
+            }
+            break;
+        }
+        
         String bd = holder.substring(0, holder.indexOf("/"));
         String by = holder.substring(holder.lastIndexOf("/")+1);
         String bm = holder.substring(holder.indexOf("/")+1, holder.lastIndexOf("/"));
@@ -140,66 +121,36 @@ public class AccountSetUp extends TraceBack{
         
         int age = ageCalc(this.birthDay,this.birthMonth,this.birthYear); // check function below
         
-        DBFactory tableManager = new DBFactory();
-        tableManager.columnAdder("Age", "INT"); // checks if there is a table for the Age if not make one.
-        tableManager.updateTable("Age", age, this.username); // update the table if there is one with the new age for the username
+        //MainProgram.db.columnAdder("Age", "INT"); // checks if there is a Column for the Age if not make one.
+        MainProgram.db.updateTable("Age", age, this.username); // update the table if there is one with the new age for the username
+        //MainProgram.db.columnAdder("Birthday", "varchar(12)"); // checks if there is a column for the Birthday if not make one.
+        MainProgram.db.updateTable("Birthday", getBirthday(), this.username); // update the table if there is one with the new birthday for the username
         System.out.println("Birthday has been Calculated and Registerd!");
-        System.out.println("--------------------------------------");
+        System.out.println("---------------------------------------");
+        
         return true;
     }
     
-    public String getBirthday()
-    {
-        return this.birthDay + "/" + this.birthMonth + "/" + this.birthYear;
-    }
-
-
-    // i will remake those when i see the implementaion of the add friends feature.
-//    public int getNoOfFriends()
-//    {
-//        return this.NoOfFriends;
-//    }
-//    
-//    // Increment every time the user adds a friend
-//    public void NoOfFriendsAdder() {
-//        this.NoOfFriends =+ getNoOfFriends();
-//    }
-
-
-    public void setJob() {
-        DBFactory tableManager = new DBFactory();
-        tableManager.columnAdder("Job", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        Scanner i = new Scanner(System.in);
-        System.out.println("\n\n");
-        System.out.print("Input Your Job: ");
-        String getString = i.nextLine();
-        
-        tableManager.updateTable("Job", getString, this.username); // update the table if there is one with the new job for the username
-        this.job = getString;
-        System.out.println("Job has Been Registerd!");
-        System.out.println("--------------------------------------");
-    }
-    
-    public String getJob()
-    {
-        return this.job;
-    }
-    
-    
     public boolean birthValidator(String birthday, String birthmonth, String birthyear)
     {
-        try{
-            if(Integer.parseInt(birthmonth) < 10)
+        try{ // check if the month/day is lower than 10 so its going to be single digit we have to add 0 next to it
+            // also check if the user typed 0 as a digit as well so we don't add a third one
+            if(Integer.parseInt(birthmonth) < 10 && !(birthmonth.substring(0,1).equals("0")))
                 birthmonth = "0" + birthmonth;
-            if(Integer.parseInt(birthday) < 10)
+            if(Integer.parseInt(birthday) < 10 && !(birthday.substring(0,1).equals("0")))
                 birthday = "0"+birthday;
+            if(Integer.parseInt(birthyear) < 1900)
+            {
+                System.out.println("Please Provide Different Year!");
+                return false;
+            }
                 
             LocalDate valid = LocalDate.parse(birthyear+"-"+ birthmonth + "-"+birthday);
             return true;
         }
-        catch(DateTimeParseException e) // throws an exception if the date is wrong
+        catch(DateTimeParseException e) // throws an exception if the date is wrong " typed 13 for month for examople or used a date we didn't reach yet
         {
-            System.out.println("Your date is not Valid!! check again");
+            System.out.println("Your Birthday is not Valid, Try Inputting it Again.");
         }
         return false;
         
@@ -221,15 +172,33 @@ public class AccountSetUp extends TraceBack{
         return this.age;
     }
     
+    public String getBirthday()
+    {
+        return this.birthDay + "/" + this.birthMonth + "/" + this.birthYear;
+    }
+
+    public void setJob() {
+        //MainProgram.db.columnAdder("Job", "varchar(255)"); // checks if there is a Column for Job if not make one.
+        System.out.print("Input Your Job: ");
+        String getString = MainProgram.sc.nextLine();
+        
+        MainProgram.db.updateTable("Job", getString, this.username); // update the table if there is one with the new job for the username
+        this.job = getString;
+        System.out.println("Job has Been Registerd!");
+        System.out.println("---------------------------------------");
+    }
+    
+    public String getJob()
+    {
+        return this.job;
+    }
+
     public String addHobbies(){
         ArrayList<String> hobbie = new ArrayList<String>();
-        System.out.println("\n\n");
-        System.out.println("Input your hobbies: ");
+        System.out.println("Write your hobbies one after the other, q to stop");
         while(true)
         {
-            Scanner i = new Scanner(System.in);
-            System.out.println("Write your hobbies one after the other, q to stop");
-            String h = i.nextLine();
+            String h = MainProgram.sc.nextLine();
             if(h.equalsIgnoreCase("q"))
                 break;
             hobbie.add(h);
@@ -239,17 +208,18 @@ public class AccountSetUp extends TraceBack{
         {
             hobby+= hobbie.get(i) +",";
         }
+        if(hobby == " ")
+            hobby = "None";
         hobby = hobby.substring(0, hobby.length() - 1); 
         System.out.println("Hobbies Have been Registerd!");
-        System.out.println("--------------------------------------");
+        System.out.println("---------------------------------------");
         return hobby;
     }
     
     public void setHobbies(String hobbies)
     {
-        DBFactory tableManager = new DBFactory();
-        tableManager.columnAdder("Hobbies", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        tableManager.updateTable("Hobbies", hobbies, this.username); // update the table if there is one with the new job for the username
+        //MainProgram.db.columnAdder("Hobbies", "varchar(500)"); // checks if there is a Column for Hobbies if not make one.
+        MainProgram.db.updateTable("Hobbies", hobbies, this.username); // update the table if there is one with the new hobbies for the username
         this.hobbies = hobbies;
     }
     
@@ -260,17 +230,13 @@ public class AccountSetUp extends TraceBack{
     
     public void setAddress()
     {
-        DBFactory tableManager = new DBFactory();
-        System.out.println("\n\n");
-        System.out.println("--------------------------------------");
         System.out.print("Enter your Address: ");
-        Scanner i = new Scanner(System.in);
-        String in = i.nextLine();
+        String in = MainProgram.sc.nextLine();
         System.out.println("");
         System.out.println("Your Address Has Been Setup!");
-        System.out.println("--------------------------------------");
-        tableManager.columnAdder("Address", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        tableManager.updateTable("Address", in, this.username); // update the table if there is one with the new job for the username
+        System.out.println("---------------------------------------");
+        //MainProgram.db.columnAdder("Address", "varchar(255)"); // checks if there is a Column for the Address if not make one.
+        MainProgram.db.updateTable("Address", in, this.username); // update the table if there is one with the new address for the username
         this.Address = in;
     }
     

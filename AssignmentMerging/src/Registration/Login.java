@@ -28,9 +28,8 @@ public class Login extends TraceBack{
             clearConsole();
             if(type=="Username")
             {
-                MainProgram.GlobalDataStore.username = this.getUser();
                 signInUsingUsername();
-
+                MainProgram.GlobalDataStore.username = this.getUser();
             }
             else
             {
@@ -50,16 +49,14 @@ public class Login extends TraceBack{
     }
 
     public TraceBack Main()  throws InterruptedException, AWTException
-    {
-        Scanner sc = new Scanner(System.in);
-        
+    {   
         Display.displayWelcomeLines("Login Page", "Login Page", "");
         Display.displayUserOption("Username", "Email", "");
         
         TraceBack returnedTraceBack = null;
         
         breaker: while (true) {
-            String getInt = sc.nextLine();
+            String getInt = MainProgram.sc.nextLine();
             switch (getInt) {
                 case "1":
                 	loginHelperMethod("Username");
@@ -71,6 +68,7 @@ public class Login extends TraceBack{
                     break breaker;
                 case "0":
                 	loginHelperMethod("0");
+                    this.isPrevious = true;
                     returnedTraceBack = this.previous;
                     break breaker;
                 default:
@@ -90,15 +88,13 @@ public class Login extends TraceBack{
     public boolean signInUsingUsername()
     {
         String name, pass;
-        DBFactory db = new DBFactory();
-        Scanner sc = new Scanner(System.in);
         Display.displayProgramPage("Login Using Username");
 
         do{
             System.out.print("Enter your Username: ");
-            name = sc.nextLine();
+            name = MainProgram.sc.nextLine();
             System.out.print("Enter your Password: ");
-            pass = sc.nextLine();
+            pass = MainProgram.sc.nextLine();
             System.out.println("");
             if(CheckerForAccount(name,pass,"username"))
                 break;
@@ -115,14 +111,13 @@ public class Login extends TraceBack{
     public boolean signInUsingEmail()
     {
         String email, pass;
-        Scanner sc = new Scanner(System.in);
         Display.displayProgramPage("Login Using Email");
 
         do{
         System.out.print("Enter your Email: ");
-        email = sc.nextLine();
+        email = MainProgram.sc.nextLine();
         System.out.print("Enter your Password: ");
-        pass = sc.nextLine();
+        pass = MainProgram.sc.nextLine();
         System.out.println("");
         if(CheckerForAccount(email,pass,"email"))
             break;
