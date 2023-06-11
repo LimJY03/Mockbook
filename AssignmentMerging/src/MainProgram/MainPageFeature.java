@@ -16,8 +16,7 @@ public class MainPageFeature extends TraceBack{
     static MainApplication mainApp;
 
     
-    public TraceBack Main() throws InterruptedException, AWTException{
-        Scanner sc = new Scanner(System.in);    
+    public TraceBack Main() throws InterruptedException, AWTException{  
         TraceBack returnedTraceBack = null;
         String user = MainProgram.GlobalDataStore.username;
         Display.displayWelcomeLines("Main Page", "Main Page", " "+user);
@@ -26,7 +25,7 @@ public class MainPageFeature extends TraceBack{
         {
 
         	Display.displayUserOption("Your Feed Feature", "Search Feature","");
-            String getInt = sc.nextLine();
+            String getInt = MainProgram.sc.nextLine();
             switch(getInt)
             {
                 case "1":
@@ -43,7 +42,8 @@ public class MainPageFeature extends TraceBack{
                     System.out.println("Redirecting To The Entrance page...");
                     Thread.sleep(500);
                     clearConsole();
-                    returnedTraceBack = new EnterMockBook();
+                    this.previous.isPrevious = true;
+                    returnedTraceBack = this.previous;
                     break breaker;
                 default:
                     System.out.println("This is NOT One of The Choices Given! Type Again :D");

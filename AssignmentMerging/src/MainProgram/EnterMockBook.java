@@ -15,7 +15,6 @@ import Display.Display;
 public class EnterMockBook extends TraceBack{
 	
     public TraceBack Main() throws InterruptedException, AWTException{
-        Scanner sc = new Scanner(System.in);
         Display.displayWelcomeLines("Welcome to MockBook","Entrance","");
         
         TraceBack returnedTraceBack = null;
@@ -23,7 +22,7 @@ public class EnterMockBook extends TraceBack{
         {
         	Display.displayUserOption("Login","Register","Admin");
         	System.out.println("Type 4 to Create Mock Data");
-            String getOption = sc.nextLine();
+            String getOption = MainProgram.sc.nextLine();
             switch(getOption)
             {
                 case "1":
