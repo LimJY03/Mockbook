@@ -3,15 +3,15 @@ package AdminGUI;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
-
-import AccessControl.RegularUser;
-import MyDataBase.MyDataBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
+
+import AccessControl.RegularUser;
+import MainProgram.MainProgram;
 
 
 public class AdminPanelController implements Initializable {
@@ -116,11 +116,11 @@ public class AdminPanelController implements Initializable {
 	
 	private void retrieveData() {
 	    userList.clear();
-	    Connection conn = MyDataBase.establishConnection();
+
 
 	    try {
 	        String query = "SELECT * FROM User";
-	        PreparedStatement stmt = conn.prepareStatement(query);
+	        PreparedStatement stmt = MainProgram.connection.prepareStatement(query);
 	        ResultSet rs = stmt.executeQuery();
 
 	        while (rs.next()) {
