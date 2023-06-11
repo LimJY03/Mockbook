@@ -20,7 +20,7 @@ public class Search extends TraceBack {
 
 	public TraceBack Main() throws InterruptedException, AWTException {
 		search();
-		this.isPrevious = true;
+		this.previous.isPrevious = true;
 		return this.previous;
 	}
 
