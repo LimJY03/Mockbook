@@ -12,6 +12,9 @@ public class Display {
 		System.out.println("Option 3: Search via Age");
 		System.out.println("Option 4: Search via Contact");
 		System.out.println("Option 5: Search via Gender");
+		System.out.println("Option 6: Search via Job");
+		System.out.println("Option 7: Search via Hobby");
+		System.out.println("Option 8: Search via Address");
 		System.out.println("Option 0: QUIT");
 	}
 
@@ -22,12 +25,13 @@ public class Display {
 		}
 
 		System.out.printf("\nResult sorted by '%s'.......\n", type);
-		System.out.printf("%-25s |%-30s |%-15s |%-15s |%-15s\n", "Username", "Email", "Contact", "Age", "Gender");
-		System.out.println(String.format("%-55s", "").replace("", "-"));
+		System.out.printf("%-25s |%-30s |%-15s |%-15s |%-15s |%-25s |%-50s |%-50s\n", "Username", "Email", "Contact", "Age", "Gender", "Job", "Address","Hobbies");
+		System.out.println(String.format("%-110s", "").replace("", "-"));
+		
 
 		for (RegularUser rUser : list) {
-			System.out.printf("%-25s |%-30s |%-15s |%-15s |%-15s\n", rUser.getName(), rUser.getEmail(),
-					rUser.getContact(), rUser.getAge(), rUser.getGender());
+			System.out.printf("%-25s |%-30s |%-15s |%-15s |%-15s |%-25s |%-50s |%-50s\n", rUser.getName(), rUser.getEmail(),
+					rUser.getContact(), rUser.getAge(), rUser.getGender(),rUser.getJob(),rUser.getAddress(),rUser.getHobbies());
 
 		}
 
