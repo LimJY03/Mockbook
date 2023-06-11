@@ -4,8 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import MyDataBase.DBFactory;
-import MyHashMap.MyHashMap;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,6 +11,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
+
+import MyHashMap.MyHashMap;
+import MainProgram.MainProgram;
 
 public class UpdateUserPageController implements Initializable {
 
@@ -59,7 +60,6 @@ public class UpdateUserPageController implements Initializable {
     @FXML
     private Text requiredField3;
     
-	private DBFactory db = new DBFactory();
     
 
 	@Override
@@ -147,7 +147,7 @@ public class UpdateUserPageController implements Initializable {
 		boolean isValid = true;
 		final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z]).+$");
 
-		if (db.searchTable("Username", Username)) {
+		if (MainProgram.db.searchTable("Username", Username)) {
 			requiredField3.setText("Username has been taken");
 			isValid = false;
 		}
@@ -195,7 +195,7 @@ public class UpdateUserPageController implements Initializable {
 			return false;
 		}
 
-		if (db.searchTable("PhoneNumber", number)) {
+		if (MainProgram.db.searchTable("PhoneNumber", number)) {
 			requiredField2.setText("Phone number already exist");
 			return false;
 		}
