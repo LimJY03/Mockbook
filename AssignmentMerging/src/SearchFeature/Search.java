@@ -62,7 +62,7 @@ public class Search extends TraceBack {
 
 			case "5":
 				System.out.print("Enter the Gender: ");
-				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Email"), "Email");
+				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Gender"), "Gender");
 				break;
 				
 			case "6":
