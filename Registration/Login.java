@@ -136,7 +136,7 @@ public class Login extends TraceBack {
 
     public boolean CheckerForAccount(String user, String password, String type) {
         
-        type = type.equalsIgnoreCase("email") ? "Username" : "Email";
+        type = type.equalsIgnoreCase("email") ? "Email" : "Username";
 
         Connection connection = MyDataBase.establishConnection();
 
