@@ -1,8 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/**
+ * @author HuSSon
  */
-
+package Registration;
 
 import com.mycompany.project.DB.*;
 import java.awt.AWTException;
@@ -12,155 +11,161 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- *
- * @author HuSSon
- */
-public class AccountSetUp extends TraceBack{
-    private String name, gender, job, hobbies,username, Address;
-    private int birthDay, birthMonth, birthYear,age;
+public class AccountSetUp extends TraceBack {
+
+    private String name, gender, job, hobbies, username, address;
+    private int birthDay, birthMonth, birthYear, age;
 
     public AccountSetUp(String user) {
-        // We can implement The CLI here if u want " or we can do it in on other file by using the functions of this class (more control) ".
-        // I can add a choice if the person doesn't want to answer some of the questions to make it in the DB as null instead if u want. 
-        setUsername(user); 
+
+        // We can implement The CLI here if u want " or we can do it in on other file by
+        // using the functions of this class (more control) ".
+        // I can add a choice if the person doesn't want to answer some of the questions
+        // to make it in the DB as null instead if u want.
+        setUsername(user);
     }
-   
-    
-    
-    public TraceBack Main() throws InterruptedException, AWTException
-    {
+
+    public TraceBack Main() throws InterruptedException, AWTException {
+
         System.out.println("New Member Alert!");
         System.out.println("Redirecting you to Setup your Account!");
+        
         setName();
         Thread.sleep(500);
+        
         setGender();
         Thread.sleep(500);
-        while(true)
-        {
+        
+        while (true) {
             boolean flag = setBirthday();
             Thread.sleep(500);
-            if(flag== true)
-                break;
+            if (flag == true) break;
         }
-        
+
         setJob();
         Thread.sleep(500);
+        
         setHobbies(addHobbies());
         Thread.sleep(500);
-        setAddress();
         
+        setAddress();
+
         return new EnterMockBook();
     }
-
-    public void setUsername(String user)
-    {
-        this.username = user;
-    }
-    public void setName() {
-        DBFactory tableManager = new DBFactory();
-        System.out.println("\n\n");
-        System.out.println("--------------------------------------");
-        System.out.print("Enter your Display name: ");
-        Scanner i = new Scanner(System.in);
-        String in = i.nextLine();
-        System.out.println("");
-        tableManager.columnAdder("Name", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        tableManager.updateTable("Name", in, this.username); // update the table if there is one with the new name for the username
-        System.out.println("Your Display name Has been SetUP!");
-        System.out.println("--------------------------------------");
-        
-
-    }
     
-    public String getName()
-    {
-        return this.name;
+    public void setName() {
+        
+        DBFactory tableManager = new DBFactory();
+        
+        System.out.println("\n\n--------------------------------------");
+        System.out.print("Enter your Display name: ");
+        
+        Scanner sc = new Scanner(System.in);
+        String in = sc.nextLine();
+        
+        System.out.println();
+        
+        // checks if there is a table for the Name if not make one.
+        tableManager.columnAdder("Name", "varchar(255)"); 
+        
+        // update the table if there is one with the new name for the username
+        tableManager.updateTable("Name", in, this.username); 
+        
+        System.out.println("Your Display name Has been Set Up!");
+        System.out.println("--------------------------------------");
     }
 
     public void setGender() {
-        // Validate Gender:
-        Scanner inStream = new Scanner(System.in);
-        System.out.println("\n\n");
-        System.out.print("Please Provide Your Gender: Male, Female or Other: ");
-        String gender = inStream.nextLine();
-        System.out.println("");
         
-        while(true){
-            if(!(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("other")))
-            {
-                System.out.print("Please Enter an Appropiate Gender: Male , Female or Other: ");
-                gender = inStream.nextLine();
+        // Validate Gender
+        Scanner sc = new Scanner(System.in);
+        System.out.print("\n\nPlease Provide Your Gender: Male, Female or Other: ");
+        String gender = sc.nextLine();
+        System.out.println();
+        
+        while (true) {
+            if (!(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("other"))) {
+                
+                System.out.print("Please Enter an Appropiate Gender: Male, Female or Other: ");
+                gender = sc.nextLine();
+                
                 System.out.println("");
-            }
-            else
-                break;
+            } else break;
         }
+        
         this.gender = gender;
         
         DBFactory tableManager = new DBFactory();
-        tableManager.columnAdder("Gender", "varchar(255)"); // checks if there is a table for the Gender if not make one.
-        tableManager.updateTable("Gender", this.gender, this.username); // update the table if there is one with the new gender for the username
+        
+        // checks if there is a table for the Gender if not make one.
+        tableManager.columnAdder("Gender", "varchar(255)"); 
+        
+        // update the table if there is one with the new gender for the username
+        tableManager.updateTable("Gender", this.gender, this.username);
+        
         System.out.println("Gender has been registerd!");
         System.out.println("--------------------------------------");
     }
     
-    public String getGender()
-    {
-        return this.gender;
-    }
+    public void setUsername(String user) { this.username = user; }
+    public String getName() { return this.name; }
+    public String getGender() { return this.gender; }
+    public int getAge() { return this.age; }
+    public String getBirthday() { return this.birthDay + "/" + this.birthMonth + "/" + this.birthYear; }
+    public String getJob() { return this.job; }
 
     public boolean setBirthday() {
-        Scanner inStream = new Scanner(System.in);
+
+        Scanner sc = new Scanner(System.in);
         System.out.println("\n\n");
         System.out.print("Please Provide Your Birthday in this format: day/month/year All in integers: ");
-        String holder = inStream.nextLine();
-        System.out.println("");
-        String bd = holder.substring(0, holder.indexOf("/"));
-        String by = holder.substring(holder.lastIndexOf("/")+1);
-        String bm = holder.substring(holder.indexOf("/")+1, holder.lastIndexOf("/"));
-        
-        int birthday = Integer.parseInt(bd); // takes the first integers before the first / 
-        int birthyear = Integer.parseInt(by); // takes the integers after the second //
+        String holder = sc.nextLine();
+
+        // String bd = holder.substring(0, holder.indexOf("/"));
+        // String by = holder.substring(holder.lastIndexOf("/") + 1);
+        // String bm = holder.substring(holder.indexOf("/") + 1, holder.lastIndexOf("/"));
+
+        int birthday = Integer.parseInt(bd); // takes the first integers before the first /
+        int birthyear = Integer.parseInt(by); // takes the integers after the second /
         int birthmonth = Integer.parseInt(bm); // takes the integers between the first / and the second /
         this.birthDay = birthday;
         this.birthMonth = birthmonth;
         this.birthYear = birthyear;
-        
 
-        if(!birthValidator(bd , bm , by)) // check function below
-        {
-            System.out.println("There is an issue with your birthday ! try again");
+
+        // check function below
+        if (!birthValidator(bd, bm, by)) {
+            System.out.println("\nThere is an issue with your birthday! Try again");
             return false;
         }
-        
-        int age = ageCalc(this.birthDay,this.birthMonth,this.birthYear); // check function below
-        
-        DBFactory tableManager = new DBFactory();
-        tableManager.columnAdder("Age", "INT"); // checks if there is a table for the Age if not make one.
-        tableManager.updateTable("Age", age, this.username); // update the table if there is one with the new age for the username
-        System.out.println("Birthday has been Calculated and Registerd!");
-        System.out.println("--------------------------------------");
-        return true;
-    }
-    
-    public String getBirthday()
-    {
-        return this.birthDay + "/" + this.birthMonth + "/" + this.birthYear;
-    }
 
+        // check function below
+        int age = ageCalc(this.birthDay, this.birthMonth, this.birthYear); 
+
+        DBFactory tableManager = new DBFactory();
+
+        // checks if there is a table for the Age if not make one.
+        tableManager.columnAdder("Age", "INT");
+        
+        // update the table if there is one with the new age for the username
+        tableManager.updateTable("Age", age, this.username); 
+        
+        System.out.println("Birthday has been Calculated and Registered!");
+        System.out.println("--------------------------------------");
+        
+        return true;
+    }    
 
     // i will remake those when i see the implementaion of the add friends feature.
-//    public int getNoOfFriends()
-//    {
-//        return this.NoOfFriends;
-//    }
-//    
-//    // Increment every time the user adds a friend
-//    public void NoOfFriendsAdder() {
-//        this.NoOfFriends =+ getNoOfFriends();
-//    }
-
+    // public int getNoOfFriends()
+    // {
+    // return this.NoOfFriends;
+    // }
+    //
+    // // Increment every time the user adds a friend
+    // public void NoOfFriendsAdder() {
+    // this.NoOfFriends =+ getNoOfFriends();
+    // }
 
     public void setJob() {
         DBFactory tableManager = new DBFactory();
@@ -169,116 +174,112 @@ public class AccountSetUp extends TraceBack{
         System.out.println("\n\n");
         System.out.print("Input Your Job: ");
         String getString = i.nextLine();
-        
-        tableManager.updateTable("Job", getString, this.username); // update the table if there is one with the new job for the username
+
+        tableManager.updateTable("Job", getString, this.username); // update the table if there is one with the new job
+                                                                   // for the username
         this.job = getString;
         System.out.println("Job has Been Registerd!");
         System.out.println("--------------------------------------");
     }
-    
-    public String getJob()
-    {
-        return this.job;
-    }
-    
-    
-    public boolean birthValidator(String birthday, String birthmonth, String birthyear)
-    {
-        //Scanner inStream = new Scanner(System.in);
-        try{
-            if(Integer.parseInt(birthmonth) < 10)
-                birthmonth = "0" + birthmonth;
-            if(Integer.parseInt(birthday) < 10)
-                birthday = "0"+birthday;
-                
-            LocalDate valid = LocalDate.parse(birthyear+"-"+ birthmonth + "-"+birthday);
+
+    public boolean birthValidator(String birthday, String birthmonth, String birthyear) {
+        
+        // throws an exception if the date is wrong
+        try {
+            if (Integer.parseInt(birthmonth) < 10) birthmonth = "0" + birthmonth;
+            if (Integer.parseInt(birthday) < 10) birthday = "0" + birthday;
+
+            LocalDate valid = LocalDate.parse(birthyear + "-" + birthmonth + "-" + birthday);
+
             return true;
-        }
-        catch(DateTimeParseException e) // throws an exception if the date is wrong
-        {
+        } 
+        catch (DateTimeParseException e) {
             System.out.println("Your date is not Valid!! check again");
         }
-        return false;
         
+        return false;
     }
- 
-    
-    public int ageCalc(int birthday, int birthmonth, int birthyear)
-    {
-        LocalDate today = LocalDate.now(); // Today's date so we can combare between
+
+    public int ageCalc(int birthday, int birthmonth, int birthyear) {
+
+        // Today's date so we can compare between
+        LocalDate today = LocalDate.now(); 
         LocalDate birth = LocalDate.of(birthyear, birthmonth, birthday);
-        Period age = Period.between(birth, today); // gets the period between the birthdate and the date of today
+
+        // gets the period between the birthdate and the date of today
+        Period age = Period.between(birth, today);
+
+        // gets only the years. " no days or months"
         this.age = age.getYears();
-        return age.getYears(); // gets only the years. " no days or months" 
-       
+        return this.age; 
     }
-    
-    public int getAge()
-    {
-        return this.age;
-    }
-    
-    public String addHobbies(){
-        ArrayList<String> hobbie = new ArrayList<String>();
-        System.out.println("\n\n");
-        System.out.println("Input your hobbies: ");
-        while(true)
-        {
-            Scanner i = new Scanner(System.in);
+
+    public String addHobbies() {
+
+        ArrayList<String> hobbies = new ArrayList<String>();
+
+        System.out.println("\n\nInput your hobbies: ");
+
+        while (true) {
+            Scanner sc = new Scanner(System.in);
             System.out.println("Write your hobbies one after the other, q to stop");
-            String h = i.nextLine();
-            if(h.equalsIgnoreCase("q"))
+            String hobbyInput = sc.nextLine();
+            if (hobby.equalsIgnoreCase("q"))
                 break;
-            hobbie.add(h);
+            hobbies.add(hobbyInput);
         }
+
         String hobby = "";
-        for(int i = 0; i < hobbie.size();i++)
-        {
-            hobby+= hobbie.get(i) +",";
-        }
-        hobby = hobby.substring(0, hobby.length() - 1); 
+
+        for (int i = 0; i < hobbies.size(); i++) hobby += hobbies.get(i) + ",";
+
+        hobby = hobby.substring(0, hobby.length() - 1);
+
         System.out.println("Hobbies Have been Registerd!");
         System.out.println("--------------------------------------");
+
         return hobby;
     }
-    
-    public void setHobbies(String hobbies)
-    {
+
+    public void setHobbies(String hobbies) {
+        
         DBFactory tableManager = new DBFactory();
-        tableManager.columnAdder("Hobbies", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        tableManager.updateTable("Hobbies", hobbies, this.username); // update the table if there is one with the new job for the username
+
+        // checks if there is a table for the Name if not make one.
+        tableManager.columnAdder("Hobbies", "varchar(255)"); 
+
+        // update the table if there is one with the new job for the username
+        tableManager.updateTable("Hobbies", hobbies, this.username); 
+        
         this.hobbies = hobbies;
     }
-    
-    public String getHobbies()
-    {
-        return this.hobbies;
-    }
-    
-    public void setAddress()
-    {
+
+    public String getHobbies() { return this.hobbies; }
+
+    public void setAddress() {
+        
+        Scanner sc = new Scanner(System.in);
         DBFactory tableManager = new DBFactory();
-        System.out.println("\n\n");
-        System.out.println("--------------------------------------");
+
+        System.out.println("\n\n--------------------------------------");
         System.out.print("Enter your Address: ");
-        Scanner i = new Scanner(System.in);
-        String in = i.nextLine();
-        System.out.println("");
-        System.out.println("Your Address Has Been Setup!");
+        
+        String address = sc.nextLine();
+
+        System.out.println("\nYour Address Has Been Setup!");
         System.out.println("--------------------------------------");
-        tableManager.columnAdder("Address", "varchar(255)"); // checks if there is a table for the Name if not make one.
-        tableManager.updateTable("Address", in, this.username); // update the table if there is one with the new job for the username
-        this.Address = in;
+
+        // checks if there is a table for the Name if not make one.
+        tableManager.columnAdder("Address", "varchar(255)");
+
+        // update the table if there is one with the new job for the username
+        tableManager.updateTable("Address", address, this.username);
+        
+        this.address = address;
     }
-    
-    public String getAddress()
-    {
-        return this.Address;
+
+    public String getAddress() {
+        return this.address;
     }
-    
-    
-    
-    
-    
-    
+
 }
