@@ -17,32 +17,31 @@ public class Login extends TraceBack {
     private String username, password, emailAddress;
 
     public TraceBack Main() throws InterruptedException, AWTException {
-        
-        Scanner i = new Scanner(System.in);
+
+        Scanner sc = new Scanner(System.in);
+
         System.out.println("****************");
         System.out.println("*   MockBook   *");
         System.out.println("****************\n");
         System.out.println("\t\t\t\t\t-------------------------------------\t\t");
         System.out.println("\t\t\t\t\t|             Login Page            |");
         System.out.println("\t\t\t\t\t-------------------------------------\t\t");
-        System.out.println(
-                "\n\t\t This is The Login Page! You Will be Presented With Mulitiple Options you May Choose From Them!");
-
+        System.out.println("\n\t\t This is The Login Page! You Will be Presented With Multiple Options you May Choose From Them!");
         System.out.println("\n\t\t\t\t\t-------------------------------------\t\t");
-        System.out.println("Type 1 to Login Using Your Username\nType 2 to Login Using Your Email\nType 0 To Go Back!");
+        System.out.println("Type 1 to Login Using Your Username\nType 2 to Login Using Your Email\nType 0 To Go Back");
         System.out.println("\t\t\t\t\t-------------------------------------\t\t");
+        
         TraceBack returnedTraceBack = null;
 
         breaker: while (true) {
-            String getInt = i.nextLine();
+            String getInt = sc.nextLine();
             switch (getInt) {
                 case "1":
                     Thread.sleep(500);
                     clearConsole();
                     signInUsingUsername();
                     MainProgram.GlobalDataStore.username = this.getUser();
-                    System.out.println("");
-                    System.out.println("Redirecting You to The Main Page! ...");
+                    System.out.println("\nRedirecting You to The Main Page! ...");
                     Thread.sleep(500);
                     clearConsole();
                     returnedTraceBack = new MainPageFeature();
@@ -51,8 +50,7 @@ public class Login extends TraceBack {
                     Thread.sleep(500);
                     clearConsole();
                     signInUsingEmail();
-                    System.out.println("");
-                    System.out.println("Redirecting You to The Main Page! ...");
+                    System.out.println("\nRedirecting You to The Main Page! ...");
                     Thread.sleep(500);
                     clearConsole();
                     returnedTraceBack = new MainPageFeature();
@@ -106,50 +104,47 @@ public class Login extends TraceBack {
     }
 
     public boolean signInUsingEmail() {
+        
         String email, pass;
         DBFactory db = new DBFactory();
         Scanner sc = new Scanner(System.in);
+
         System.out.println("****************");
         System.out.println("*   MockBook   *");
         System.out.println("****************\n");
         System.out.println("\t\t\t\t\t-------------------------------------\t\t");
         System.out.println("\t\t\t\t\t|          Login Using Email        |");
-        System.out.println("\t\t\t\t\t-------------------------------------\t\t");
-        System.out.println("\n");
+        System.out.println("\t\t\t\t\t-------------------------------------\t\t\n");
+
         do {
-            System.out.print("Enter your Email: ");
-            email = sc.nextLine();
-            System.out.print("Enter your Password: ");
-            pass = sc.nextLine();
-            System.out.println("");
-            if (CheckerForAccount(email, pass, "email"))
-                break;
-            System.out.println("Wrong Email/Password, Try Again!");
+            System.out.print("Enter your Email: "); email = sc.nextLine();
+            System.out.print("Enter your Password: "); pass = sc.nextLine();
+
+            if (CheckerForAccount(email, pass, "email")) break;
+
+            System.out.println("\nWrong Email/Password, Try Again!");
+
         } while (true);
 
+        System.out.println("\nYou have Logged in Successfully!");
+        
         this.emailAddress = email;
         this.password = pass;
-        System.out.println("You have Logged in Successfully!");
+        
         return true;
     }
 
     public boolean CheckerForAccount(String user, String password, String type) {
-        if (type.equalsIgnoreCase("username"))
-            type = "Username";
-        else if (type.equalsIgnoreCase("email"))
-            type = "Email";
-        else {
-            System.out.println("give propa type");
-        }
+        
+        type = type.equalsIgnoreCase("email") ? "Username" : "Email";
+
         Connection connection = MyDataBase.establishConnection();
+
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(
-                    "SELECT * FROM User WHERE " + type + " ='" + user + "' AND Password = '" + password + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE " + type + " ='" + user + "' AND Password = '" + password + "'");
 
-            if (rs.next()) {
-                return true;
-            }
+            if (rs.next()) return true;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
