@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 
-public class MainApplication extends Application implements Runnable{
+public class MainApplication extends Application{
 
 	public static MainApplication mainApp;
 	public static Stage stage;
@@ -91,15 +91,5 @@ public class MainApplication extends Application implements Runnable{
 		alert.show();
 	}
 
-	@Override
-	public void run() {
-		
-//		stage.show();
-		Platform.runLater(()->{
-	        Platform.exit();
-
-			System.exit(0);
-		});
-	}
 
 }
