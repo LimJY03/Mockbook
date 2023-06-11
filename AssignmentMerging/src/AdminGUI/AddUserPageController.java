@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import MyDataBase.DBFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -12,6 +11,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
+
+import MainProgram.MainProgram;
 
 public class AddUserPageController implements Initializable {
 
@@ -46,7 +47,6 @@ public class AddUserPageController implements Initializable {
 	    @FXML
 	    private Button goBackButton;
 	    
-		private DBFactory db = new DBFactory();
 
     	    
 	@Override
@@ -107,7 +107,7 @@ public class AddUserPageController implements Initializable {
         final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z]).+$");
         
 
-        if (db.searchTable("Username", Username)) {
+        if (MainProgram.db.searchTable("Username", Username)) {
             usernameLabel.setText("Username has been taken");
             isValid= false;
         }
@@ -202,7 +202,7 @@ public class AddUserPageController implements Initializable {
 			return false;
 		}
 
-		if (db.searchTable("PhoneNumber", number))
+		if (MainProgram.db.searchTable("PhoneNumber", number))
 		{
 			userContactLabel.setText("Phone number already exist");
 			return false;
