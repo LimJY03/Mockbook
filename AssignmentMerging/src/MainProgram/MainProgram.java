@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.util.Scanner;
 
 import AdminGUI.MainApplication;
+import MyDataBase.DBFactory;
 import MyDataBase.MyDataBase;
 
 import TraceBack.TraceBack;
@@ -13,6 +14,7 @@ public class MainProgram {
 
 	public static Scanner sc = new Scanner(System.in);
 	public static Connection connection = MyDataBase.establishConnection();
+        public static DBFactory db = new DBFactory();
 	static MainApplication mainApp;
 
 	public static class GlobalDataStore {
