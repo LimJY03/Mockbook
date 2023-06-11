@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+package Registration;
 
 import com.mycompany.project.DB.DBFactory;
 import java.awt.AWTException;
@@ -14,10 +11,6 @@ public class Registration extends TraceBack{
     private String username, emailAddress, phoneNumber, password;
     private boolean flag;
 
-    // Constructor
-    public Registration() {
-    }
-
     // Methods
     public void setUserName() {
         PostFeature pf = new PostFeature();
@@ -27,14 +20,15 @@ public class Registration extends TraceBack{
         boolean isValid;
         System.out.print("Enter Username: ");
         String userName = sc.nextLine();
-        System.out.println("");
+        System.out.println();
 
         // Validate Username Requirements
         do {
             isValid = false;
 
             if (!firstPass) {
-                System.out.print("Username : "); userName  = sc.nextLine();
+                System.out.print("Username : "); 
+                userName  = sc.nextLine();
             }
 
             firstPass = false;
@@ -54,7 +48,6 @@ public class Registration extends TraceBack{
 
         } while (!isValid);
         
-        
         System.out.println("Username Accepted !");
         db.addNewUser(userName);
         pf.addNewUserToPost(userName);
@@ -62,12 +55,11 @@ public class Registration extends TraceBack{
         System.out.println(this.username);
     }
     
-    private boolean isValidUsername(String Username) {
+    private static boolean isValidUsername(String Username) {
         
         boolean isValid = true;
         final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z]).+$");
         
-
         if (Username.length() > 25 || Username.length() < 5) {
             System.out.println("Username must be less than 25 and more than 5 characters in length.");
             isValid = false;
@@ -75,29 +67,14 @@ public class Registration extends TraceBack{
 
         // Check Upper Case Match
         if (!textPattern.matcher(Username).matches()) {
-            System.out.println("Username must have atleast one uppercase/ one lowercase character");
+            System.out.println("Username must have at least one uppercase / one lowercase character");
             isValid = false;
         }
-
-        
-//        if (!Username.matches("(.[A-Z].)")) {
-//            System.out.println("Username must have atleast one uppercase character");
-//            isValid = false;
-//        }
-//
-//        // Check Lower Case Match
-//        if (!Username.matches( "(.[a-z].)")) {
-//            System.out.println("Username must have atleast one lowercase character");
-//            isValid = false;
-//        }
 
         return isValid;
     }
 
     public void setEmailAddress() {
-
-        // Validating Email
-        // if ((email.split("@").length == 2) && ...)
         
         Scanner sc = new Scanner(System.in);
         DBFactory db = new DBFactory();
@@ -107,66 +84,70 @@ public class Registration extends TraceBack{
         
         do{
             System.out.print("Enter your Email Address: ");
-            email = sc.next();
+            email = sc.nextLine();
 
             System.out.println("\nYour Email address : " + email);
 
-            System.out.println("\nIs the Email address valid ?" + isValidEmail(email));
-            
-            System.out.println("\nis this Email in the system? " + db.searchTable("Email", email));
-            
-            if(isValidEmail(email) && !db.searchTable("Email", email))
-                break;
+            if (!isValidEmail(email)) {
+                System.out.println("Invalid Email Address!");
+                System.out.println("\nTry Again");
+            } else if (db.searchTable("Email", email)) {
+                System.out.println("Email Already Registered! Login or Use A New Email");
+                System.out.println("\nTry Again");
+            } else break;
 
-            System.out.println("\nTry Again");
-        }while(valid);
+        } while (valid);
+
         System.out.println("Email Accepted !");
         db.updateTable("Email", email, this.username);
+        
         this.emailAddress = email;
     }
     
     private static boolean isValidEmail(String email){
-
-        String regex = "[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-         
-        return email.matches(regex);
+        return email.matches("[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
     }
 
     public void setPhoneNumber() {
+
         DBFactory db = new DBFactory();
 
         Scanner sc = new Scanner (System.in) ;
         String number = "";
 
-            do{
-                System.out.print("Enter your phone number : ");
-                number = sc.next();
+        do{
+            System.out.print("Enter your phone number : ");
+            number = sc.nextLine();
 
-                String regex = "\\d{10}";
+            String numRegex = "\\d{10}";
 
-                System.out.println("Your Number Phone is :" + number);
-                System.out.println("Is the phone number Valid ? " + number.matches(regex));
-                System.out.println("is the phone number in the system? " + db.searchTable("PhoneNumber", number));
-                
-                if(!number.matches(regex) || db.searchTable("PhoneNumber", number))
-                {
-                    System.out.println("Try Again");
-                    continue;
-                }
-                
-                if(!db.searchTable("PhoneNumber", number))
-                    break;
-            }while(true);
-            System.out.println("Phone number Accepted !");
-            db.updateTable("PhoneNumber", number, this.username);
+            System.out.println("Your Number Phone is :" + number);
+
+            System.out.println("Is the phone number Valid ? " + number.matches(numRegex));
+            System.out.println("is the phone number in the system? " + db.searchTable("PhoneNumber", number));
+
+            if (!number.matches(numRegex)) {
+                System.out.println("Phone Number Contains Only 10 Digits!!");
+                System.out.println("\nTry Again");
+            } else if (db.searchTable("PhoneNumber", number)) {
+                System.out.println("Number Already Registered! Please Enter A New Number");
+                System.out.println("\nTry Again");
+            } else break;
+
+        } while (true);
+
+        System.out.println("Phone number Accepted !");
+        db.updateTable("PhoneNumber", number, this.username);
+        
         this.phoneNumber = number;
     }     
 
     public void setPassword() {
+
         DBFactory db = new DBFactory();
         Scanner sc = new Scanner(System.in);
         boolean firstPass = true;
-        boolean isValid;
+        boolean isValid = false;
         System.out.print("Enter Password: ");
         String password = sc.nextLine();
         System.out.println("");
@@ -176,8 +157,6 @@ public class Registration extends TraceBack{
 
         // Validate Password Requirements
         do {
-            isValid = false;
-
             if (!firstPass) {
                 System.out.print("Enter Password: "); password = sc.nextLine();
                 System.out.print("Retype Password: "); passwordRetype = sc.nextLine();
@@ -201,9 +180,10 @@ public class Registration extends TraceBack{
 
         } while (!isValid);
         
-        this.password = password;
         db.updateTable("Password", password, this.username);
         System.out.println("Password Saved Successfully!");
+
+        this.password = password;
     }
 
     private static boolean isValidPassword(String password) {
@@ -234,7 +214,6 @@ public class Registration extends TraceBack{
         }
         
         // Check Special Characters Match
-        // if (!password.matches("(.*[@,#,$,%].*$)")) {
         if (!password.matches("(.*[~,!,@,#,$,%,^,&,*,_,-,+,=,`,|,(,),{,},[,],:,;,\",\',<,>,,,.,?,/].*$)")) {
             System.out.println("Password must have atleast one special character among @#$%");
             isValid = false;
@@ -243,27 +222,28 @@ public class Registration extends TraceBack{
         return isValid;
     }
 
-    public String getUsername()
-    {
+    public String getUsername() {
         return this.username;
     }
     
-    public TraceBack Main() throws InterruptedException, AWTException
-    {
-        boolean f = false;
+    public TraceBack Main() throws InterruptedException, AWTException {
+        
         Scanner sc = new Scanner(System.in);
         Registration register = new Registration();
+        
         System.out.println("Welcome to The Register Page!");
         System.out.println("Please Provide The following Informations :D so we can register you as a new member!");
+        
         register.setUserName();
         register.setPassword();
         register.setEmailAddress();
         register.setPhoneNumber();
+        
         System.out.println("Done! Going Back to The previous page.....");
         System.out.println(register.getUsername());
+
         AccountSetUp setUpAccount = new AccountSetUp(register.getUsername());
-        return setUpAccount;
         
+        return setUpAccount;   
     }
-    
 }
