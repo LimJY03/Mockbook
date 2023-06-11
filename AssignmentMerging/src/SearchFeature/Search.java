@@ -57,12 +57,26 @@ public class Search extends TraceBack {
 
 			case "4":
 				System.out.print("Enter the Contact: ");
-				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Phone Number"), "Phone Number");
+				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "PhoneNumber"), "Phone Number");
 				break;
 
 			case "5":
 				System.out.print("Enter the Gender: ");
 				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Email"), "Email");
+				break;
+				
+			case "6":
+				System.out.print("Enter the Job: ");
+				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Job"), "Job");
+				break;
+			case "7":
+				System.out.print("Enter the Hobby: ");
+				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Hobbies"), "Hobbies");
+				break;
+				
+			case "8":
+				System.out.print("Enter the Address: ");
+				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Address"), "Address");
 				break;
 
 			default:
@@ -88,12 +102,17 @@ public class Search extends TraceBack {
 			while (rs.next()) {
 				String name = rs.getString("Username");
 				String email = rs.getString("Email");
-				Integer age = rs.getInt("Age");
+				int age = rs.getInt("Age");
 				String contact = rs.getString("PhoneNumber");
 				String gender = rs.getString("Gender");
 				String password = rs.getString("Password");
+				String job = rs.getString("Job");
+				String hobbies = rs.getString("Hobbies");
+				String address = rs.getString("Address");
 
-				list.add(new RegularUser(name, email, contact, age, gender, password));
+				RegularUser newUser = new RegularUser(name, email, contact, age, gender, password, job, hobbies, address);
+				list.add(newUser);
+
 			}
 
 		}
