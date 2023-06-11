@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import AccessControl.RegularUser;
 
 public class Display {
+    
+        final static int totalLength = 38; // Total width the "-" in the functions
 
 	public static void displaySearchOption() {
 		System.out.println("Option 1: Search via username");
@@ -41,17 +43,31 @@ public class Display {
 
 	public static void displayWelcomeLines(String header,String type,String user) {
 		
+		int headerLength = header.length();
+                int spaces = (totalLength - headerLength) / 2;
 		System.out.println("****************");
 		System.out.println("*   MockBook   *");
 		System.out.println("****************\n");
-		System.out.println("\t\t\t\t\t-------------------------------------\t\t");
-		System.out.println("\t\t\t\t\t           "+header+"!       ");
-		System.out.println("\t\t\t\t\t-------------------------------------\t\t");
+		System.out.println("\t\t\t\t\t--------------------------------------\t\t");
+		System.out.println("\t\t\t\t\t"+space(spaces)+header+space(spaces));
+		System.out.println("\t\t\t\t\t--------------------------------------\t\t");
 		System.out.println("\n");
 		System.out.println(
 				"\t\t Hello"+user+"! This is The "+type+"! You Will be Presented With Mulitiple Options you May Choose From Them!");
 
 	}
+        
+        public static String space(int spaces)
+        {
+            StringBuilder string = new StringBuilder();
+            if(!(spaces % 2 == 0))
+                spaces++;
+            for (int i = 0; i < spaces; i++) {
+                string.append(" ");
+            }
+            return string.toString();
+        }
+        
 
 	public static void displayUserOption(String type1,String type2,String type3) {
 		System.out.println("\n\t\t\t\t\t-------------------------------------\t\t");
@@ -72,12 +88,14 @@ public class Display {
 	
 	public static void displayProgramPage(String displayMessage)
 	{
+        int displayMessageLength = displayMessage.length();
+        int spaces = (totalLength - displayMessageLength) / 2;
         System.out.println("\n****************");
         System.out.println("*   MockBook   *");
         System.out.println("****************\n");
-        System.out.println("\t\t\t\t\t-------------------------------------\t\t");
-        System.out.println("\t\t\t\t\t        "+displayMessage+"       ");
-        System.out.println("\t\t\t\t\t-------------------------------------\t\t");
+        System.out.println("\t\t\t\t\t--------------------------------------\t\t");
+        System.out.println("\t\t\t\t\t"+space(spaces)+displayMessage+space(spaces));
+        System.out.println("\t\t\t\t\t--------------------------------------\t\t");
         System.out.println("\n");
 	}
 	
