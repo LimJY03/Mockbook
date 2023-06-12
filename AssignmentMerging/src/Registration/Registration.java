@@ -29,6 +29,12 @@ public class Registration extends TraceBack{
 
             firstPass = false;
             
+            if(userName.contains(" "))
+            {
+                System.out.println("Username Should NOT Contain Spaces!");
+                continue;
+            }
+            
             // This username has been taken
             if (MainProgram.db.searchTable("Username", userName)) {
                 System.out.println("Username has been taken");
