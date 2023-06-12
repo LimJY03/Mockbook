@@ -14,34 +14,35 @@ public class RegularUser extends User {
     
     
 
-    public RegularUser(String name, String email, String contact, int age, String gender, String p) {
-        super(name, p);
+    public RegularUser(String userName, String email, String contact, int age, String gender, String p) {
+        super(userName, p);
         this.email = email;
         this.contact = contact;
         this.age = age;
         this.gender = gender;
     }
     
-    public RegularUser(String name, String email, String contact, int age, String gender, String p, String job, String hobbies, String address) 
+    public RegularUser(String userName, String email, String contact, int age, String gender, String p, String job, String hobbies, String address) 
     {
-        this(name, email, contact, age, gender, p);
+        this(userName, email, contact, age, gender, p);
         this.job = job;
         this.hobbies = hobbies;
         this.address = address;
     }
     
-    public RegularUser(String name, String email, String contact, int age, String gender, String p, String job, String hobbies, String address, LocalDate birthday) 
+    public RegularUser(String userName, String email, String contact, int age, String gender, String p, String job, String hobbies, String address, LocalDate birthday) 
     {
-    	this(name, email, contact, age, gender, p,job,hobbies,address);
+    	this(userName, email, contact, age, gender, p,job,hobbies,address);
     	this.birthday=birthday;
     }
 
+    
 
     public void setConnection(int connection) {
         this.connection = connection;
     }
 
-    public String getName() {
+    public String getUserName() {
         return super.getUsername();
     }
 
