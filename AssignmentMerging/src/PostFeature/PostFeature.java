@@ -34,7 +34,7 @@ public class PostFeature extends TraceBack{
                     case "1":
                         clearConsole();
                         Display.displayPostCaption(user);
-                        System.out.println("\t\t\t\t\tHere are your posts!");
+                        System.out.println("\t\t\t\t\t\t  Here are your posts!");
                         displayPostForUser(user);
                         Display.displayUserOption("","","");
                         String done = MainProgram.sc.nextLine();
@@ -160,7 +160,7 @@ public class PostFeature extends TraceBack{
 
             while (rs.next()) {
                 String name = rs.getString("Username");
-                String content = rs.getString("post");
+                String content = rs.getString("Content");
                 if(content == null)
                     continue;
                 System.out.println(name);
@@ -184,7 +184,7 @@ public class PostFeature extends TraceBack{
 
             while (rs.next()) {
                 String name = rs.getString("Username");
-                String content = rs.getString("post");
+                String content = rs.getString("Content");
                 if(content == null)
                     continue;
                 p.addFirst(name, content);
