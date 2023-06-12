@@ -98,7 +98,7 @@ public class PostFeature extends TraceBack{
 
                     case "0":
                         clearConsole();
-                        this.isPrevious = true;
+                        this.previous.isPrevious = true;
                         return this.previous;
                     default:
                         System.out.println("\n\n");
@@ -119,7 +119,7 @@ public class PostFeature extends TraceBack{
     {
         try{
             Statement stmt = MainProgram.connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT post FROM Post,User WHERE Post.Username = User.Username AND User.Username ='"+ row +"'");
+            ResultSet rs = stmt.executeQuery("SELECT Content FROM Post,User WHERE Post.Username = User.Username AND User.Username ='"+ row +"'");
 
             if (rs.next()) 
                 return true;
@@ -133,7 +133,7 @@ public class PostFeature extends TraceBack{
 
     public void addNewPost(String username , String post)
     {
-        String q = String.format("INSERT INTO Post (Username, post) VALUES ('%s', '%s')" , username, post);
+        String q = String.format("INSERT INTO Post (Username, Content) VALUES ('%s', '%s')" , username, post);
         if(!MainProgram.db.searchTable("Username", username))
         {
             System.out.println("No such user is here");
@@ -180,7 +180,7 @@ public class PostFeature extends TraceBack{
         PostLinkedList<String> p = new PostLinkedList<String>();
         try{
             Statement stmt = MainProgram.connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT Username, post FROM Post WHERE Username <> '"+ user +"'");
+            ResultSet rs = stmt.executeQuery("SELECT Username, Content FROM Post WHERE Username <> '"+ user +"'");
 
             while (rs.next()) {
                 String name = rs.getString("Username");
