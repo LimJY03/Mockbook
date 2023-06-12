@@ -20,7 +20,7 @@ public class Search extends TraceBack {
 
 	public TraceBack Main() throws InterruptedException, AWTException {
 		search();
-		this.previous.isPrevious = true;
+		this.isPrevious = true;
 		return this.previous;
 	}
 
@@ -100,7 +100,7 @@ public class Search extends TraceBack {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				String name = rs.getString("Username");
+				String userName = rs.getString("Username");
 				String email = rs.getString("Email");
 				int age = rs.getInt("Age");
 				String contact = rs.getString("PhoneNumber");
@@ -110,7 +110,7 @@ public class Search extends TraceBack {
 				String hobbies = rs.getString("Hobbies");
 				String address = rs.getString("Address");
 
-				RegularUser newUser = new RegularUser(name, email, contact, age, gender, password, job, hobbies, address);
+				RegularUser newUser = new RegularUser(userName, email, contact, age, gender, password, job, hobbies, address);
 				list.add(newUser);
 
 			}
