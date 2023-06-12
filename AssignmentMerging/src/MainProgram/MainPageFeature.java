@@ -2,10 +2,10 @@ package MainProgram;
 
 
 import java.awt.AWTException;
-import java.util.Scanner;
 
 import AccessControl.ConnectionNet;
 import AccessControl.RegularUser;
+import AddFriend.AddNewFriend;
 import AdminGUI.MainApplication;
 import SearchFeature.Search;
 import TraceBack.TraceBack;
@@ -20,15 +20,17 @@ public class MainPageFeature extends TraceBack{
     
     public TraceBack Main() throws InterruptedException, AWTException{  
         TraceBack returnedTraceBack = null;
-        String user = MainProgram.GlobalDataStore.username;        
+        String user = MainProgram.GlobalDataStore.username;
+        
         RegularUser me = ConnectionNet.getAllConnection(user);
+        
         ConnectionNet.buildGraph(me);
         Display.displayWelcomeLines("Main Page", "Main Page", " "+user);
         
         breaker: while(true)    
         {
 
-        	Display.displayUserOption("Your Feed Feature", "Search Feature","");
+        	Display.displayUserOption("Your Feed Feature", "Search Feature","Add New Friend");
             String getInt = MainProgram.sc.nextLine();
             switch(getInt)
             {
@@ -42,6 +44,11 @@ public class MainPageFeature extends TraceBack{
                     clearConsole();
                     returnedTraceBack = new Search();
                     break breaker; 
+                case "3":
+                    Thread.sleep(500);
+                    clearConsole();
+                    returnedTraceBack= new AddNewFriend(me);
+                    break breaker;   	
                 case "0": 
                     System.out.println("Redirecting To The Entrance page...");
                     Thread.sleep(500);
