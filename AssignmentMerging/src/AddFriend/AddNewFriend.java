@@ -1,5 +1,6 @@
 package AddFriend;
 
+import java.awt.AWTException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +9,21 @@ import java.util.Scanner;
 
 import AccessControl.RegularUser;
 import MainProgram.MainProgram;
+import TraceBack.TraceBack;
 
-public class AddNewFriend {
+public class AddNewFriend extends TraceBack {
+	
+	RegularUser me;
+	
+	public AddNewFriend(RegularUser me) {
+		this.me = me;
+	}
+	
+	public TraceBack Main() throws InterruptedException, AWTException {
+		addFriend(this.me);
+		this.isPrevious = true;
+		return this.previous;
+	}
 
 	public static ArrayList<String> sentFriendRequestList(ArrayList<String> sentFriendRequests,
 			ArrayList<String> friendRecommendation, int index, String username) {
@@ -49,7 +63,7 @@ public class AddNewFriend {
 
 			stmt = MainProgram.connection.prepareStatement("UPDATE User SET ReceivedFriendRequest = '" + newReceivedList
 					+ "' WHERE Username = '" + targetUsername + "'");
-			stmt.executeQuery();
+			stmt.executeUpdate();
 
 			// Update my sent list
 			newSentList = newSentRequestList.toString().replaceAll(" ", "");
@@ -57,7 +71,7 @@ public class AddNewFriend {
 
 			stmt = MainProgram.connection.prepareStatement(
 					"UPDATE User SET SentFriendRequest = '" + newSentList + "' WHERE Username = '" + username + "'");
-			stmt.executeQuery();
+			stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -138,7 +152,7 @@ public class AddNewFriend {
 		return receivedFriendRequestList;
 	}
 
-	public static void addFriend(RegularUser me) {
+	private static void addFriend(RegularUser me) {
 
 		ArrayList<String> recommendation = me.getConnection2();
 
@@ -174,53 +188,63 @@ public class AddNewFriend {
 			index = Integer.parseInt(sc.nextLine());
 		}
 		sentRequest = sentFriendRequestList(sentRequest, recommendation, index, me.getUsername());
-		System.out.println("Display sent friend request list for me");
+		System.out.println("Pending Friend Request(s)");
 		int k = 1;
 		for (String s : sentRequest) {
 			System.out.println(k + ":\t" + s);
 			k++;
 		}
 
-		System.out.println("\n");
+		System.out.println("---\n");
 
 //        receivedRequest = receiveFriendRequestList(receivedRequest, me.getUsername);
 
 		// show received list
-		System.out.println("Display received friend request list for ");
+		System.out.println("Friend Request To Be Reviewed");
 		int j = 1;
-		for (String s : receivedRequest) {
-			System.out.println(j + ":\t" + s);
-			j++;
-		}
-
-		System.out.println("\n");
-
-		// choose who to accept or decline
-		System.out.println("Enter index of friend to accept/decline: ");
-		int option = Integer.parseInt(sc.nextLine());
-		while ((option > receivedRequest.size()) || option < 1) {
-			System.out.println("Invalid index. Enter a valid index.");
-			option = Integer.parseInt(sc.nextLine());
-		}
-
-		// accept or decline
-		System.out.println("Enter 1 to accept friend request, 2 to decline friend request for me, 3 to view "
-				+ receivedRequest.get(option - 1));
 		
-		int acceptOrDeclineOrView = Integer.parseInt(sc.nextLine());
+		if (!receivedRequest.isEmpty()) {
+			
+			for (String s : receivedRequest) {
+				System.out.println(j + ":\t" + s);
+				j++;
+			}
 
-		while (!(acceptOrDeclineOrView == 1 || acceptOrDeclineOrView == 2 || acceptOrDeclineOrView == 3)) {
-			// not (1 or 2) -> not 1 and not 2
-			System.out.println("Invalid index. Enter 1 or 2 or 3.");
-			acceptOrDeclineOrView = Integer.parseInt(sc.nextLine());
+			System.out.println("---\n");
+
+			// choose who to accept or decline
+			System.out.println("Enter index of friend to accept/decline: ");
+			int option = Integer.parseInt(sc.nextLine());
+			while ((option > receivedRequest.size()) || option < 1) {
+				System.out.println("Invalid index. Enter a valid index.");
+				option = Integer.parseInt(sc.nextLine());
+			}
+
+			// accept or decline
+			System.out.println("Enter 1 to accept friend request, 2 to decline friend request for me, 3 to view "
+					+ receivedRequest.get(option - 1));
+			
+			int acceptOrDeclineOrView = Integer.parseInt(sc.nextLine());
+
+			while (!(acceptOrDeclineOrView == 1 || acceptOrDeclineOrView == 2 || acceptOrDeclineOrView == 3)) {
+				// not (1 or 2) -> not 1 and not 2
+				System.out.println("Invalid index. Enter 1 or 2 or 3.");
+				acceptOrDeclineOrView = Integer.parseInt(sc.nextLine());
+			}
+
+			System.out.println("\n");
+
+			receivedRequest = processReceiveFriendRequest(me, receivedRequest, acceptOrDeclineOrView, option);
+
 		}
-
-		System.out.println("\n");
-
-		receivedRequest = processReceiveFriendRequest(me, receivedRequest, acceptOrDeclineOrView, option);
-//        processSentFriendRequest(sent, acceptOrDecline, option, friend);
+		else {
+			System.out.println("No pending request to be reviewed");
+			System.out.println("---\n");
+		}
 
 		// display updated friends list for user/me
+		if(me.getConnection1().contains(me.getUsername()))
+			me.getConnection1().remove(me.getConnection1().indexOf(me.getUsername()));
 		System.out.println("Friend's list for me: " + me.getConnection1());
 	}
 
