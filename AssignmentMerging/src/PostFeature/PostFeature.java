@@ -36,7 +36,7 @@ public class PostFeature extends TraceBack{
                         Display.displayPostCaption(user);
                         System.out.println("\t\t\t\t\tHere are your posts!");
                         displayPostForUser(user);
-                        Display.displayUserOption("Go Back","","");
+                        Display.displayUserOption("","","");
                         String done = MainProgram.sc.nextLine();
                         while(true)
                         {
@@ -46,7 +46,7 @@ public class PostFeature extends TraceBack{
                                 clearConsole();
                                 break;
                             }
-                            Display.displayUserOption("Go Back","","");
+                            Display.displayUserOption("","","");
                         }
                         break;
                     case "2":
