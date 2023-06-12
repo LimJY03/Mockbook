@@ -85,16 +85,18 @@ public class Login extends TraceBack{
         return this.username;
     }
     
-    public boolean signInUsingUsername()
+      public boolean signInUsingUsername()
     {
         String name, pass;
+        DBFactory db = new DBFactory();
+        Scanner sc = new Scanner(System.in);
         Display.displayProgramPage("Login Using Username");
 
         do{
             System.out.print("Enter your Username: ");
-            name = MainProgram.sc.nextLine();
+            name = sc.nextLine();
             System.out.print("Enter your Password: ");
-            pass = MainProgram.sc.nextLine();
+            pass = sc.nextLine();
             System.out.println("");
             if(CheckerForAccount(name,pass,"username"))
                 break;
@@ -103,6 +105,7 @@ public class Login extends TraceBack{
         
         this.username = name;
         this.password = pass;
+        MainProgram.GlobalDataStore.username = name;
         System.out.println("You have Logged in Successfully!");
         
         return true;
@@ -111,13 +114,14 @@ public class Login extends TraceBack{
     public boolean signInUsingEmail()
     {
         String email, pass;
+        Scanner sc = new Scanner(System.in);
         Display.displayProgramPage("Login Using Email");
 
         do{
         System.out.print("Enter your Email: ");
-        email = MainProgram.sc.nextLine();
+        email = sc.nextLine();
         System.out.print("Enter your Password: ");
-        pass = MainProgram.sc.nextLine();
+        pass = sc.nextLine();
         System.out.println("");
         if(CheckerForAccount(email,pass,"email"))
             break;
@@ -127,9 +131,11 @@ public class Login extends TraceBack{
         this.emailAddress = email;
         this.username = getUsernameFromEmail(this.emailAddress);
         this.password = pass;
+        MainProgram.GlobalDataStore.username = username;
         System.out.println("You have Logged in Successfully!");
         return true;
     }
+    
     
     public String getUsernameFromEmail(String email)
     {
