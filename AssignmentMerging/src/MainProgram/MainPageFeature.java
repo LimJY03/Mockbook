@@ -4,6 +4,8 @@ package MainProgram;
 import java.awt.AWTException;
 import java.util.Scanner;
 
+import AccessControl.ConnectionNet;
+import AccessControl.RegularUser;
 import AdminGUI.MainApplication;
 import SearchFeature.Search;
 import TraceBack.TraceBack;
