@@ -14,25 +14,25 @@ public class RegularUser extends User {
     
     
 
-    public RegularUser(String userName, String email, String contact, int age, String gender, String p) {
-        super(userName, p);
+    public RegularUser(String username, String email, String contact, int age, String gender, String p) {
+        super(username, p);
         this.email = email;
         this.contact = contact;
         this.age = age;
         this.gender = gender;
     }
     
-    public RegularUser(String userName, String email, String contact, int age, String gender, String p, String job, String hobbies, String address) 
+    public RegularUser(String username, String email, String contact, int age, String gender, String p, String job, String hobbies, String address) 
     {
-        this(userName, email, contact, age, gender, p);
+        this(username, email, contact, age, gender, p);
         this.job = job;
         this.hobbies = hobbies;
         this.address = address;
     }
     
-    public RegularUser(String userName, String email, String contact, int age, String gender, String p, String job, String hobbies, String address, LocalDate birthday) 
+    public RegularUser(String username, String email, String contact, int age, String gender, String p, String job, String hobbies, String address, LocalDate birthday) 
     {
-    	this(userName, email, contact, age, gender, p,job,hobbies,address);
+    	this(username, email, contact, age, gender, p,job,hobbies,address);
     	this.birthday=birthday;
     }
 
@@ -42,7 +42,7 @@ public class RegularUser extends User {
         this.connection = connection;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return super.getUsername();
     }
 
