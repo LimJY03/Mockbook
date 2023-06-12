@@ -32,7 +32,7 @@ public class Display {
 		
 
 		for (RegularUser rUser : list) {
-			System.out.printf("%-25s |%-30s |%-15s |%-15s |%-15s |%-25s |%-50s |%-50s\n", rUser.getUserName(), rUser.getEmail(),
+			System.out.printf("%-25s |%-30s |%-15s |%-15s |%-15s |%-25s |%-50s |%-50s\n", rUser.getUsername(), rUser.getEmail(),
 					rUser.getContact(), rUser.getAge(), rUser.getGender(),rUser.getJob(),rUser.getAddress(),rUser.getHobbies());
 
 		}
