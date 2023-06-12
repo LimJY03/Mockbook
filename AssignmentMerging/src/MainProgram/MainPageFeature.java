@@ -18,7 +18,9 @@ public class MainPageFeature extends TraceBack{
     
     public TraceBack Main() throws InterruptedException, AWTException{  
         TraceBack returnedTraceBack = null;
-        String user = MainProgram.GlobalDataStore.username;
+        String user = MainProgram.GlobalDataStore.username;        
+        RegularUser me = ConnectionNet.getAllConnection(user);
+        ConnectionNet.buildGraph(me);
         Display.displayWelcomeLines("Main Page", "Main Page", " "+user);
         
         breaker: while(true)    
