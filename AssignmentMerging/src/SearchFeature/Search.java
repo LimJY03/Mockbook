@@ -100,7 +100,7 @@ public class Search extends TraceBack {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				String userName = rs.getString("Username");
+				String username = rs.getString("Username");
 				String email = rs.getString("Email");
 				int age = rs.getInt("Age");
 				String contact = rs.getString("PhoneNumber");
@@ -110,7 +110,7 @@ public class Search extends TraceBack {
 				String hobbies = rs.getString("Hobbies");
 				String address = rs.getString("Address");
 
-				RegularUser newUser = new RegularUser(userName, email, contact, age, gender, password, job, hobbies, address);
+				RegularUser newUser = new RegularUser(username, email, contact, age, gender, password, job, hobbies, address);
 				list.add(newUser);
 
 			}
