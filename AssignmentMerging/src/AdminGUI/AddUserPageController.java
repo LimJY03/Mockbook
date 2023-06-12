@@ -123,11 +123,18 @@ public class AddUserPageController implements Initializable {
             	usernameLabel.setText("Must have atleast one uppercase/ one lowercase character");
                 isValid = false;
             }
+        	else if(Username.contains(" "))
+            {
+        		usernameLabel.setText("Username Should NOT Contain Spaces!");
+                isValid= false;
+            }
         	
         } 
 
         return isValid;
     }
+    
+
 
     
 
