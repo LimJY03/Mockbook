@@ -1,5 +1,5 @@
-import java.sql.*;
-import java.util.*;
+package assignmentds;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,44 +12,43 @@ public class MySQLStorage {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "Atsukomajitenshi.27";
 
-    public static void saveUser(User account) {
-    try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-        int newId = account.getId();
-        
-        // Check if the ID already exists in the table
-        while (idExists(connection, newId)) {
-            newId++; // Increment the ID until a unique ID is found
+    public static void saveUser(RegularUser account) {
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+            int newId = account.getId();
+
+            // Check if the ID already exists in the table
+            while (idExists(connection, newId)) {
+                newId++; // Increment the ID until a unique ID is found
+            }
+
+            // Insert the new record
+            String query = "INSERT INTO account_data (UserId, Name, Username, Email, Phone_Number, Birthday, Age, Address, Gender, Num_friends, Hobbies, Jobs, Password) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, newId);
+                statement.setString(2, account.getName());
+                statement.setString(3, account.getUsername());
+                statement.setString(4, account.getEmail());
+                statement.setString(5, account.getContact());
+                statement.setString(6, account.getBirthday().toString());
+                statement.setInt(7, account.calculateAge());
+                statement.setString(8, account.getAddress());
+                statement.setString(9, account.getGender());
+                statement.setInt(10, account.getNumberOfFriends());
+                statement.setString(11, account.getHobbies());
+                statement.setString(12, account.getJob());
+                statement.setString(13, account.getPassword());
+                statement.executeUpdate();
+                System.out.println("User saved successfully with ID: " + newId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        // Insert the new record
-        String query = "INSERT INTO account_data (id, name, username, email, contact_number, birthday, age, address, gender, num_friends, hobbies, jobs) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, newId);
-            statement.setString(2, account.getName());
-            statement.setString(3, account.getUsername());
-            statement.setString(4, account.getEmail());
-            statement.setString(5, account.getContactNumber());
-            statement.setInt(7, account.calculateAge()); 
-            statement.setString(6, account.getBirthday().toString());
-            statement.setString(8, account.getAddress());
-            statement.setString(9, account.getGender());
-            statement.setInt(10, account.getNumberOfFriends());
-            statement.setString(11, listToString(account.getHobbies()));
-            statement.setString(12, listToString(account.getJobs()));
-
-            statement.executeUpdate();
-            System.out.println("User saved successfully with ID: " + newId);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-}
-
 
     private static boolean idExists(Connection connection, int id) throws SQLException {
-        String query = "SELECT COUNT(*) FROM account_data WHERE id = ?";
+        String query = "SELECT COUNT(*) FROM account_data WHERE UserId = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
