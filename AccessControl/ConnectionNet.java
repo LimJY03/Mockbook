@@ -1,7 +1,10 @@
 package AccessControl;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import MainProgram.MainProgram;
@@ -101,7 +104,21 @@ public class ConnectionNet {
 				String hobbies = rs.getString("Hobbies");
 				String address = rs.getString("Address");
 				String friendHolder = rs.getString("Friend");
-				LocalDate birthday = rs.getDate("Birthday") == null ? null : rs.getDate("Birthday").toLocalDate();
+
+				String birthdayString = rs.getString("Birthday");
+	            LocalDate birthday = null;
+	            if (birthdayString != null) 
+	            {
+	                SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY");
+	                try {
+	                    java.util.Date parsedDate = dateFormat.parse(birthdayString);
+	                    birthday = new java.sql.Date(parsedDate.getTime()).toLocalDate();
+	                } catch (ParseException e) {
+	                    System.out.println("Error parsing date: " + birthdayString);
+	                    e.printStackTrace();
+	                }
+	            }
+	            
 				String[] friends = {};
 
 				if (friendHolder != null)
