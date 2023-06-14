@@ -80,15 +80,10 @@ public class ConnectionNet {
 						ConnectionNet.map.put(username, new Friend(username, 2));
 						ConnectionNet.map.get(username).mutualFriends = userMutualFriends;
 					}
-
 					visited.add(username);
 				}
-
 			}
-
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
+		} catch (SQLException e) { ystem.out.println(e.getMessage()); }
 	}
 
 	public static RegularUser getAllConnection(String myName) {
