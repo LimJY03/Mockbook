@@ -62,18 +62,35 @@ public class RegularUser extends User {
     public String getEmail() {
         return this.email;
     }
+    
+    public void setEmail(String newEmail)
+    {
+    	this.email=newEmail;
+    }
 
     public String getGender() {
         return this.gender;
+    }
+    
+    public void setGender(String gender) {
+    	this.gender=gender;
     }
 
     public String getContact() {
         return this.contact;
     }
+    
+    public void setContact(String newContact) {
+    	this.contact= newContact;
+    }
 
     public int getAge() {
         return this.age;
     }
+    
+	public void setAge(int newAge) {
+		this.age= newAge;
+	}
 
     public String getJob() {
         return this.job;
@@ -103,7 +120,8 @@ public class RegularUser extends User {
     	return this.birthday;
     }
     
-    public void setBirthday(LocalDate birthday) {
+    
+    public void setBirthday(LocalDate newBirthday) {
     	this.birthday = birthday;
     }
 
@@ -149,5 +167,7 @@ public class RegularUser extends User {
         Period period = Period.between(birthday, currentDate);
         return period.getYears();
     }
+
+
     
 }
