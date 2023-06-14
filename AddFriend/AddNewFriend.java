@@ -184,10 +184,14 @@ public class AddNewFriend extends TraceBack {
 		}
 
 		int p = 1;
+		
+		System.out.printf("%-5s| %-25s| %-20s|\n","No.","Username","Connection Degree");
+		System.out.printf(String.format("%-45s", "").replace("", "-"));
+		System.out.println();
 		while (!recommendationPq.isEmpty()) {
 			String recommend = recommendationPq.poll();
 			recommendation.add(recommend);
-			System.out.println(p + ": \t" + recommend + "\t\t" + ConnectionNet.map.get(recommend).getMutualFriends().size());
+			System.out.printf("%-5d| %-25s| %-20s|\n",p,recommend,ConnectionNet.map.get(recommend).getMutualFriends().size());
 			p++;
 		}
 
