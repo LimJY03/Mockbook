@@ -128,6 +128,7 @@ public class AddNewFriend extends TraceBack {
 		switch (acceptOrDeclineOrView) {
 			case 1:
 				me.addConnection1(friend); // add to my friend list
+				ConnectionNet.map.get(friend).setConnectionDegree(1);
 				if (me.getConnection2().contains(friend))
 					me.removeConnection2(friend);
 				else
@@ -138,8 +139,8 @@ public class AddNewFriend extends TraceBack {
 				updateDBAfterReceived(me.getUsername(), friend, receivedFriendRequestList, true);
 
 				// Update our mutual friend lists to include this newly added friend
-				ArrayList<String> friendMutualFriends = ConnectionNet.map.get(friend).mutualFriends;
-				for (String friendMutualFriend: friendMutualFriends) ConnectionNet.map.get(friendMutualFriend).mutualFriends.add(friend);
+				ArrayList<String> friendMutualFriends = ConnectionNet.map.get(friend).getMutualFriends();
+				for (String friendMutualFriend: friendMutualFriends) ConnectionNet.map.get(friendMutualFriend).addMutualFriends(friend);
 
 				break;
 			case 2:
@@ -163,7 +164,7 @@ public class AddNewFriend extends TraceBack {
 	}
 
 	private static int sort(String a, String b) {
-		return ConnectionNet.map.get(b).mutualFriends.size() - ConnectionNet.map.get(a).mutualFriends.size();
+		return ConnectionNet.map.get(b).getMutualFriends().size() - ConnectionNet.map.get(a).getMutualFriends().size();
 	}
 
 	private static void addFriend(RegularUser me) {
@@ -187,7 +188,7 @@ public class AddNewFriend extends TraceBack {
 		while (!recommendationPq.isEmpty()) {
 			String recommend = recommendationPq.poll();
 			recommendation.add(recommend);
-			System.out.println(p + ": \t" + recommend + "\t\t" + ConnectionNet.map.get(recommend).mutualFriends.size());
+			System.out.println(p + ": \t" + recommend + "\t\t" + ConnectionNet.map.get(recommend).getMutualFriends().size());
 			p++;
 		}
 

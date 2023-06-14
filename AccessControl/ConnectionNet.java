@@ -40,7 +40,7 @@ public class ConnectionNet {
 				if (me.getConnection1().contains(username)) {
 
 					ConnectionNet.map.put(username, new Friend(username, 1));
-					ConnectionNet.map.get(username).mutualFriends = MutualFriend.getMutualFriends(me, rs.getString("Friend"));
+					ConnectionNet.map.get(username).setMutualFriends(MutualFriend.getMutualFriends(me, rs.getString("Friend")));
 
 					// Explore my friend’s friend
 					for (int i = 0; i < theirFriends.length - 1; i++) {
@@ -53,7 +53,7 @@ public class ConnectionNet {
 						// My friend’s friend not in my friend list
 						me.addConnection2(theirFriend);
 						ConnectionNet.map.put(theirFriend, new Friend(theirFriend, 2));
-						ConnectionNet.map.get(theirFriend).mutualFriends = MutualFriend.getMutualFriends(me, rs.getString("Friend"));
+						ConnectionNet.map.get(theirFriend).setMutualFriends(MutualFriend.getMutualFriends(me, rs.getString("Friend")));
 
 						visited.add(theirFriend);
 					}
@@ -77,7 +77,7 @@ public class ConnectionNet {
 					else {
 						me.addConnection2(username);
 						ConnectionNet.map.put(username, new Friend(username, 2));
-						ConnectionNet.map.get(username).mutualFriends = userMutualFriends;
+						ConnectionNet.map.get(username).setMutualFriends(userMutualFriends);
 					}
 					visited.add(username);
 				}
