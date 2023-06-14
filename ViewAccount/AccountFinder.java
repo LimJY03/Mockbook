@@ -19,7 +19,7 @@ public class AccountFinder {
 				
 				int connectionDegree = ConnectionNet.map.get(selectedAccountUsername).getConnectionDegree();
 				
-		        System.out.println("Username: " + resultSet.getString("Username") +" Connection Degree: " +connectionDegree);
+		        System.out.println("Username: " + resultSet.getString("Username") +", Connection Degree: " +connectionDegree);
 		        System.out.println("Gender: " + resultSet.getString("Gender"));
 		        System.out.println("Hobbies: " + resultSet.getString("Hobbies"));
 		        System.out.println("Jobs: " + resultSet.getString("Job"));
