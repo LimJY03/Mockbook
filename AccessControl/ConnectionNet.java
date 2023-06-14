@@ -11,69 +11,81 @@ import SearchFeature.Friend;
 import SearchFeature.MutualFriend;
 
 public class ConnectionNet {
-	
+
 	public static MyHashMap<String, Friend> map = new MyHashMap<>();
 
 	public static void buildGraph(RegularUser me) {
 
 		ArrayList<String> visited = me.getConnection1();
 		ResultSet rs = buildGraphHelper();
-		
+
 		visited.add(me.getUsername());
 
 		try {
 			while (rs.next()) {
-				
+
 				String username = rs.getString("Username");
-				
-				if (username.equals(me.getUsername())) continue;
-				
+
+				// This is me
+				if (username.equals(me.getUsername()))
+					continue;
+
 				String friendHolder = rs.getString("Friend");
 				String[] theirFriends = {};
-				
-				if (friendHolder != null) theirFriends = friendHolder.split(",");
-				
+
+				// This user has friend
+				if (friendHolder != null)
+					theirFriends = friendHolder.split(",");
+
+				// Username is my friend -> 1st degree
 				if (me.getConnection1().contains(username)) {
-					
+
 					ConnectionNet.map.put(username, new Friend(username, 1));
 					ConnectionNet.map.get(username).mutualFriends = MutualFriend.getMutualFriends(me, rs.getString("Friend"));
-					
-					for (int i = 0; i < theirFriends.length - 1; i++) {
-						
-						String theirFriend = theirFriends[i];
-						
-						if (visited.contains(theirFriend)) continue;
-						
-						me.getConnection2().add(theirFriend);
 
-						ConnectionNet.map.put(username, new Friend(username, 2));
-						ConnectionNet.map.get(username).mutualFriends = MutualFriend.getMutualFriends(me, rs.getString("Friend"));
-						
+					// Explore my friend’s friend
+					for (int i = 0; i < theirFriends.length - 1; i++) {
+
+						String theirFriend = theirFriends[i];
+
+						if (visited.contains(theirFriend))
+							continue;
+
+						// My friend’s friend not in my friend list
+						me.getConnection2().add(theirFriend);
+						ConnectionNet.map.put(theirFriend, new Friend(theirFriend, 2));
+						ConnectionNet.map.get(theirFriend).mutualFriends = MutualFriend.getMutualFriends(me, rs.getString("Friend"));
+
 						visited.add(theirFriend);
 					}
-				} else {
-					
-					boolean is2degree = false;
-					
-					for (String theirFriend : theirFriends) {
-						
-						if (me.getConnection1().contains(theirFriend)) {
-							
-							me.getConnection2().add(theirFriend);
-							ConnectionNet.map.put(username, new Friend(username, 2));
-							ConnectionNet.map.get(username).mutualFriends = MutualFriend.getMutualFriends(me, rs.getString("Friend"));
-							
-							is2degree = true;							
-							break;
-						}
-					}
-					if (!is2degree) {
+				}
+
+				// This is not my friend -> 2nd / 3rd degree
+				else {
+
+					if (visited.contains(username))
+						continue;
+
+					ArrayList<String> userMutualFriends = MutualFriend.getMutualFriends(me, rs.getString("Friend"));
+
+					// Username don't have mutual friend with me -> 3rd degree
+					if (userMutualFriends.isEmpty()) {
 						me.getConnection3plus().add(username);
 						ConnectionNet.map.put(username, new Friend(username, 3));
+					} 
+					
+					// Username have mutual friend with me -> 2nd degree
+					else {
+						me.getConnection2().add(theirFriend);
+						ConnectionNet.map.put(username, new Friend(username, 2));
+						ConnectionNet.map.get(username).mutualFriends = userMutualFriends;
 					}
+
+					visited.add(username);
 				}
+
 			}
-			
+
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -82,61 +94,49 @@ public class ConnectionNet {
 	public static RegularUser getAllConnection(String myName) {
 
 		try {
-				
-			PreparedStatement stmt = MainProgram.connection.prepareStatement("SELECT * FROM User WHERE Username = '"+myName+"'");
-			ResultSet rs = stmt.executeQuery();
+
+			
+			ResultSet rs = MainProgram.connection.prepareStatement("SELECT * FROM User WHERE Username = '" + myName + "'").executeQuery();
 
 			if (rs.next()) {
-			    // Retrieve data from ResultSet
-			    String password = rs.getString("Password");
-			    String email = rs.getString("Email");
-			    String contact = rs.getString("PhoneNumber");
-			    Integer age = rs.getInt("Age");
-			    String gender = rs.getString("Gender");
-			    String job = rs.getString("Job");
-			    String hobbies = rs.getString("Hobbies");
-			    String address = rs.getString("Address");
-			    String friendHolder = rs.getString("Friend");
-			    LocalDate birthday = rs.getDate("Birthday")==null? null : rs.getDate("Birthday").toLocalDate();
-			    String[] friends = {};
-			    
-			    if (friendHolder != null) friends = friendHolder.split(",");		    
 
-			    RegularUser me = new RegularUser(myName, email, contact, age, gender, password);
+				// Retrieve data from ResultSet
+				String password = rs.getString("Password");
+				String email = rs.getString("Email");
+				String contact = rs.getString("PhoneNumber");
+				Integer age = rs.getInt("Age");
+				String gender = rs.getString("Gender");
+				String job = rs.getString("Job");
+				String hobbies = rs.getString("Hobbies");
+				String address = rs.getString("Address");
+				String friendHolder = rs.getString("Friend");
+				LocalDate birthday = rs.getDate("Birthday") == null ? null : rs.getDate("Birthday").toLocalDate();
+				String[] friends = {};
 
-			    for (String friend : friends)
-			        me.getConnection1().add(friend);
-			    
-			    if(!me.getConnection1().isEmpty())
-			    	me.getConnection1().remove(me.getConnection1().size()-1);
-			    
-			    return me;
-			} else {
-			    System.out.println("No user found with the username: " + myName);
-			}
+				if (friendHolder != null)
+					friends = friendHolder.split(",");
 
+				RegularUser me = new RegularUser(myName, email, contact, age, gender, password);
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+				for (int i = 0; i < friends.length - 1; i++)
+					me.getConnection1().add(friends[i]);
+
+				return me;
+			} 
+			else { System.out.println("No user found with the username: " + myName); }
+		} 
+		catch (SQLException e) { e.printStackTrace(); }
 
 		return null;
 	}
 
 	private static ResultSet buildGraphHelper() {
+
 		try {
-
-			PreparedStatement stmt = MainProgram.connection.prepareStatement("SELECT Friend,Username FROM User");
-			ResultSet rs = stmt.executeQuery();
-
-			return rs;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			return MainProgram.connection.prepareStatement("SELECT Friend, Username FROM User").executeQuery();
+		} 
+		catch (SQLException e) { e.printStackTrace(); }
 
 		return null;
-
 	}
-
 }
