@@ -80,7 +80,7 @@ public class AccountSetUp extends TraceBack{
     }
     
     public boolean setBirthday() {
-        System.out.print("Please Provide Your Birthday in this format: day/month/year (ALL IN INTEGERS): ");
+        System.out.print("Please Provide Your Birthday in this format: DD/MM/YYYY (ALL IN INTEGERS): ");
         String holder = MainProgram.sc.nextLine();
         System.out.println("");
         
@@ -202,9 +202,11 @@ public class AccountSetUp extends TraceBack{
         {
             hobby+= hobbie.get(i) +",";
         }
-        if(hobby == " ")
+        if(hobby == " "||hobby=="")
             hobby = "None";
-        hobby = hobby.substring(0, hobby.length() - 1); 
+        else
+        	hobby = hobby.substring(0, hobby.length() - 1);
+        
         System.out.println("Hobbies Have been Registerd!");
         System.out.println("---------------------------------------");
         return hobby;
