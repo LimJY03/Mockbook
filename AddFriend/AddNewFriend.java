@@ -91,8 +91,7 @@ public class AddNewFriend extends TraceBack {
 
 				String[] tempSentList = rs.getString("SentFriendRequest").split(",");
 
-				for (int i = 0; i < tempSentList.length - 1; i++) {
-					String sent = tempSentList[i];
+				for (String sent: tempSentList) {
 					if (sent.equals(username))
 						continue;
 					newReceivedList += sent + ",";
