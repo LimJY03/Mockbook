@@ -23,7 +23,7 @@ public class PasswordEncrypt {
         // Convert byte array into signum representation
         BigInteger number = new BigInteger(1, finalBytes);
 
-        // Convert message digest into hex value
+        // Convert into hex value
         StringBuilder hexString = new StringBuilder(number.toString(16));
 
         // Pad with leading zeros
@@ -37,11 +37,11 @@ public class PasswordEncrypt {
     // Test
     public static void main(String args[]) {
 
-        String s1 = "pAssword1";
-        System.out.println("\n" + s1 + ": " + encryptSHA256(s1, "username"));
+        String s1 = "data_Structureisc00L";
+        System.out.println("\n" + s1 + ": " + encryptSHA256(s1, "Wia1002Datastructure"));
 
-        // String s2 = "mypAssword1";
-        // System.out.println("\n" + s2 + ": " + encryptSHA256(s2));
+        String s2 = "data_Structureisc00L";
+        System.out.println("\n" + s2 + ": " + encryptSHA256(s2, "1002Datastructure"));
 
         // String s3 = "my-pAssword1";
         // System.out.println("\n" + s3 + ": " + encryptSHA256(s3));
