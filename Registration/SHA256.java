@@ -53,8 +53,8 @@ public class SHA256 {
 
             // operate on TEMP
             for (int t = 0; t < W.length; ++t) {
-                int t1 = TEMP[7] + bigSig1(TEMP[4]) + ch(TEMP[4], TEMP[5], TEMP[6]) + K[t] + W[t];
-                int t2 = bigSig0(TEMP[0]) + maj(TEMP[0], TEMP[1], TEMP[2]);
+                int t1 = TEMP[7] + S1(TEMP[4]) + ch(TEMP[4], TEMP[5], TEMP[6]) + K[t] + W[t];
+                int t2 = S0(TEMP[0]) + maj(TEMP[0], TEMP[1], TEMP[2]);
                 System.arraycopy(TEMP, 0, TEMP, 1, TEMP.length - 1);
                 TEMP[4] += t1;
                 TEMP[0] = t1 + t2;
@@ -107,24 +107,24 @@ public class SHA256 {
         return buf.array();
     }
 
-    private static int ch(int x, int y, int z) {
-        return (x & y) | ((~x) & z);
+    private static int ch(int e, int f, int g) {
+        return (e & f) | ((~e) & g);
     }
 
-    private static int maj(int x, int y, int z) {
-        return (x & y) | (x & z) | (y & z);
+    private static int maj(int a, int b, int c) {
+        return (a & b) | (a & c) | (b & c);
     }
 
-    private static int bigSig0(int x) {
-        return Integer.rotateRight(x, 2) 
-            ^ Integer.rotateRight(x, 13) 
-            ^ Integer.rotateRight(x, 22);
+    private static int S0(int a) {
+        return Integer.rotateRight(a, 2) 
+            ^ Integer.rotateRight(a, 13) 
+            ^ Integer.rotateRight(a, 22);
     }
 
-    private static int bigSig1(int x) {
-        return Integer.rotateRight(x, 6)
-            ^ Integer.rotateRight(x, 11)
-            ^ Integer.rotateRight(x, 25);
+    private static int S1(int e) {
+        return Integer.rotateRight(e, 6)
+            ^ Integer.rotateRight(e, 11)
+            ^ Integer.rotateRight(e, 25);
     }
 
     private static int smallSig0(int x) {
