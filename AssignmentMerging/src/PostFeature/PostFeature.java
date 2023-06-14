@@ -46,13 +46,18 @@ public class PostFeature extends TraceBack{
                                 clearConsole();
                                 break;
                             }
-                            Display.displayUserOption("","","");
+                            else
+                            {
+                            	
+                            	Display.displayUserOption("","","");
+                            	done = MainProgram.sc.nextLine();
+                            }
                         }
                         break;
                     case "2":
                         clearConsole();
                         Display.displayPostCaption(user);
-                        System.out.println("Pleas Enter The Post: ");
+                        System.out.println("Please Enter The Post: ");
                         String postContent = MainProgram.sc.nextLine();
                         addNewPost(user,postContent);
                         System.out.println("Post Has Been Successfully Made! Redirecting..");
