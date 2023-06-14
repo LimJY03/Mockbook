@@ -5,15 +5,13 @@
 package MyDataBase;
 
 import java.sql.*;
+import MainProgram.MainProgram;
 
 /**
  * 
  * @author HuSSon
  */
 public class DBFactory {
-// One mistake in changing something here breaks the SQL syntax , change at ur own discretion
-
-    // adds the table to the DB after checking if it is in it or not
     
     public void columnAdder(String nameOfColumn, String typeOfTable)
     {
@@ -21,9 +19,8 @@ public class DBFactory {
         {
             return;
         }
-        Connection connection = MyDataBase.establishConnection();
         String q = "ALTER TABLE User ADD " + nameOfColumn + " " + typeOfTable ;
-        try(PreparedStatement stmt = connection.prepareStatement(q)) 
+        try(PreparedStatement stmt = MainProgram.connection.prepareStatement(q)) 
         {
             
             int affected = stmt.executeUpdate(q);
@@ -41,8 +38,7 @@ public class DBFactory {
         
         boolean flag = false;
         try{
-            Connection connection = MyDataBase.establishConnection();
-            DatabaseMetaData md = connection.getMetaData();
+            DatabaseMetaData md = MainProgram.connection.getMetaData();
             ResultSet rs = md.getColumns(null, null, "User", nameOfColumn);
             if (rs.next()) {
                 flag = true;
@@ -60,9 +56,8 @@ public class DBFactory {
     public void updateTable(String column ,String updated, String username)
     {
         
-        Connection connection = MyDataBase.establishConnection();
         String q = "UPDATE User SET " +column +  " = '" + updated + "' WHERE Username = '" + username +"'";
-        try(PreparedStatement stmt = connection.prepareStatement(q)) 
+        try(PreparedStatement stmt = MainProgram.connection.prepareStatement(q)) 
         {
             int affected = stmt.executeUpdate(q);
             if(affected < 1)
@@ -80,9 +75,8 @@ public class DBFactory {
     public void updateTable(String column ,int updated, String username)
     {
         
-        Connection connection = MyDataBase.establishConnection();
         String q = "UPDATE User SET " + column +  " = '" + updated + "' WHERE Username = '" + username +"'";
-        try(PreparedStatement stmt = connection.prepareStatement(q)) 
+        try(PreparedStatement stmt = MainProgram.connection.prepareStatement(q)) 
         {
             int affected = stmt.executeUpdate(q);
             if(affected < 1)
@@ -98,10 +92,9 @@ public class DBFactory {
     
     public boolean searchTable(String column, String row)
     {
-        Connection connection = MyDataBase.establishConnection();
         try{
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM User where Username='"+row+"'");
+            Statement stmt = MainProgram.connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE " + column +  "= '" + row + "'");
 
             if (rs.next()) {
                 return true;
@@ -118,9 +111,8 @@ public class DBFactory {
     
     public void addNewUser(String username)
     {
-        Connection connection = MyDataBase.establishConnection();
         String q = String.format("INSERT INTO User (Username) VALUES ('%s')" , username);
-        try(PreparedStatement stmt = connection.prepareStatement(q)) 
+        try(PreparedStatement stmt = MainProgram.connection.prepareStatement(q)) 
         {
             int affected = stmt.executeUpdate(q);
             if(affected < 1)

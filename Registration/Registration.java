@@ -73,7 +73,7 @@ public class Registration extends TraceBack{
 
         return isValid;
     }
-
+    
     public void setEmailAddress() {
         String email = "";
         boolean valid = true;
@@ -81,10 +81,11 @@ public class Registration extends TraceBack{
         do{
             System.out.print("\nEnter your Email Address: ");
             email = MainProgram.sc.nextLine();
+            email.toLowerCase();
             if (!isValidEmail(email)) {
                 System.out.println("Invalid Email Address!");
                 System.out.println("\nTry Again");
-            } else if (MainProgram.db.searchTable("Email", email.toLowerCase())) {
+            } else if (MainProgram.db.searchTable("Email",email)) {
                 System.out.println("Email Already Registered! Login or Use A New Email");
                 System.out.println("\nTry Again");
                 continue;
@@ -161,7 +162,7 @@ public class Registration extends TraceBack{
 
         } while (!isValid);
         
-        MainProgram.db.updateTable("Password", password, this.username);
+        MainProgram.db.updateTable("Password", PasswordEncrypt.encryptSHA256(password, this.username), this.username);
         System.out.print("Password Saved Successfully!");
 
         this.password = password;
@@ -238,7 +239,10 @@ public class Registration extends TraceBack{
                 clearConsole();
                 break breaker;
             }
-            System.out.println("This is NOT One of The Choices Given! Type Again :D");
+            else{
+                System.out.println("This is NOT One of The Choices Given! Type Again :D");
+                getInt = MainProgram.sc.nextLine();
+            }
         }
         
         

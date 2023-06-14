@@ -101,7 +101,7 @@ public class Login extends TraceBack{
         }while(true);
         
         this.username = name;
-        this.password = pass;
+        this.password = PasswordEncrypt.encryptSHA256(pass, name);
         MainProgram.GlobalDataStore.username = name;
         System.out.println("You have Logged in Successfully!");
         
@@ -126,7 +126,7 @@ public class Login extends TraceBack{
         
         this.emailAddress = email;
         this.username = getUsernameFromEmail(this.emailAddress);
-        this.password = pass;
+        this.password = PasswordEncrypt.encryptSHA256(pass, this.username);
         MainProgram.GlobalDataStore.username = username;
         System.out.println("You have Logged in Successfully!");
         return true;
@@ -167,7 +167,7 @@ public class Login extends TraceBack{
         Connection connection = MyDataBase.establishConnection();
         try{
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE " + type +" ='"+ user +"' AND Password = '" + password+ "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE " + type +" ='"+ user +"' AND Password = '" + PasswordEncrypt.encryptSHA256(password, user)+ "'");
 
             if (rs.next()) {
                 return true;
