@@ -5,12 +5,23 @@ import java.nio.charset.StandardCharsets;
 
 public class PasswordEncrypt {
 
-    public static String encryptSHA256(String input) {
+    public static String encryptSHA256(String password, String username) {
 
-        byte[] bytes = SHA256.hash(input.getBytes(StandardCharsets.US_ASCII));
+        byte[] initialBytes = password.getBytes(StandardCharsets.US_ASCII);
+        byte[] salt = username.getBytes(StandardCharsets.US_ASCII);
+
+        byte[] combinedBytes = new byte[initialBytes.length + salt.length];
+
+        // Copy the contents of initialBytes to the combinedBytes array
+        System.arraycopy(initialBytes, 0, combinedBytes, 0, initialBytes.length);
+
+        // Copy the contents of salt to the combinedBytes array, starting from the end of initialBytes
+        System.arraycopy(salt, 0, combinedBytes, initialBytes.length, salt.length);
+
+        byte[] finalBytes = SHA256.hash(combinedBytes);
 
         // Convert byte array into signum representation
-        BigInteger number = new BigInteger(1, bytes);
+        BigInteger number = new BigInteger(1, finalBytes);
 
         // Convert message digest into hex value
         StringBuilder hexString = new StringBuilder(number.toString(16));
@@ -27,12 +38,12 @@ public class PasswordEncrypt {
     public static void main(String args[]) {
 
         String s1 = "pAssword1";
-        System.out.println("\n" + s1 + ": " + encryptSHA256(s1));
+        System.out.println("\n" + s1 + ": " + encryptSHA256(s1, "username"));
 
-        String s2 = "mypAssword1";
-        System.out.println("\n" + s2 + ": " + encryptSHA256(s2));
+        // String s2 = "mypAssword1";
+        // System.out.println("\n" + s2 + ": " + encryptSHA256(s2));
 
-        String s3 = "my-pAssword1";
-        System.out.println("\n" + s3 + ": " + encryptSHA256(s3));
+        // String s3 = "my-pAssword1";
+        // System.out.println("\n" + s3 + ": " + encryptSHA256(s3));
     }
 }
