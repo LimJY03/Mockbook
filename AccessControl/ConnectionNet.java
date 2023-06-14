@@ -51,7 +51,7 @@ public class ConnectionNet {
 							continue;
 
 						// My friend’s friend not in my friend list
-						me.getConnection2().add(theirFriend);
+						me.addConnection2(theirFriend);
 						ConnectionNet.map.put(theirFriend, new Friend(theirFriend, 2));
 						ConnectionNet.map.get(theirFriend).mutualFriends = MutualFriend.getMutualFriends(me, rs.getString("Friend"));
 
@@ -69,13 +69,13 @@ public class ConnectionNet {
 
 					// Username don't have mutual friend with me -> 3rd degree
 					if (userMutualFriends.isEmpty()) {
-						me.getConnection3plus().add(username);
+						me.addConnection3plus(username);
 						ConnectionNet.map.put(username, new Friend(username, 3));
 					} 
 					
 					// Username have mutual friend with me -> 2nd degree
 					else {
-						me.getConnection2().add(username);
+						me.addConnection2(username);
 						ConnectionNet.map.put(username, new Friend(username, 2));
 						ConnectionNet.map.get(username).mutualFriends = userMutualFriends;
 					}
@@ -113,7 +113,7 @@ public class ConnectionNet {
 				RegularUser me = new RegularUser(myName, email, contact, age, gender, password, job, hobbies, address, birthday);
 
 				for (int i = 0; i < friends.length - 1; i++)
-					me.getConnection1().add(friends[i]);
+					me.addConnection1(friends[i]);
 
 				return me;
 			} 

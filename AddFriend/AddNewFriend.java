@@ -126,12 +126,12 @@ public class AddNewFriend extends TraceBack {
 		String friend = receivedFriendRequestList.get(position);
 
 		switch (acceptOrDeclineOrView) {
-			case 1 -> {
-				me.getConnection1().add(friend); // add to my friend list
+			case 1:
+				me.addConnection1(friend); // add to my friend list
 				if (me.getConnection2().contains(friend))
-					me.getConnection2().remove(me.getConnection2().indexOf(friend));
+					me.removeConnection2(friend);
 				else
-					me.getConnection3plus().remove(me.getConnection3plus().indexOf(friend));
+					me.removeConnection3plus(friend);
 				receivedFriendRequestList.remove(position); // remove from my received friend requests list
 				System.out.println("Accept friend: successful");
 				System.out.println("updated received friend requests list for me: " + receivedFriendRequestList);
@@ -140,18 +140,23 @@ public class AddNewFriend extends TraceBack {
 				// Update our mutual friend lists to include this newly added friend
 				ArrayList<String> friendMutualFriends = ConnectionNet.map.get(friend).mutualFriends;
 				for (String friendMutualFriend: friendMutualFriends) ConnectionNet.map.get(friendMutualFriend).mutualFriends.add(friend);
-			}
-			case 2 -> {
+
+				break;
+			case 2:
 				receivedFriendRequestList.remove(position);
 				System.out.println("Decline friend: successful");
 				System.out.println("updated received friend requests list for me: " + receivedFriendRequestList);
 				updateDBAfterReceived(me.getUsername(), friend, receivedFriendRequestList, false);
-			}
-			case 3 -> {
+
+				break;
+			case 3:
 				String targetUsername = receivedFriendRequestList.get(position);
 				// View User from Daniel
-			}
-			default -> System.out.println("");
+
+				break;
+			default:
+				System.out.println("");
+				break;
 		}
 
 		return receivedFriendRequestList;
@@ -271,7 +276,7 @@ public class AddNewFriend extends TraceBack {
 
 		// display updated friends list for user/me
 		if (me.getConnection1().contains(me.getUsername()))
-			me.getConnection1().remove(me.getConnection1().indexOf(me.getUsername()));
+			me.removeConnection1(me.getUsername());
 		System.out.println("Friend's list for me: " + me.getConnection1());
 	}
 
