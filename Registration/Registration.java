@@ -1,26 +1,22 @@
 package Registration;
 
-import com.mycompany.project.DB.DBFactory;
+import MainProgram.MainProgram;
+import TraceBack.TraceBack;
+import Display.Display;
 import java.awt.AWTException;
-import java.util.Scanner;
 import java.util.regex.*;
 
 public class Registration extends TraceBack{
 
     // Properties
     private String username, emailAddress, phoneNumber, password;
-    private boolean flag;
 
     // Methods
     public void setUserName() {
-        PostFeature pf = new PostFeature();
-        DBFactory db = new DBFactory();
-        Scanner sc = new Scanner(System.in);
         boolean firstPass = true;
         boolean isValid;
         System.out.print("Enter Username: ");
-        String userName = sc.nextLine();
-        System.out.println();
+        String userName = MainProgram.sc.nextLine();
 
         // Validate Username Requirements
         do {
@@ -28,13 +24,19 @@ public class Registration extends TraceBack{
 
             if (!firstPass) {
                 System.out.print("Username : "); 
-                userName  = sc.nextLine();
+                userName = MainProgram.sc.nextLine();
             }
 
             firstPass = false;
             
+            if(userName.contains(" "))
+            {
+                System.out.println("Username Should NOT Contain Spaces!");
+                continue;
+            }
+            
             // This username has been taken
-            if (db.searchTable("Username", userName)) {
+            if (MainProgram.db.searchTable("Username", userName)) {
                 System.out.println("Username has been taken");
                 continue;
             }
@@ -48,14 +50,12 @@ public class Registration extends TraceBack{
 
         } while (!isValid);
         
-        System.out.println("Username Accepted !");
-        db.addNewUser(userName);
-        pf.addNewUserToPost(userName);
+        System.out.print("Username Accepted !");
+        MainProgram.db.addNewUser(userName);
         this.username = userName;
-        System.out.println(this.username);
     }
     
-    private static boolean isValidUsername(String Username) {
+    public static boolean isValidUsername(String Username) {
         
         boolean isValid = true;
         final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z]).+$");
@@ -75,91 +75,72 @@ public class Registration extends TraceBack{
     }
 
     public void setEmailAddress() {
-        
-        Scanner sc = new Scanner(System.in);
-        DBFactory db = new DBFactory();
-        
         String email = "";
         boolean valid = true;
         
         do{
-            System.out.print("Enter your Email Address: ");
-            email = sc.nextLine();
-
-            System.out.println("\nYour Email address : " + email);
-
+            System.out.print("\nEnter your Email Address: ");
+            email = MainProgram.sc.nextLine();
             if (!isValidEmail(email)) {
                 System.out.println("Invalid Email Address!");
                 System.out.println("\nTry Again");
-            } else if (db.searchTable("Email", email)) {
+            } else if (MainProgram.db.searchTable("Email", email.toLowerCase())) {
                 System.out.println("Email Already Registered! Login or Use A New Email");
                 System.out.println("\nTry Again");
+                continue;
             } else break;
 
         } while (valid);
 
-        System.out.println("Email Accepted !");
-        db.updateTable("Email", email, this.username);
+        System.out.print("Email Accepted !");
+        MainProgram.db.updateTable("Email", email, this.username);
         
         this.emailAddress = email;
     }
     
-    private static boolean isValidEmail(String email){
+    public static boolean isValidEmail(String email){
         return email.matches("[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
     }
 
     public void setPhoneNumber() {
-
-        DBFactory db = new DBFactory();
-
-        Scanner sc = new Scanner (System.in) ;
         String number = "";
 
         do{
-            System.out.print("Enter your phone number : ");
-            number = sc.nextLine();
+            System.out.print("\nEnter your phone number : ");
+            number = MainProgram.sc.nextLine();
 
             String numRegex = "\\d{10}";
 
-            System.out.println("Your Number Phone is :" + number);
-
-            System.out.println("Is the phone number Valid ? " + number.matches(numRegex));
-            System.out.println("is the phone number in the system? " + db.searchTable("PhoneNumber", number));
-
             if (!number.matches(numRegex)) {
-                System.out.println("Phone Number Contains Only 10 Digits!!");
+                System.out.println("Phone Number Should Contain Only 10 Digits!!");
                 System.out.println("\nTry Again");
-            } else if (db.searchTable("PhoneNumber", number)) {
+            } else if (MainProgram.db.searchTable("Contact", number)) {
                 System.out.println("Number Already Registered! Please Enter A New Number");
                 System.out.println("\nTry Again");
             } else break;
 
         } while (true);
 
-        System.out.println("Phone number Accepted !");
-        db.updateTable("PhoneNumber", number, this.username);
+        System.out.print("Phone number Accepted !");
+        MainProgram.db.updateTable("Contact", number, this.username);
         
         this.phoneNumber = number;
     }     
 
     public void setPassword() {
 
-        DBFactory db = new DBFactory();
-        Scanner sc = new Scanner(System.in);
         boolean firstPass = true;
         boolean isValid = false;
-        System.out.print("Enter Password: ");
-        String password = sc.nextLine();
-        System.out.println("");
+        System.out.print("\nEnter Password: ");
+        String password = MainProgram.sc.nextLine();
         System.out.print("Retype Password: ");
-        String passwordRetype = sc.nextLine();
-        System.out.println("");
+        String passwordRetype = MainProgram.sc.nextLine();
 
         // Validate Password Requirements
         do {
             if (!firstPass) {
-                System.out.print("Enter Password: "); password = sc.nextLine();
-                System.out.print("Retype Password: "); passwordRetype = sc.nextLine();
+                System.out.print("\nEnter Password: "); password = MainProgram.sc.nextLine();
+                System.out.print("Retype Password: "); passwordRetype = MainProgram.sc.nextLine();
             }
 
             firstPass = false;
@@ -180,13 +161,13 @@ public class Registration extends TraceBack{
 
         } while (!isValid);
         
-        db.updateTable("Password", password, this.username);
-        System.out.println("Password Saved Successfully!");
+        MainProgram.db.updateTable("Password", password, this.username);
+        System.out.print("Password Saved Successfully!");
 
         this.password = password;
     }
 
-    private static boolean isValidPassword(String password) {
+    public static boolean isValidPassword(String password) {
         
         boolean isValid = true;
 
@@ -228,22 +209,39 @@ public class Registration extends TraceBack{
     
     public TraceBack Main() throws InterruptedException, AWTException {
         
-        Scanner sc = new Scanner(System.in);
         Registration register = new Registration();
-        
-        System.out.println("Welcome to The Register Page!");
-        System.out.println("Please Provide The following Informations :D so we can register you as a new member!");
-        
-        register.setUserName();
-        register.setPassword();
-        register.setEmailAddress();
-        register.setPhoneNumber();
-        
-        System.out.println("Done! Going Back to The previous page.....");
-        System.out.println(register.getUsername());
+        TraceBack returnedTraceBack = null;
+        Display.displayWelcomeLines("Registration Page", "Registration Page", "");
+        Display.displayUserOption("Start Registering", "", "");
+        String getInt = MainProgram.sc.nextLine();
 
-        AccountSetUp setUpAccount = new AccountSetUp(register.getUsername());
+        breaker: while(true)
+        {
+            if(getInt.equals("1"))
+            {
+                register.setUserName();
+                register.setPassword();
+                register.setEmailAddress();
+                register.setPhoneNumber();
+                AccountSetUp setUpAccount = new AccountSetUp(register.getUsername());
+                returnedTraceBack = setUpAccount;
+                Thread.sleep(250);
+                clearConsole();
+                break breaker;
+            }
+            else if(getInt.equals("0"))
+            {
+                System.out.println("Redirecting You to The Entrance Page! ...");
+                this.previous.isPrevious = true;
+                returnedTraceBack = this.previous;
+                Thread.sleep(250);
+                clearConsole();
+                break breaker;
+            }
+            System.out.println("This is NOT One of The Choices Given! Type Again :D");
+        }
         
-        return setUpAccount;   
+        
+        return returnedTraceBack;  
     }
 }
