@@ -43,10 +43,7 @@ public class ConnectionNet {
 					ConnectionNet.map.get(username).setMutualFriends(MutualFriend.getMutualFriends(me, rs.getString("Friend")));
 
 					// Explore my friend’s friend
-					for (int i = 0; i < theirFriends.length - 1; i++) {
-
-						String theirFriend = theirFriends[i];
-
+					for (String theirFriend: theirFriends) {
 						if (visited.contains(theirFriend))
 							continue;
 
@@ -112,7 +109,7 @@ public class ConnectionNet {
 					
 				RegularUser me = new RegularUser(myName, email, contact, age, gender, password, job, hobbies, address, birthday);
 
-				for (int i = 0; i < friends.length - 1; i++)
+				for (int i = 0; i < friends.length; i++)
 					me.addConnection1(friends[i]);
 
 				return me;
