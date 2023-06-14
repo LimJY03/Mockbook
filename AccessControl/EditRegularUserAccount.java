@@ -8,11 +8,9 @@ import java.sql.SQLException;
 import MainProgram.MainPageFeature;
 import MainProgram.MainProgram;
 import Registration.AccountSetUp;
+import Registration.PasswordEncrypt;
 import TraceBack.TraceBack;
 import java.sql.ResultSet;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -376,7 +374,6 @@ public class EditRegularUserAccount extends TraceBack {
 				MainPageFeature.me.setContact(newPhoneNumber);
 				System.out.println("Successfully changed to new phone number");
 				System.out.println("Your current phone number is: " + MainPageFeature.me.getContact());
-//				MainProgram.GlobalDataStore.phoneNumber = MainPageFeature.me.getPhoneNumber();
 			} else
 				System.out.println("Error updating phone number. Please try again");
 		} catch (SQLException e) {
@@ -406,7 +403,6 @@ public class EditRegularUserAccount extends TraceBack {
 				MainPageFeature.me.setGender(newGender);
 				System.out.println("Successfully changed to new gender");
 				System.out.println("Your current gender is: " + MainPageFeature.me.getGender());
-//				MainProgram.GlobalDataStore.gender = MainPageFeature.me.getGender();
 			} else
 				System.out.println("Error updating gender. Please try again");
 		} catch (SQLException e) {
@@ -438,7 +434,6 @@ public class EditRegularUserAccount extends TraceBack {
 				MainPageFeature.me.setAge(Integer.parseInt(newAge));
 				System.out.println("Successfully changed to new age");
 				System.out.println("Your current age is: " + MainPageFeature.me.getAge());
-//				MainProgram.GlobalDataStore.age = MainPageFeature.me.getAge();
 			} else
 				System.out.println("Error updating age. Please try again");
 		} catch (SQLException e) {
@@ -459,6 +454,7 @@ public class EditRegularUserAccount extends TraceBack {
 			String query = "UPDATE User SET Password = ? WHERE Username = ?";
 
 			PreparedStatement stmt = connection.prepareStatement(query);
+			newPassword = PasswordEncrypt.encryptSHA256(newPassword);
 			stmt.setString(1, newPassword);
 			stmt.setString(2, MainPageFeature.me.getUsername());
 
@@ -468,7 +464,6 @@ public class EditRegularUserAccount extends TraceBack {
 				MainPageFeature.me.setPassword(newPassword);
 				System.out.println("Successfully changed to new password");
 				System.out.println("Your current password is: " + MainPageFeature.me.getPassword());
-//				MainProgram.GlobalDataStore.password = MainPageFeature.me.getPassword();
 			} else
 				System.out.println("Error updating password. Please try again");
 		} catch (SQLException e) {
