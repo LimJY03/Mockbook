@@ -87,8 +87,12 @@ class editAcct {
                     sc.nextLine();
                     user.chooseStatus(indexStatus);
                     break;
-
+            
+                case 10:
+                    break;
+                    
                 default:
+                    System.out.println("Invalid option, try again.");
                     break;
             }
             editWhat = sc.nextInt();
