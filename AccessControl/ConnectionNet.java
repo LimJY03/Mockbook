@@ -1,6 +1,5 @@
 package AccessControl;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -76,14 +75,14 @@ public class ConnectionNet {
 					
 					// Username have mutual friend with me -> 2nd degree
 					else {
-						me.getConnection2().add(theirFriend);
+						me.getConnection2().add(username);
 						ConnectionNet.map.put(username, new Friend(username, 2));
 						ConnectionNet.map.get(username).mutualFriends = userMutualFriends;
 					}
 					visited.add(username);
 				}
 			}
-		} catch (SQLException e) { ystem.out.println(e.getMessage()); }
+		} catch (SQLException e) { System.out.println(e.getMessage()); }
 	}
 
 	public static RegularUser getAllConnection(String myName) {
@@ -110,8 +109,8 @@ public class ConnectionNet {
 
 				if (friendHolder != null)
 					friends = friendHolder.split(",");
-
-				RegularUser me = new RegularUser(myName, email, contact, age, gender, password);
+					
+				RegularUser me = new RegularUser(myName, email, contact, age, gender, password, job, hobbies, address, birthday);
 
 				for (int i = 0; i < friends.length - 1; i++)
 					me.getConnection1().add(friends[i]);
