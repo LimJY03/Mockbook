@@ -119,6 +119,30 @@ public class RegularUser extends User {
     public ArrayList<String> getConnection3plus() {
         return this.connection3plus;
     }
+
+    public void addConnection1(String friend) {
+        this.connection1.add(friend);
+    }
+
+    public void addConnection2(String friend) {
+        this.connection2.add(friend);
+    }
+
+    public void addConnection3plus(String friend) {
+        this.connection3plus.add(friend);
+    }
+
+    public void removeConnection1(String friend) {
+        this.connection1.remove(friend);
+    }
+
+    public void removeConnection2(String friend) {
+        this.connection2.remove(friend);
+    }
+
+    public void removeConnection3plus(String friend) {
+        this.connection3plus.remove(friend);
+    }
     
     public int calculateAge() {
         LocalDate currentDate = LocalDate.now();
