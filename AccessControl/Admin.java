@@ -1,6 +1,7 @@
 package AccessControl;
 import java.sql.*;
 import MyHashMap.MyHashMap;
+import Registration.PasswordEncrypt;
 import MainProgram.MainProgram;
 
 public class Admin extends User{
@@ -73,7 +74,7 @@ public class Admin extends User{
 	            stmt.setString(1, username);
 	            stmt.setString(2, userEmail);
 	            stmt.setString(3, userContact);
-	            stmt.setString(4, userPassword);
+	            stmt.setString(4, PasswordEncrypt.encryptSHA256(userPassword));
 
 	            int rowAffected = stmt.executeUpdate();
 
