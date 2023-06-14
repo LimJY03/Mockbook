@@ -122,7 +122,7 @@ public class RegularUser extends User {
     
     
     public void setBirthday(LocalDate newBirthday) {
-    	this.birthday = birthday;
+    	this.birthday = newBirthday;
     }
 
     public ArrayList<String> getConnection1() {
