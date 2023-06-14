@@ -16,13 +16,10 @@ import java.awt.AWTException;
 
 public class Search extends TraceBack {
 
-//	public static void main(String[] args) throws InterruptedException, AWTException {
-//		new Search().Main();
-//	}
 
 	public TraceBack Main() throws InterruptedException, AWTException {
 		search();
-		this.isPrevious = true;
+		this.previous.isPrevious = true;
 		return this.previous;
 	}
 
@@ -33,7 +30,7 @@ public class Search extends TraceBack {
 
 			Display.displaySearchOption();
 
-			System.out.print("Enter your option to search for Users: ");
+			System.out.print("\nEnter your option to search for Users:");
 
 			String option = sc.nextLine();
 
@@ -52,48 +49,41 @@ public class Search extends TraceBack {
 				System.out.print("Enter the Email: ");
 				viewAccount("Email");
 
-//				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Email"), "Email");
 				break;
 
 			case "3":
 				System.out.print("Enter the Age: ");
 				viewAccount("Age");
 
-//				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Age"), "Age");
 				break;
 
 			case "4":
 				System.out.print("Enter the Contact: ");
 				viewAccount("PhoneNumber");
 
-//				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "PhoneNumber"), "Phone Number");
 				break;
 
 			case "5":
 				System.out.print("Enter the Gender: ");
 				viewAccount("Gender");
 
-//				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Gender"), "Gender");
 				break;
 				
 			case "6":
 				System.out.print("Enter the Job: ");
 				viewAccount("Job");
 
-//				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Job"), "Job");
 				break;
 			case "7":
 				System.out.print("Enter the Hobby: ");
 				viewAccount("Hobbies");
 
-//				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Hobbies"), "Hobbies");
 				break;
 				
 			case "8":
 				System.out.print("Enter the Address: ");
 				viewAccount("Address");
 
-//				Display.displaySearchResult(prepareSearchList(sc.nextLine().trim(), "Address"), "Address");
 				break;
 
 			default:
@@ -146,28 +136,33 @@ public class Search extends TraceBack {
 		ArrayList<RegularUser> list = prepareSearchList(MainProgram.sc.nextLine().trim(),optionType);
 		Display.displaySearchResult(list,"Username");
 		
-		viewAccountLoop: while(true)
+		if(list.isEmpty())
+			System.out.println("\nNo available account to be view\n");
+		else
 		{
-			System.out.println("Based on the number given, enter the desired account number to view, '-1' to quit");
-			String accountOption = MainProgram.sc.nextLine();
-			switch(accountOption)
+			viewAccountLoop: while(true)
 			{
-				case "-1": break viewAccountLoop;
-				default: 
-					try {
-						int accountNo = Integer.parseInt(accountOption);
-						
-						if(accountNo<0||accountNo>=list.size())
-							System.out.println("Invalid number. Try again");
-						else
-						{
-							RegularUser selectedUser = list.get(accountNo);
-							AccountFinder.displayAccountInformation(selectedUser.getUsername());
-						}
+				System.out.println("\nBased on the number given, enter the desired account number to view, '-1' to quit\n");
+				String accountOption = MainProgram.sc.nextLine();
+				switch(accountOption)
+				{
+					case "-1": break viewAccountLoop;
+					default: 
+						try {
+							int accountNo = Integer.parseInt(accountOption);
 							
+							if(accountNo<0||accountNo>=list.size())
+								System.out.println("\nInvalid number. Try again\n");
+							else
+							{
+								RegularUser selectedUser = list.get(accountNo);
+								AccountFinder.displayAccountInformation(selectedUser.getUsername());
+							}
+								
+						}
+						catch(Exception e){
+							System.out.println("\nInvalid option. Try again.\n");
 					}
-					catch(Exception e){
-						System.out.println("Invalid option. Try again.");
 				}
 			}
 		}
