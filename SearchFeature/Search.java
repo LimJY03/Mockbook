@@ -134,7 +134,7 @@ public class Search extends TraceBack {
 	private static void viewAccount(String optionType)
 	{
 		ArrayList<RegularUser> list = prepareSearchList(MainProgram.sc.nextLine().trim(),optionType);
-		Display.displaySearchResult(list,"Username");
+		Display.displaySearchResult(list,optionType);
 		
 		if(list.isEmpty())
 			System.out.println("\nNo available account to be view\n");
