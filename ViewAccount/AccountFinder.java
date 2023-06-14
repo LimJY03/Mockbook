@@ -2,6 +2,7 @@ package ViewAccount;
 
 import java.sql.*;
 import AccessControl.ConnectionNet;
+import MainProgram.MainPageFeature;
 import MainProgram.MainProgram;
 
 public class AccountFinder {
@@ -15,11 +16,21 @@ public class AccountFinder {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			if (resultSet.next()) {
-				System.out.println("\nAccount Information:");
 				
-				int connectionDegree = ConnectionNet.map.get(selectedAccountUsername).getConnectionDegree();
+				if(resultSet.getString("Username").equals(MainPageFeature.me.getUsername()))
+				{
+					
+					System.out.println("Your own account Information: ");
+					System.out.println("Username: " + resultSet.getString("Username") +", Connection Degree: Yourself");
+				}					
+				else
+				{
+					System.out.println("\nAccount Information:");
+					int connectionDegree = ConnectionNet.map.get(selectedAccountUsername).getConnectionDegree();
+					System.out.println("Username: " + resultSet.getString("Username") +", Connection Degree: " +connectionDegree);					
+				}
+					
 				
-		        System.out.println("Username: " + resultSet.getString("Username") +", Connection Degree: " +connectionDegree);
 		        System.out.println("Gender: " + resultSet.getString("Gender"));
 		        System.out.println("Hobbies: " + resultSet.getString("Hobbies"));
 		        System.out.println("Jobs: " + resultSet.getString("Job"));
