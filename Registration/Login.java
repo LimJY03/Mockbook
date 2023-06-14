@@ -95,13 +95,13 @@ public class Login extends TraceBack{
             System.out.print("Enter your Password: ");
             pass = MainProgram.sc.nextLine();
             System.out.println("");
-            if(CheckerForAccount(name,pass,"username"))
+            if(CheckerForAccount(name,PasswordEncrypt.encryptSHA256(pass),"username"))
                 break;
             System.out.println("Wrong Username/Password, Try Again!");
         }while(true);
         
         this.username = name;
-        this.password = PasswordEncrypt.encryptSHA256(pass, name);
+        this.password = pass;
         MainProgram.GlobalDataStore.username = name;
         System.out.println("You have Logged in Successfully!");
         
@@ -119,14 +119,14 @@ public class Login extends TraceBack{
         System.out.print("Enter your Password: ");
         pass = MainProgram.sc.nextLine();
         System.out.println("");
-        if(CheckerForAccount(email,pass,"email"))
+        if(CheckerForAccount(email,PasswordEncrypt.encryptSHA256(pass),"email"))
             break;
             System.out.println("Wrong Email/Password, Try Again!");
         }while(true);
         
         this.emailAddress = email;
         this.username = getUsernameFromEmail(this.emailAddress);
-        this.password = PasswordEncrypt.encryptSHA256(pass, this.username);
+        this.password = pass;
         MainProgram.GlobalDataStore.username = username;
         System.out.println("You have Logged in Successfully!");
         return true;
@@ -167,7 +167,7 @@ public class Login extends TraceBack{
         Connection connection = MyDataBase.establishConnection();
         try{
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE " + type +" ='"+ user +"' AND Password = '" + PasswordEncrypt.encryptSHA256(password, user)+ "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE " + type +" ='"+ user +"' AND Password = '" + password+ "'");
 
             if (rs.next()) {
                 return true;
