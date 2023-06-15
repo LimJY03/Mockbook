@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import MainProgram.MainPageFeature;
 import MainProgram.MainProgram;
 import Registration.AccountSetUp;
-import Registration.PasswordEncrypt;
+import Registration.PasswordReset;
 import TraceBack.TraceBack;
 import java.sql.ResultSet;
 
@@ -161,12 +161,11 @@ public class EditRegularUserAccount extends TraceBack {
 
 			case "8":
 				optionLoop8: while (true) {
-					System.out.println("Current password: " + me.getPassword());
 					System.out.println("Would you like to change your password? Enter 1 for yes, 2 for no.");
 					String yesOrNo = sc.nextLine();
 					switch (yesOrNo) {
 					case "1":
-						updatePassword();
+						PasswordReset.resetPassword(MainPageFeature.me.getUsername());
 					case "2":
 						break optionLoop8;
 					default:
@@ -441,35 +440,6 @@ public class EditRegularUserAccount extends TraceBack {
 		}
 	}
 
-	private static void updatePassword() {
-		System.out.println("Enter your new password: ");
-		String newPassword = sc.nextLine();
-
-		while (!isValidPassword(newPassword)) {
-			System.out.println("Please enter your new password");
-			newPassword = sc.nextLine();
-		}
-
-		try {
-			String query = "UPDATE User SET Password = ? WHERE Username = ?";
-
-			PreparedStatement stmt = connection.prepareStatement(query);
-			newPassword = PasswordEncrypt.encryptSHA256(newPassword, MainPageFeature.me.getUsername());
-			stmt.setString(1, newPassword);
-			stmt.setString(2, MainPageFeature.me.getUsername());
-
-			int rowAffected = stmt.executeUpdate();
-
-			if (rowAffected > 0) {
-				MainPageFeature.me.setPassword(newPassword);
-				System.out.println("Successfully changed to new password");
-				System.out.println("Your current password is: " + MainPageFeature.me.getPassword());
-			} else
-				System.out.println("Error updating password. Please try again");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
 	private static void updateBirthday() {
 		
@@ -668,49 +638,6 @@ public class EditRegularUserAccount extends TraceBack {
 
 		return isValid;
 
-	}
-
-	private static boolean isValidPassword(String password) {
-		boolean isValid = true;
-
-		if (password.length() > 20 || password.length() < 8) {
-
-			System.out.println("Password must be less than 20 and more than 8 characters in length.");
-			isValid = false;
-
-		} else if (!password.matches("(.*[A-Z].*)")) {
-
-			System.out.println("Password must have atleast one uppercase character");
-			isValid = false;
-
-		} else if (!password.matches("(.*[a-z].*)")) {
-
-			System.out.println("Password must have atleast one lowercase character");
-			isValid = false;
-
-		} else if (!password.matches("(.*[0-9].*)")) {
-
-			System.out.println("Password must have atleast one number");
-			isValid = false;
-
-		} else if (!password.matches("(.*[~,!,@,#,$,%,^,&,*,_,-,+,=,`,|,(,),{,},[,],:,;,\",\',<,>,,,.,?,/].*$)")) {
-
-			System.out.println("Password must have atleast one special character among @#$%");
-			isValid = false;
-
-		} else if (password.contains(" ")) {
-
-			System.out.println("Password can't contain empty space");
-			isValid = false;
-
-		} else if (password.isEmpty()) {
-
-			System.out.println("Invalid input.");
-			isValid = false;
-
-		}
-
-		return isValid;
 	}
 
 }
