@@ -46,10 +46,10 @@ public class Login extends TraceBack{
         clearConsole();
     }
 
-    public TraceBack Main()  throws InterruptedException, AWTException
+    public TraceBack Main() throws InterruptedException, AWTException
     {   
         Display.displayWelcomeLines("Login Page", "Login Page", "");
-        Display.displayUserOption("Username", "Email", "");
+        Display.displayUserOption("Username", "Email", "Reset Password");
         
         TraceBack returnedTraceBack = null;
         
@@ -63,6 +63,9 @@ public class Login extends TraceBack{
                 case "2":
                 	loginHelperMethod("Email");
                     returnedTraceBack = new MainPageFeature();
+                    break breaker;
+                case "3":
+                    returnedTraceBack = new PasswordReset();
                     break breaker;
                 case "0":
                 	loginHelperMethod("0");
