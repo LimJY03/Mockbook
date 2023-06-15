@@ -6,6 +6,7 @@ import TraceBack.TraceBack;
 
 import java.awt.AWTException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
@@ -99,13 +100,22 @@ public class AccountSetUp extends TraceBack {
             System.out.println("There is an issue with your birthday ! try again");
             return false;
         }
+        
+        if(MainPageFeature.me!=null)
+        {
+        	MainPageFeature.me.setBirthday(LocalDate.of(birthyear, birthmonth, birthday));
+        	MainPageFeature.me.setAge(MainPageFeature.me.calculateAge());        	
+        }
+        else
+        {
+            int age = ageCalc(this.birthDay, this.birthMonth, this.birthYear); // check function below
+        }
+        
 
-        MainPageFeature.me.setBirthday(LocalDate.of(birthyear, birthmonth, birthday));
-        MainPageFeature.me.setAge(MainPageFeature.me.calculateAge());
 
         // MainProgram.db.columnAdder("Age", "INT"); // checks if there is a Column for
         // the Age if not make one.
-        MainProgram.db.updateTable("Age", MainPageFeature.me.getAge(), this.username); // update the table if there is one with the new age for
+        MainProgram.db.updateTable("Age", age, this.username); // update the table if there is one with the new age for
                                                                // the username
         // MainProgram.db.columnAdder("Birthday", "varchar(12)"); // checks if there is
         // a column for the Birthday if not make one.
@@ -158,6 +168,15 @@ public class AccountSetUp extends TraceBack {
         
         
         return this.birthYear + "-" + bm + "-" + bd;
+    }
+    
+    public int ageCalc(int birthday, int birthmonth, int birthyear) {
+        LocalDate today = LocalDate.now(); // Today's date so we can combare between
+        LocalDate birth = LocalDate.of(birthyear, birthmonth, birthday);
+        Period age = Period.between(birth, today); // gets the period between the birthdate and the date of today
+        this.age = age.getYears();
+        return age.getYears(); // gets only the years. " no days or months"
+
     }
 
     public void setJob() {
