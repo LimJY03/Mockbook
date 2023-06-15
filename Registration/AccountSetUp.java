@@ -1,13 +1,11 @@
 package Registration;
 
 import Display.Display;
-import MainProgram.MainProgram;
-import MainProgram.EnterMockBook;
+import MainProgram.*;
 import TraceBack.TraceBack;
 
 import java.awt.AWTException;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
@@ -17,10 +15,6 @@ public class AccountSetUp extends TraceBack {
     private int birthDay, birthMonth, birthYear, age;
 
     public AccountSetUp(String user) {
-        // We can implement The CLI here if u want " or we can do it in on other file by
-        // using the functions of this class (more control) ".
-        // I can add a choice if the person doesn't want to answer some of the questions
-        // to make it in the DB as null instead if u want.
         setUsername(user);
     }
 
@@ -106,16 +100,18 @@ public class AccountSetUp extends TraceBack {
             return false;
         }
 
-        int age = ageCalc(this.birthDay, this.birthMonth, this.birthYear); // check function below
+        MainPageFeature.me.setBirthday(LocalDate.of(birthyear, birthmonth, birthday));
+        MainPageFeature.me.setAge(MainPageFeature.me.calculateAge());
 
         // MainProgram.db.columnAdder("Age", "INT"); // checks if there is a Column for
         // the Age if not make one.
-        MainProgram.db.updateTable("Age", age, this.username); // update the table if there is one with the new age for
+        MainProgram.db.updateTable("Age", MainPageFeature.me.getAge(), this.username); // update the table if there is one with the new age for
                                                                // the username
         // MainProgram.db.columnAdder("Birthday", "varchar(12)"); // checks if there is
         // a column for the Birthday if not make one.
         MainProgram.db.updateTable("Birthday", getBirthday(), this.username); // update the table if there is one with
                                                                               // the new birthday for the username
+        
         System.out.println("Birthday has been Calculated and Registerd!");
         System.out.println("---------------------------------------");
 
@@ -145,14 +141,6 @@ public class AccountSetUp extends TraceBack {
         }
         return false;
 
-    }
-
-    public int ageCalc(int birthday, int birthmonth, int birthyear) {
-        LocalDate today = LocalDate.now(); // Today's date so we can combare between
-        LocalDate birth = LocalDate.of(birthyear, birthmonth, birthday);
-        Period age = Period.between(birth, today); // gets the period between the birthdate and the date of today
-        this.age = age.getYears();
-        return age.getYears(); // gets only the years. " no days or months"
     }
 
     public int getAge() {
