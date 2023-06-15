@@ -153,7 +153,6 @@ public class AccountSetUp extends TraceBack {
         Period age = Period.between(birth, today); // gets the period between the birthdate and the date of today
         this.age = age.getYears();
         return age.getYears(); // gets only the years. " no days or months"
-
     }
 
     public int getAge() {
@@ -161,7 +160,16 @@ public class AccountSetUp extends TraceBack {
     }
 
     public String getBirthday() {
-        return this.birthDay + "/" + this.birthMonth + "/" + this.birthYear;
+        String bm = Integer.toString(this.birthMonth);
+        String bd = Integer.toString(this.birthDay);
+        
+        if (this.birthMonth  < 10)
+                bm = "0" + this.birthMonth;
+        if (this.birthDay < 10)
+                bd = "0" + this.birthDay;
+        
+        
+        return this.birthYear + "-" + bm + "-" + bd;
     }
 
     public void setJob() {
