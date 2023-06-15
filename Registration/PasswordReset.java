@@ -28,13 +28,14 @@ public class PasswordReset {
         // Check private key
         while (true) {
             
-            System.out.println("Enter your private key: ");
+            System.out.println("Enter your private key (press 0 to quit): ");
             String privateKey = MainProgram.sc.nextLine();
 
             boolean matchKey = matchPrivateKey(username, privateKey);
 
             // Break loop
             if (matchKey) break;
+            if (privateKey.equals("0")) return;
 
             // Key does not match
             System.out.println("Your private key is wrong, try again!");
@@ -42,5 +43,6 @@ public class PasswordReset {
 
         // Reset password
         Registration.setNewPassword(username);
+        System.out.println("Password reset successfully!");
     }
 }
