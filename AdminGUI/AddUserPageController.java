@@ -1,9 +1,6 @@
 package AdminGUI;
 
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -20,198 +17,172 @@ import Registration.PrivateKey;
 
 public class AddUserPageController implements Initializable {
 
+	@FXML
+	private Text userContactLabel;
 
-	    @FXML
-	    private Text userContactLabel;
+	@FXML
+	private Text userEmailLabel;
 
-	    @FXML
-	    private Text userEmailLabel;
+	@FXML
+	private Text userPasswordLabel;
 
-	    @FXML
-	    private Text userPasswordLabel;
+	@FXML
+	private Text usernameLabel;
 
-	    @FXML
-	    private Text usernameLabel;
+	@FXML
+	private TextField usernameText;
 
-	    @FXML
-	    private TextField usernameText;
+	@FXML
+	private TextField userContactText;
 
-	    @FXML
-	    private TextField userContactText;
+	@FXML
+	private TextField userEmailText;
 
-	    @FXML
-	    private TextField userEmailText;
-	    
-	    @FXML
-	    private PasswordField userPasswordText;
-	    
-	    @FXML
-	    private Button confirmButton;
-	    
-	    @FXML
-	    private Button goBackButton;
-	    
+	@FXML
+	private PasswordField userPasswordText;
 
-    	    
+	@FXML
+	private Button confirmButton;
+
+	@FXML
+	private Button goBackButton;
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-		goBackButton.setOnMouseClicked(e->
-		{
-			if(e.getButton()==MouseButton.PRIMARY)
-			{
+
+		goBackButton.setOnMouseClicked(e -> {
+			if (e.getButton() == MouseButton.PRIMARY) {
 				MainApplication.changeRoot("newAdminPanel.fxml");
 			}
 		});
-		
+
 		confirmButton.setOnMouseClicked(e -> {
-		    String username = usernameText.getText();
-		    String userEmail = userEmailText.getText();
-		    String userContact = userContactText.getText();
-		    String userPassword = userPasswordText.getText();
+			String username = usernameText.getText();
+			String userEmail = userEmailText.getText();
+			String userContact = userContactText.getText();
+			String userPassword = userPasswordText.getText();
 
-		    boolean isValidate = true;
+			boolean isValidate = true;
 
-		    // Clear previous error messages
-		    usernameLabel.setText("");
-		    userEmailLabel.setText("");
-		    userContactLabel.setText("");
-		    userPasswordLabel.setText("");
+			// Clear previous error messages
+			usernameLabel.setText("");
+			userEmailLabel.setText("");
+			userContactLabel.setText("");
+			userPasswordLabel.setText("");
 
-		    isValidate = isValidUsername(username);
-		    isValidate = isValidEmail(userEmail);
-		    isValidate = isValidPhoneNumber(userContact);
-		    isValidate = isValidPassword(userPassword);
+			isValidate = isValidUsername(username);
+			isValidate = isValidEmail(userEmail);
+			isValidate = isValidPhoneNumber(userContact);
+			isValidate = isValidPassword(userPassword);
 
-		    
-		    if (isValidate) {
-		        int rowAffected = AdminLoginController.admin.guiAddUser(username, userEmail, userContact, userPassword);
-		        
-		        if(rowAffected>0)
-		        {		        	
-		            String privateKey = PrivateKey.createPrivateKey(username);
+			if (isValidate) {
+				int rowAffected = AdminLoginController.admin.guiAddUser(username, userEmail, userContact, userPassword);
 
-							
-				        	MainApplication.generateAlert("Information", "Success", "User added Successfully",""
-				        			+ "Here is the user's private Key:"+privateKey+" Store it somewhere");
-						
+				if (rowAffected > 0) {
+					String privateKey = PrivateKey.createPrivateKey(username);
 
-		        	
-		        }
-		        else
-		        	MainApplication.generateAlert
-		        	("Error","Error","Failed to add user","Please contact technician or try again");
-		    }
-		    
+					MainApplication.generateAlert("Information", "Success", "User added Successfully",
+							"" + "Here is the user's private Key:" + privateKey + " Store it somewhere");
 
-		    usernameText.clear();
-		    userEmailText.clear();
-		    userContactText.clear();
-		    userPasswordText.clear();
+				} else
+					MainApplication.generateAlert("Error", "Error", "Failed to add user",
+							"Please contact technician or try again");
+			}
+
+			usernameText.clear();
+			userEmailText.clear();
+			userContactText.clear();
+			userPasswordText.clear();
 		});
 
 	}
-	
-	
-    private boolean isValidUsername(String Username) {
-        
-        boolean isValid = true;
-        final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z]).+$");
-        
 
-        if (MainProgram.db.searchTable("Username", Username)) {
-            usernameLabel.setText("Username has been taken");
-            isValid= false;
-        }
+	private boolean isValidUsername(String Username) {
 
-        else {
-        	
-        	if(Username.length() > 25 || Username.length() < 5) {
-            	usernameLabel.setText("Must less than 25 and more than 5 characters.");
-                isValid = false;
-            }
-            // Check Upper Case Match
-        	else if (!textPattern.matcher(Username).matches()) {
-            	usernameLabel.setText("Must have atleast one uppercase/ one lowercase character");
-                isValid = false;
-            }
-        	else if(Username.contains(" "))
-            {
-        		usernameLabel.setText("Username Should NOT Contain Spaces!");
-                isValid= false;
-            }
-        	
-        } 
+		boolean isValid = true;
+		final Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z]).+$");
 
-        return isValid;
-    }
-    
+		if (MainProgram.db.searchTable("Username", Username)) {
+			usernameLabel.setText("Username has been taken");
+			isValid = false;
+		}
 
+		else {
 
-    
+			if (Username.length() > 25 || Username.length() < 5) {
+				usernameLabel.setText("Must less than 25 and more than 5 characters.");
+				isValid = false;
+			}
+			// Check Upper Case Match
+			else if (!textPattern.matcher(Username).matches()) {
+				usernameLabel.setText("Must have atleast one uppercase/ one lowercase character");
+				isValid = false;
+			} else if (Username.contains(" ")) {
+				usernameLabel.setText("Username Should NOT Contain Spaces!");
+				isValid = false;
+			}
 
-    private boolean isValidEmail(String email){
+		}
 
-    	if(email.isEmpty())
-    	{
-    		userEmailLabel.setText("Email can't be empty");
-    		return false;
-    	}
-    	else
-    	{
-    		 String regex = "[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-             
-    	     boolean result = email.matches(regex);
-    	     if(!result)
-    	    	userEmailLabel.setText("Invalid format");
+		return isValid;
+	}
 
-    	     return result;
+	private boolean isValidEmail(String email) {
 
-    	}
-    }
-    
-    
-    private boolean isValidPassword(String password) {
-        
-        if(password.isEmpty())
-        {
-        	userPasswordLabel.setText("Password can't be empty");
-        	return false;
-        }
-        if (password.length() > 20 || password.length() < 8) {
-            userPasswordLabel.setText("Must less than 20 and more than 8 characters.");
-            return false;
-        }
+		if (email.isEmpty()) {
+			userEmailLabel.setText("Email can't be empty");
+			return false;
+		} else {
+			String regex = "[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 
-        // Check Upper Case Match
-        if (!password.matches("(.*[A-Z].*)")) {
-        	userPasswordLabel.setText("Must have atleast one uppercase character");
-            return false;
-        }
+			boolean result = email.matches(regex);
+			if (!result)
+				userEmailLabel.setText("Invalid format");
 
-        // Check Lower Case Match
-        if (!password.matches( "(.*[a-z].*)")) {
-        	userPasswordLabel.setText("Must have atleast one lowercase character");
-            return false;
-        }
+			return result;
 
-        // Check Number Match
-        if (!password.matches("(.*[0-9].*)")) {
-        	userPasswordLabel.setText("Must have atleast one number");
-            return false;
-        }
-        
-        // Check Special Characters Match
-        // if (!password.matches("(.*[@,#,$,%].*$)")) {
-        if (!password.matches("(.*[~,!,@,#,$,%,^,&,*,_,-,+,=,`,|,(,),{,},[,],:,;,\",\',<,>,,,.,?,/].*$)")) {
-        	userPasswordLabel.setText("Must have atleast one special character among @#$%");
-            return false;
-        }
+		}
+	}
+
+	private boolean isValidPassword(String password) {
+
+		if (password.isEmpty()) {
+			userPasswordLabel.setText("Password can't be empty");
+			return false;
+		}
+		if (password.length() > 20 || password.length() < 8) {
+			userPasswordLabel.setText("Must less than 20 and more than 8 characters.");
+			return false;
+		}
+
+		// Check Upper Case Match
+		if (!password.matches("(.*[A-Z].*)")) {
+			userPasswordLabel.setText("Must have atleast one uppercase character");
+			return false;
+		}
+
+		// Check Lower Case Match
+		if (!password.matches("(.*[a-z].*)")) {
+			userPasswordLabel.setText("Must have atleast one lowercase character");
+			return false;
+		}
+
+		// Check Number Match
+		if (!password.matches("(.*[0-9].*)")) {
+			userPasswordLabel.setText("Must have atleast one number");
+			return false;
+		}
+
+		// Check Special Characters Match
+		// if (!password.matches("(.*[@,#,$,%].*$)")) {
+		if (!password.matches("(.*[~,!,@,#,$,%,^,&,*,_,-,+,=,`,|,(,),{,},[,],:,;,\",\',<,>,,,.,?,/].*$)")) {
+			userPasswordLabel.setText("Must have atleast one special character among @#$%");
+			return false;
+		}
 		return true;
 
-    }
-    
-    
+	}
+
 	private boolean isValidPhoneNumber(String number) {
 
 		String regex = "\\d{10}";
@@ -221,13 +192,12 @@ public class AddUserPageController implements Initializable {
 			return false;
 		}
 
-		if (MainProgram.db.searchTable("PhoneNumber", number))
-		{
+		if (MainProgram.db.searchTable("PhoneNumber", number)) {
 			userContactLabel.setText("Phone number already exist");
 			return false;
 		}
 
 		return true;
 	}
-	
+
 }
