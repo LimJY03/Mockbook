@@ -17,7 +17,7 @@ public class Login extends TraceBack{
     private String username,password,emailAddress;
     
     
-    private void loginHelperMethod(String type) throws InterruptedException, AWTException
+    private boolean loginHelperMethod(String type) throws InterruptedException, AWTException
     {
     	Thread.sleep(500);
     	
@@ -26,17 +26,18 @@ public class Login extends TraceBack{
             clearConsole();
             if(type=="Username")
             {
-                signInUsingUsername();
+                boolean flag = signInUsingUsername();
                 MainProgram.GlobalDataStore.username = this.getUser();
+                return flag;
             }
-            else
+            else if(type=="Email")
             {
-            	signInUsingEmail();
+            	boolean flag = signInUsingEmail();
+                return flag;
             }
 
             System.out.println("\nRedirecting You to The Main Page! ...");
-
-
+            return false;
         }
         else
         {
@@ -44,6 +45,7 @@ public class Login extends TraceBack{
         }
         Thread.sleep(500);
         clearConsole();
+        return false;
     }
 
     public TraceBack Main() throws InterruptedException, AWTException
@@ -57,11 +59,23 @@ public class Login extends TraceBack{
             String getInt = MainProgram.sc.nextLine();
             switch (getInt) {
                 case "1":
-                	loginHelperMethod("Username");
+                    boolean flag = loginHelperMethod("Username");
+                    if(flag == false)
+                    {
+                        this.previous.isPrevious = true;
+                        returnedTraceBack = this.previous;
+                        break breaker;
+                    }
                     returnedTraceBack = new MainPageFeature();
                     break breaker;
                 case "2":
-                	loginHelperMethod("Email");
+                    boolean flag2 = loginHelperMethod("Email");
+                    if(flag2 == false)
+                    {
+                        this.previous.isPrevious = true;
+                        returnedTraceBack = this.previous;
+                        break breaker;
+                    }
                     returnedTraceBack = new MainPageFeature();
                     break breaker;
                 case "3":
@@ -69,7 +83,7 @@ public class Login extends TraceBack{
                     break breaker;
                 case "0":
                 	loginHelperMethod("0");
-                    this.isPrevious = true;
+                    this.previous.isPrevious = true;
                     returnedTraceBack = this.previous;
                     break breaker;
                 default:
@@ -93,10 +107,14 @@ public class Login extends TraceBack{
         Display.displayProgramPage("Login Using Username");
 
         do{
-            System.out.print("Enter your Username: ");
+            System.out.print("Enter your Username: -1 to Exit ");
             name = MainProgram.sc.nextLine();
-            System.out.print("Enter your Password: ");
+            if(name.equalsIgnoreCase("-1"))
+                return false;
+            System.out.print("Enter your Password: -1 to Exit ");
             pass = MainProgram.sc.nextLine();
+            if(pass.equalsIgnoreCase("-1"))
+                return false;
             System.out.println("");
             if(CheckerForAccount(name,PasswordEncrypt.encryptSHA256(pass, name),"username"))
                 break;
@@ -140,9 +158,8 @@ public class Login extends TraceBack{
     public String getUsernameFromEmail(String email)
     {
         String name = "";
-        Connection connection = MainProgram.connection;
         try{
-            Statement stmt = connection.createStatement();
+            Statement stmt = MainProgram.connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT Username FROM User WHERE Email = '" + email.trim() +"'");
 
             if (rs.next()) {
@@ -167,15 +184,13 @@ public class Login extends TraceBack{
         else{
             System.out.println("give propa type");
         }
-        Connection connection = MyDataBase.establishConnection();
         try{
-            Statement stmt = connection.createStatement();
+            Statement stmt = MainProgram.connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE " + type +" ='"+ user +"' AND Password = '" + password+ "'");
 
             if (rs.next()) {
                 return true;
             }
-            connection.close();
         }
         catch(SQLException e)
         {
