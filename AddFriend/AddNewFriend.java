@@ -62,11 +62,9 @@ public class AddNewFriend extends TraceBack {
 			stmt.executeUpdate();
 
 			// Update my sent list
-			newSentList = newSentRequestList.toString().replaceAll(" ", "");
-			newSentList = newSentList.substring(1, newSentList.length() - 1);
-
-			stmt = MainProgram.connection.prepareStatement("UPDATE User SET SentFriendRequest = '" + newSentList + "' WHERE Username = '" + username + "'");
-			stmt.executeUpdate();
+			newSentList = newSentRequestList.toString().replaceAll(" ", "").replace("[", "").replace("]", "");
+					
+			MainProgram.connection.prepareStatement("UPDATE User SET SentFriendRequest = '" + newSentList + "' WHERE Username = '" + username + "'").executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
