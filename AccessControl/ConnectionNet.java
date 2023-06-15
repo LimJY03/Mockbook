@@ -1,10 +1,7 @@
 package AccessControl;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import MainProgram.MainProgram;
@@ -18,7 +15,7 @@ public class ConnectionNet {
 
 	public static void buildGraph(RegularUser me) {
 
-		ArrayList<String> visited = me.getConnection1();
+		ArrayList<String> visited = new ArrayList<>(me.getConnection1());
 		ResultSet rs = buildGraphHelper();
 
 		visited.add(me.getUsername());
@@ -83,7 +80,8 @@ public class ConnectionNet {
 				}
 			}
 		} catch (SQLException e) { System.out.println(e.getMessage()); }
-	}
+		
+}
 
 	public static RegularUser getAllConnection(String myName) {
 
@@ -105,19 +103,7 @@ public class ConnectionNet {
 				String address = rs.getString("Address");
 				String friendHolder = rs.getString("Friend");
 
-				String birthdayString = rs.getString("Birthday");
-	            LocalDate birthday = null;
-	            if (birthdayString != null) 
-	            {
-	                SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY");
-	                try {
-	                    java.util.Date parsedDate = dateFormat.parse(birthdayString);
-	                    birthday = new java.sql.Date(parsedDate.getTime()).toLocalDate();
-	                } catch (ParseException e) {
-	                    System.out.println("Error parsing date: " + birthdayString);
-	                    e.printStackTrace();
-	                }
-	            }
+			    LocalDate birthday = rs.getDate("Birthday")==null? null : rs.getDate("Birthday").toLocalDate();
 	            
 				String[] friends = {};
 
