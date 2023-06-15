@@ -10,7 +10,9 @@ import javafx.stage.StageStyle;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 
 public class MainApplication extends Application{
 
@@ -84,10 +86,17 @@ public class MainApplication extends Application{
 		else
 			alert = new Alert(Alert.AlertType.INFORMATION);
 		
+		TextArea textArea = new TextArea(content);
+		textArea.setEditable(false);
+		textArea.setWrapText(true);
+		GridPane gridPane = new GridPane();
+		gridPane.setMaxWidth(Double.MAX_VALUE);
+		gridPane.add(textArea, 0, 0);
+
 		alert.setTitle(title);
 		alert.setHeaderText(header);
-		alert.setContentText(content);
-		alert.show();
+		alert.getDialogPane().setContent(gridPane);
+		alert.showAndWait();
 	}
 
 
