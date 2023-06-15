@@ -62,20 +62,16 @@ public class Admin extends User{
 	    return false;
 	}
 	
-	
-	
-	
-	
+
 	public int guiAddUser(String username,String userEmail,String userContact,String userPassword)
 	{
 		try (
 				
-	            PreparedStatement stmt = MainProgram.connection.prepareStatement("INSERT INTO User(Username, Email, Contact, Password) VALUES (?, ?, ?, ?)")) {
+	            PreparedStatement stmt = MainProgram.connection.prepareStatement("INSERT INTO User(Username, Email, PhoneNumber, Password) VALUES (?, ?, ?, ?)")) {
 	            stmt.setString(1, username);
 	            stmt.setString(2, userEmail);
 	            stmt.setString(3, userContact);
-	            stmt.setString(4, PasswordEncrypt.encryptSHA256(userPassword, username));
-
+	            stmt.setString(4, PasswordEncrypt.encryptSHA256(userPassword,username));
 	            int rowAffected = stmt.executeUpdate();
 
 	            return rowAffected;
