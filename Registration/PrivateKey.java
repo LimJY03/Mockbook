@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 
 public class PrivateKey {
     
-    public static void createPrivateKey(String username) {
+    public static String createPrivateKey(String username) {
         
         // Random bytes
         SecureRandom random = new SecureRandom();
@@ -28,5 +28,7 @@ public class PrivateKey {
 
         // Store key in database
         MainProgram.db.updateTable("PrivateKey", hashedPrivateKey, username);
+        
+        return privateKey;
     }
 }
