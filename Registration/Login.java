@@ -119,7 +119,8 @@ public class Login extends TraceBack{
         System.out.print("Enter your Password: ");
         pass = MainProgram.sc.nextLine();
         System.out.println("");
-        this.username = getUsernameFromEmail(this.emailAddress);
+        this.username = getUsernameFromEmail(email);
+        System.out.println("Hello "+this.username);
         if(CheckerForAccount(email,PasswordEncrypt.encryptSHA256(pass, this.username),"email"))
             break;
             System.out.println("Wrong Email/Password, Try Again!");
@@ -136,16 +137,15 @@ public class Login extends TraceBack{
     public String getUsernameFromEmail(String email)
     {
         String name = "";
-        Connection connection = MyDataBase.establishConnection();
+        Connection connection = MainProgram.connection;
         try{
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT Username FROM User WHERE Email = '" + email +"'");
+            ResultSet rs = stmt.executeQuery("SELECT Username FROM User WHERE Email = '" + email.trim() +"'");
 
             if (rs.next()) {
                 name = rs.getString("Username");
                 return name;
             }
-            connection.close();
         }
         catch(SQLException e)
         {
