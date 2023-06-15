@@ -1,9 +1,10 @@
-package AdminGUI;
+ 		package AdminGUI;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import AccessControl.Admin;
+import Registration.PasswordEncrypt;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -87,11 +88,11 @@ public class AdminLoginController implements Initializable {
 	{
 		  
         boolean validId = Admin.isValidAdminId(adminID);
-        boolean validPassword = Admin.isValidPassword(adminID, password);
+        boolean validPassword = Admin.isValidPassword(adminID, PasswordEncrypt.encryptSHA256(password,adminID));
         
         if(validId&&validPassword)
         {
-        	admin = new Admin(adminID,password);
+        	admin = new Admin(adminID,PasswordEncrypt.encryptSHA256(password,adminID));
         	MainApplication.changeRoot("newAdminPanel.fxml");
         	
         }
