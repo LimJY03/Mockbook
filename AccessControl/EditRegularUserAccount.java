@@ -225,6 +225,7 @@ public class EditRegularUserAccount extends TraceBack {
 				System.out.println("Successfully changed to new username");
 				System.out.println("Your current username is: " + MainPageFeature.me.getUsername());
 				MainProgram.GlobalDataStore.username = MainPageFeature.me.getUsername();
+//				PrivateKey.createPrivateKey(newUsername);
 			} else
 				System.out.println("Error updating username. Please try again");
 		} catch (SQLException e) {
