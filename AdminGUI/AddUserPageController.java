@@ -93,7 +93,7 @@ public class AddUserPageController implements Initializable {
 
 							
 				        	MainApplication.generateAlert("Information", "Success", "User added Successfully",""
-				        			+ "Here is the user's private Key:"+privateKey+". Store it somewhere");
+				        			+ "Here is the user's private Key:"+privateKey+" Store it somewhere");
 						
 
 		        	
