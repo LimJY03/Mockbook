@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import MainProgram.MainPageFeature;
 import MainProgram.MainProgram;
 import Registration.AccountSetUp;
+import Registration.PasswordEncrypt;
 import Registration.PasswordReset;
 import TraceBack.TraceBack;
 import java.sql.ResultSet;
@@ -203,13 +204,34 @@ public class EditRegularUserAccount extends TraceBack {
 
 	// update methods
 	private static void updateUsername() {
-		System.out.println("Enter your new username: ");
-		String newUsername = sc.nextLine();
 
-		while (!isValidUsername(newUsername)) {
-			System.out.println("Please enter your new username");
-			newUsername = sc.nextLine();
+		String password;
+
+		while (true) {
+			System.out.print("Enter your current password before changing the username (0 to quit): ");
+			password = sc.nextLine();
+
+			if (password.equals("0")) {
+				return;
+			}
+
+			if (isValidPassword(MainPageFeature.me.getUsername(), password)) {
+				break;
+			}
+
+			System.out.println("Wrong password. Try again");
 		}
+
+		String newUsername;
+
+		do {
+			System.out.print("Enter your new username: ");
+			newUsername = sc.nextLine();
+
+			if (!isValidUsername(newUsername)) {
+				System.out.println("Please enter a valid username");
+			}
+		} while (!isValidUsername(newUsername));
 
 		try {
 			String query = "UPDATE User SET Username = ? WHERE Username = ?";
@@ -224,8 +246,10 @@ public class EditRegularUserAccount extends TraceBack {
 				MainPageFeature.me.setUsername(newUsername);
 				System.out.println("Successfully changed to new username");
 				System.out.println("Your current username is: " + MainPageFeature.me.getUsername());
+
 				MainProgram.GlobalDataStore.username = MainPageFeature.me.getUsername();
-//				PrivateKey.createPrivateKey(newUsername);
+				password = PasswordEncrypt.encryptSHA256(password, MainPageFeature.me.getUsername());
+				MainProgram.db.updateTable("Password", password, MainPageFeature.me.getUsername());
 			} else
 				System.out.println("Error updating username. Please try again");
 		} catch (SQLException e) {
@@ -278,7 +302,6 @@ public class EditRegularUserAccount extends TraceBack {
 			PreparedStatement stmt = connection.prepareStatement("SELECT Job FROM User WHERE Username = ?");
 			stmt.setString(1, MainPageFeature.me.getUsername());
 			ResultSet rs = stmt.executeQuery();
-			
 
 			String query = "UPDATE User SET Job = ? WHERE Username = ?";
 			PreparedStatement stmt2 = connection.prepareStatement(query);
@@ -311,10 +334,10 @@ public class EditRegularUserAccount extends TraceBack {
 		}
 
 		try {
-			
+
 			PreparedStatement stmt = connection.prepareStatement("SELECT Hobbies FROM User WHERE Username = ?");
 			stmt.setString(1, MainPageFeature.me.getUsername());
-			StringBuilder hobbySb =new StringBuilder();
+			StringBuilder hobbySb = new StringBuilder();
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
@@ -325,7 +348,7 @@ public class EditRegularUserAccount extends TraceBack {
 					hobbiesArr = hobbies.split(",");
 					for (String i : hobbiesArr) {
 						hobbyList.add(i);
-						hobbySb.append(i+",");
+						hobbySb.append(i + ",");
 					}
 				}
 
@@ -420,7 +443,7 @@ public class EditRegularUserAccount extends TraceBack {
 		}
 
 		int integerAge = Integer.parseInt(newAge);
-		
+
 		try {
 			String query = "UPDATE User SET Age = ? WHERE Username = ?";
 
@@ -441,11 +464,11 @@ public class EditRegularUserAccount extends TraceBack {
 		}
 	}
 
-
 	private static void updateBirthday() {
-		
+
 		new AccountSetUp(MainPageFeature.me.getUsername()).setBirthday();
-		System.out.println("This is your current birthday and age: "+MainPageFeature.me.getBirthday()+" "+MainPageFeature.me.getAge());
+		System.out.println("This is your current birthday and age: " + MainPageFeature.me.getBirthday() + " "
+				+ MainPageFeature.me.getAge());
 	}
 
 	// validation methods
@@ -630,15 +653,34 @@ public class EditRegularUserAccount extends TraceBack {
 			System.out.println("Invalid input.");
 			isValid = false;
 
-		}else if (!(Integer.parseInt(age) >= 1 && Integer.parseInt(age) <= 100)) {
+		} else if (!(Integer.parseInt(age) >= 1 && Integer.parseInt(age) <= 100)) {
 
 			System.out.println("Age must be 1-100 years old only");
 			isValid = false;
 
-		} 
+		}
 
 		return isValid;
 
+	}
+
+	private static boolean isValidPassword(String username, String password) {
+		try {
+			PreparedStatement stmt = MainProgram.connection
+					.prepareStatement("SELECT Password FROM User WHERE Username= ?");
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				if (PasswordEncrypt.encryptSHA256(password, username).equals(rs.getString("Password")))
+					;
+				return true;
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }
