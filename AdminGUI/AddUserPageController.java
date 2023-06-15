@@ -1,6 +1,9 @@
 package AdminGUI;
 
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -13,6 +16,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
 
 import MainProgram.MainProgram;
+import Registration.PrivateKey;
 
 public class AddUserPageController implements Initializable {
 
@@ -84,8 +88,16 @@ public class AddUserPageController implements Initializable {
 		        int rowAffected = AdminLoginController.admin.guiAddUser(username, userEmail, userContact, userPassword);
 		        
 		        if(rowAffected>0)
-		        	MainApplication.generateAlert
-		        	("Success","Success","User added Successfully","Please kindly refresh the database");
+		        {		        	
+		            String privateKey = PrivateKey.createPrivateKey(username);
+
+							
+				        	MainApplication.generateAlert("Information", "Success", "User added Successfully",""
+				        			+ "Here is the user's private Key:"+privateKey+". Store it somewhere");
+						
+
+		        	
+		        }
 		        else
 		        	MainApplication.generateAlert
 		        	("Error","Error","Failed to add user","Please contact technician or try again");
