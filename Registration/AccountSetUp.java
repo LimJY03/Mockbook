@@ -105,7 +105,6 @@ public class AccountSetUp extends TraceBack{
         this.birthDay = birthday;
         this.birthMonth = birthmonth;
         this.birthYear = birthyear;
-        
 
         if(!birthValidator(bd , bm , by)) // check function below
         {
@@ -133,13 +132,15 @@ public class AccountSetUp extends TraceBack{
                 birthmonth = "0" + birthmonth;
             if(Integer.parseInt(birthday) < 10 && !(birthday.substring(0,1).equals("0")))
                 birthday = "0"+birthday;
-            if(Integer.parseInt(birthyear) < 1900)
+            
+            if(Integer.parseInt(birthyear) < 1900 || Integer.parseInt(birthyear) > 2023)
             {
-                System.out.println("Please Provide Different Year!");
+                System.out.println("Please an Appropiate Year!");
                 return false;
             }
                 
             LocalDate valid = LocalDate.parse(birthyear+"-"+ birthmonth + "-"+birthday);
+           
             return true;
         }
         catch(DateTimeParseException e) // throws an exception if the date is wrong " typed 13 for month for examople or used a date we didn't reach yet

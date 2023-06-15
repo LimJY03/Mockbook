@@ -28,18 +28,6 @@ public class Registration extends TraceBack{
             }
 
             firstPass = false;
-            
-            if(userName.contains(" "))
-            {
-                System.out.println("Username Should NOT Contain Spaces!");
-                continue;
-            }
-            
-            // This username has been taken
-            if (MainProgram.db.searchTable("Username", userName)) {
-                System.out.println("Username has been taken");
-                continue;
-            }
 
             // Username Accepted
             if (!isValidUsername(userName)) {
@@ -68,6 +56,18 @@ public class Registration extends TraceBack{
         // Check Upper Case Match
         if (!textPattern.matcher(Username).matches()) {
             System.out.println("Username must have at least one uppercase / one lowercase character");
+            isValid = false;
+        }
+        
+        if(Username.contains(" "))
+        {
+            System.out.println("Username Should NOT Contain Spaces!");
+            isValid = false;
+        }
+            
+            // This username has been taken
+        if (MainProgram.db.searchTable("Username", Username)) {
+            System.out.println("Username has been taken");
             isValid = false;
         }
 
@@ -161,7 +161,7 @@ public class Registration extends TraceBack{
 
         } while (!isValid);
         
-        password = PasswordEncrypt.encryptSHA256(password);
+        password = PasswordEncrypt.encryptSHA256(password,this.username);
         
         MainProgram.db.updateTable("Password",password, this.username);
         System.out.print("Password Saved Successfully!");
@@ -240,7 +240,11 @@ public class Registration extends TraceBack{
                 clearConsole();
                 break breaker;
             }
-            System.out.println("This is NOT One of The Choices Given! Type Again :D");
+            else{
+                System.out.println("This is NOT One of The Choices Given! Type Again :D");
+                getInt = MainProgram.sc.nextLine();
+            }
+            
         }
         
         
