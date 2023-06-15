@@ -673,8 +673,7 @@ public class EditRegularUserAccount extends TraceBack {
 
 			if (rs.next()) {
 				if (PasswordEncrypt.encryptSHA256(password, username).equals(rs.getString("Password")))
-					;
-				return true;
+					return true;
 
 			}
 		} catch (SQLException e) {
