@@ -127,7 +127,7 @@ public class AdminPanelController implements Initializable {
 	            userList.add(new RegularUser(
 	                    rs.getString("Username"),
 	                    rs.getString("Email"),
-	                    rs.getString("Contact"),
+	                    rs.getString("PhoneNumber"),
 	                    rs.getInt("Age"),
 	                    rs.getString("Gender"),
 	                    rs.getString("Password")
