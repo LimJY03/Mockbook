@@ -95,7 +95,7 @@ public class Login extends TraceBack{
             System.out.print("Enter your Password: ");
             pass = MainProgram.sc.nextLine();
             System.out.println("");
-            if(CheckerForAccount(name,PasswordEncrypt.encryptSHA256(pass),"username"))
+            if(CheckerForAccount(name,PasswordEncrypt.encryptSHA256(pass, name),"username"))
                 break;
             System.out.println("Wrong Username/Password, Try Again!");
         }while(true);
@@ -119,15 +119,15 @@ public class Login extends TraceBack{
         System.out.print("Enter your Password: ");
         pass = MainProgram.sc.nextLine();
         System.out.println("");
-        if(CheckerForAccount(email,PasswordEncrypt.encryptSHA256(pass),"email"))
+        this.username = getUsernameFromEmail(this.emailAddress);
+        if(CheckerForAccount(email,PasswordEncrypt.encryptSHA256(pass, this.username),"email"))
             break;
             System.out.println("Wrong Email/Password, Try Again!");
         }while(true);
         
         this.emailAddress = email;
-        this.username = getUsernameFromEmail(this.emailAddress);
         this.password = pass;
-        MainProgram.GlobalDataStore.username = username;
+        MainProgram.GlobalDataStore.username = this.username;
         System.out.println("You have Logged in Successfully!");
         return true;
     }

@@ -454,7 +454,7 @@ public class EditRegularUserAccount extends TraceBack {
 			String query = "UPDATE User SET Password = ? WHERE Username = ?";
 
 			PreparedStatement stmt = connection.prepareStatement(query);
-			newPassword = PasswordEncrypt.encryptSHA256(newPassword);
+			newPassword = PasswordEncrypt.encryptSHA256(newPassword, MainPageFeature.me.getUsername());
 			stmt.setString(1, newPassword);
 			stmt.setString(2, MainPageFeature.me.getUsername());
 

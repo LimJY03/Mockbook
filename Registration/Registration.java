@@ -58,14 +58,13 @@ public class Registration extends TraceBack{
             System.out.println("Username must have at least one uppercase / one lowercase character");
             isValid = false;
         }
-        
-        if(Username.contains(" "))
-        {
+
+        if(Username.contains(" ")) {
             System.out.println("Username Should NOT Contain Spaces!");
             isValid = false;
         }
             
-            // This username has been taken
+        // This username has been taken
         if (MainProgram.db.searchTable("Username", Username)) {
             System.out.println("Username has been taken");
             isValid = false;
@@ -127,8 +126,13 @@ public class Registration extends TraceBack{
         this.phoneNumber = number;
     }     
 
-    public void setPassword() {
+    public void setPassword() {      
 
+        this.password = setNewPassword(this.username);
+    }
+
+    public static String setNewPassword(String username) {
+        
         boolean firstPass = true;
         boolean isValid = false;
         System.out.print("\nEnter Password: ");
@@ -161,12 +165,12 @@ public class Registration extends TraceBack{
 
         } while (!isValid);
         
-        password = PasswordEncrypt.encryptSHA256(password,this.username);
+        password = PasswordEncrypt.encryptSHA256(password, username);
         
-        MainProgram.db.updateTable("Password",password, this.username);
+        MainProgram.db.updateTable("Password",password, username);
         System.out.print("Password Saved Successfully!");
 
-        this.password = password;
+        return password;
     }
 
     public static boolean isValidPassword(String password) {
@@ -223,6 +227,10 @@ public class Registration extends TraceBack{
             {
                 register.setUserName();
                 register.setPassword();
+
+                // Create new private key for user
+                PrivateKey.createPrivateKey(register.getUsername());
+
                 register.setEmailAddress();
                 register.setPhoneNumber();
                 AccountSetUp setUpAccount = new AccountSetUp(register.getUsername());
@@ -231,8 +239,7 @@ public class Registration extends TraceBack{
                 clearConsole();
                 break breaker;
             }
-            else if(getInt.equals("0"))
-            {
+            else if(getInt.equals("0")) {
                 System.out.println("Redirecting You to The Entrance Page! ...");
                 this.previous.isPrevious = true;
                 returnedTraceBack = this.previous;
@@ -240,13 +247,11 @@ public class Registration extends TraceBack{
                 clearConsole();
                 break breaker;
             }
-            else{
+            else {
                 System.out.println("This is NOT One of The Choices Given! Type Again :D");
                 getInt = MainProgram.sc.nextLine();
             }
-            
         }
-        
         
         return returnedTraceBack;  
     }
