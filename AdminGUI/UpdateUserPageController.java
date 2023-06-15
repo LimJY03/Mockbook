@@ -93,7 +93,7 @@ public class UpdateUserPageController implements Initializable {
 				if(contactTickBox.isSelected())
 				{
 					if(isValidPhoneNumber(contactField.getText()) )
-						map.put("Contact", contactField.getText());
+						map.put("PhoneNumber", contactField.getText());
 				}
 				 
 				if(newUsernameTickBox.isSelected())
@@ -109,8 +109,11 @@ public class UpdateUserPageController implements Initializable {
 					int rowAffected = AdminLoginController.admin.guiUpdateUser(username,map);
 					
 					if(rowAffected>0)
-						MainApplication.generateAlert
-						("Success","Success","User updated Successfully","Please kindly refresh the database");
+					{		
+							MainApplication.generateAlert
+							("Success","Success","User updated Successfully","Please kindly refresh the database");
+						
+					}
 					else
 						MainApplication.generateAlert
 						("Error","Failed","User not found","Please try in a valid username");
