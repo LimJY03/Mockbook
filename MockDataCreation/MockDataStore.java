@@ -4,17 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import AccessControl.RegularUser;
 import MainProgram.MainProgram;
+import Registration.PasswordEncrypt;
+import Registration.PrivateKey;
 
 public class MockDataStore {
 
 
     public static void saveUser(RegularUser account) {
-        try (Connection connection = MainProgram.connection) 
+        try  
         {
+        	Connection connection = MainProgram.connection;
             String newId = account.getUsername();
 
             // Check if the ID already exists in the table
@@ -34,6 +36,7 @@ public class MockDataStore {
             String query = "INSERT INTO User (Username,Email,PhoneNumber,Birthday, Age, Address, Gender,Hobbies, Job, Password) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+            System.out.println(account.getBirthday());
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, account.getUsername());
                 statement.setString(2, account.getEmail());
@@ -44,9 +47,13 @@ public class MockDataStore {
                 statement.setString(7, account.getGender());
                 statement.setString(8, account.getHobbies());
                 statement.setString(9, account.getJob());
-                statement.setString(10, account.getPassword());
+                statement.setString(10, PasswordEncrypt.encryptSHA256(account.getPassword(), account.getUsername()));
                 statement.executeUpdate();
+                
+                
                 System.out.println("User saved successfully with Username: " + newId);
+                System.out.println("User password is :"+account.getPassword());
+                PrivateKey.createPrivateKey(account.getUsername());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -55,7 +62,8 @@ public class MockDataStore {
 
     private static boolean idExists(String username) throws SQLException {
         String query = "SELECT * FROM User WHERE Username = ?";
-        try (PreparedStatement statement = MainProgram.connection.prepareStatement(query)) {
+        try {
+        	PreparedStatement statement = MainProgram.connection.prepareStatement(query);
             statement.setString(1, username);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -63,17 +71,11 @@ public class MockDataStore {
                 }
             }
         }
+        catch(SQLException e)
+        {
+        	e.printStackTrace();
+        }
         return true;
     }
 
-    private static String listToString(List<String> list) {
-        StringBuilder sb = new StringBuilder();
-        for (String item : list) {
-            sb.append(item).append(", ");
-        }
-        if (sb.length() > 0) {
-            sb.setLength(sb.length() - 2);
-        }
-        return sb.toString();
-    }
 }
