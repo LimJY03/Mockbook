@@ -27,13 +27,13 @@ public class Display {
 		}
 
 		System.out.printf("\nResult sorted by '%s'.......\n", type);
-		System.out.printf("%-5s |%-25s |%-30s |%-15s |%-15s |%-15s |%-25s |%-50s |%-50s\n","No.","Username", "Email", "Contact", "Age", "Gender", "Job", "Address","Hobbies");
-		System.out.println(String.format("%-110s", "").replace("", "-"));
+		System.out.printf("%-5s |%-25s |%-30s |%-15s |%-15s |%-15s |%-25s |%-70s |%-50s\n","No.","Username", "Email", "Contact", "Age", "Gender", "Job", "Address","Hobbies");
+		System.out.println(String.format("%-130s", "").replace("", "-"));
 		
 		int index=0;
 
 		for (RegularUser rUser : list) {
-			System.out.printf("%-5d |%-25s |%-30s |%-15s |%-15s |%-15s |%-25s |%-50s |%-50s\n",index++, rUser.getUsername(), rUser.getEmail(),
+			System.out.printf("%-5d |%-25s |%-30s |%-15s |%-15s |%-15s |%-25s |%-70s |%-50s\n",index++, rUser.getUsername(), rUser.getEmail(),
 					rUser.getContact(), rUser.getAge(), rUser.getGender(),rUser.getJob(),rUser.getAddress(),rUser.getHobbies());
 
 		}
