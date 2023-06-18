@@ -30,10 +30,6 @@ and algorithms that optimize performance and facilitate efficient data storage a
 To achieve our project goals, we will utilize various data structures such as arrays, linked lists,
 etc., depending on the specific requirements of each feature.
 
-In this report, we will delve into the design and implementation details of our Java-based social
-media platform. We will discuss the core functionalities of our mock Facebook project, providing
-insights into the code snippets and algorithms used to achieve them.
-
 ## Contributors
 
 <a href="https://github.com/LimJY03/Mockbook/graphs/contributors">
