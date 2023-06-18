@@ -538,7 +538,7 @@ public class EditRegularUserAccount extends TraceBack {
 
 		} else if (!textPattern.matcher(phoneNumber).matches()) {
 
-			System.out.println("Phone number must only contain 10 Digits");
+			System.out.println("Phone number must only contain 10 to 11 Digits");
 			isValid = false;
 
 		} else if (phoneNumber.contains(" ")) {
