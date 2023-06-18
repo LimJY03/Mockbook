@@ -111,7 +111,7 @@ public class Registration extends TraceBack{
             String numRegex = "\\d{10,11}";
 
             if (!number.matches(numRegex)) {
-                System.out.println("Phone Number Should Contain Only 10 Digits!!");
+                System.out.println("Phone Number Should Contain Only 10 to 11 Digits!!");
                 System.out.println("\nTry Again");
             } else if (MainProgram.db.searchTable("Contact", number)) {
                 System.out.println("Number Already Registered! Please Enter A New Number");
