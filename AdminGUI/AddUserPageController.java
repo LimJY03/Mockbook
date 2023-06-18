@@ -138,14 +138,21 @@ public class AddUserPageController implements Initializable {
 			userEmailLabel.setText("Email can't be empty");
 			return false;
 		} else {
-			String regex = "[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+			
+			if (MainProgram.db.searchTable("Email", userEmailText.getText())) {
+				userEmailLabel.setText("Email already exist");
+				return false;
+			}
+			else
+			{
+				String regex = "[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 
-			boolean result = email.matches(regex);
-			if (!result)
-				userEmailLabel.setText("Invalid format");
-
-			return result;
-
+				boolean result = email.matches(regex);
+				if (!result)
+					userEmailLabel.setText("Invalid format");
+				
+				return result;
+			}
 		}
 	}
 
