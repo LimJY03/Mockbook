@@ -95,7 +95,7 @@ public class DBFactory {
         Connection connection = MyDataBase.establishConnection();
         try{
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM User where Username='"+row+"'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM User where "+column+"='"+row+"'");
 
             if (rs.next()) {
                 return true;
