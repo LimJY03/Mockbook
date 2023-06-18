@@ -36,4 +36,6 @@ insights into the code snippets and algorithms used to achieve them.
 
 ## Contributors
 
-
+<a href="https://github.com/LimJY03/Mockbook/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=LimJY03/Mockbook" />
+</a>
