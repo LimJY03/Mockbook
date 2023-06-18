@@ -200,13 +200,20 @@ public class UpdateUserPageController implements Initializable {
 			requiredField1.setText("Email can't be empty");
 			return false;
 		} else {
-			String regex = "[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+			if (MainProgram.db.searchTable("Email", emailField.getText())) {
+				requiredField1.setText("Email already exist");
+				return false;
+			}
+			else
+			{
+				String regex = "[\\w-\\.+]*[\\w-\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 
-			boolean result = email.matches(regex);
-			if (!result)
-				requiredField1.setText("This field can't be alter !!!!!");
-
-			return result;
+				boolean result = email.matches(regex);
+				if (!result)
+					requiredField1.setText("Invalid format");
+				
+				return result;
+			}
 
 		}
 	}
