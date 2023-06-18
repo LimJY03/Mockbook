@@ -5,11 +5,9 @@ import java.util.Random;
 public class PostLinkedList<String> {
 	private Node<String> head, tail;
 	private int size;
-	private int index;
 
 	public PostLinkedList() {
 		this.size = 0;
-		this.index = 0;
 		this.head = this.tail = null;
 	}
 
@@ -51,15 +49,9 @@ public class PostLinkedList<String> {
 	}
 
 	public String getFirst() {
-		if (size == 0 || this.head == null)
+		if (this.size == 0 || this.head == null)
 			return null;
 		return this.head.content;
-	}
-
-	public String getLast() {
-		if (size == 0)
-			return null;
-		return this.tail.content;
 	}
 
 	public void insertPostList(PostLinkedList<String> s) {
@@ -73,103 +65,25 @@ public class PostLinkedList<String> {
 		}
 	}
 
-	public void insertThree(PostLinkedList<String> s, int index) {
-		if (index < 0 || index >= s.size) {
+	public void printPosts() {
+		if (this.head == null) {
+			System.out.println("There are no Posts");
 			return;
 		}
-		if (s.head == null)
-			return;
-		Node<String> current = s.head;
-		for (int i = 0; i < index - 1; i++) {
-			addFirst(current.username, current.content);
-			current = current.next;
-			size++;
-		}
-	}
 
-	public void removeThree() {
-		removeFirst();
-		removeFirst();
-		removeFirst();
-	}
-
-//	public void printfirst() {
-//
-//		if (this.head == null) {
-//			return;
-//		}
-//		Node<String> current = head;
-//		for (int i = 0; i < this.size && i < 3; i++) {
-//                    if(current == null)
-//                    {
-//                        System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
-//                    }
-//			System.out.println(current.username);
-//			System.out.println("   "+current.content);
-//                        System.out.println("--");
-//			current = current.next;
-//			removeFirst();
-//			this.index++;
-//		}
-//	}
-//
-//	public int getIndex() {
-//		return this.index;
-//	}
-//
-//	public void printthree(int index) {
-//		if (index < 0 || index >= size) {
-//			System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
-//			return;
-//		}
-//		if (head == null)
-//			return;
-//		Node<String> current = head;
-//		for (int i = 0; i < index - 1; i++) {
-//			if (current == null) {
-//				System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
-//				return;
-//			}
-//			current = current.next;
-//			removeFirst();
-//		}
-//
-//		for (int i = 0; i < 3; i++) {
-//			if (current == null) {
-//				System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
-//				return;
-//			}
-//			System.out.println(current.username);
-//			System.out.println("   " + current.content);
-//                        System.out.println("--");
-//			current = current.next;
-//                        removeFirst();
-//
-//		}
-//	}
-//        
-        public void printPosts()
-        {
-            if (this.head == null) {
-                    System.out.println("There are no Posts");
-                    return;
-		}
-            
 		Node<String> current = head;
 		for (int i = 0; i < this.size && i < 3; i++) {
-                    if(current == null)
-                    {
-                        System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
-                        break;
-                    }
+			if (current == null) {
+				System.out.println("\nThat's it ! You reached the End of the Feed :D! Please go back");
+				break;
+			}
 			System.out.println(current.username);
-			System.out.println("   "+current.content);
-                        System.out.println("--");
+			System.out.println("   " + current.content);
+			System.out.println("--");
 			current = current.next;
 			removeFirst();
-			this.index++;
 		}
-        }
+	}
 
 	public boolean isEmpty() {
 		return size == 0;
@@ -177,19 +91,6 @@ public class PostLinkedList<String> {
 
 	public void addFirst(String e, String c) {
 		Node<String> newNode = new Node<>(e, c);
-
-		// this check if the post and the user exist in the same time but i don't think
-		// this is needed.
-
-		// Node<String> current = this.head;
-//    for (int i = 0; i < this.size; i++) {
-//        if(current.content.equals(c) && current.username.equals(e))
-//        {
-//            System.out.println("i was here");
-//            return;
-//        }
-//        current = current.next;
-//    }
 
 		newNode.next = this.head;
 		this.head = newNode;
@@ -199,21 +100,8 @@ public class PostLinkedList<String> {
 			this.tail = this.head;
 	}
 
-	public void addLast(String e, String c) {
-		Node<String> newNode = new Node<String>(e, c); // Create a new for element e
-
-		if (tail == null) {
-			head = tail = newNode; // The new node is the only node in list
-		} else {
-			tail.next = newNode; // Link the new with the last node
-			tail = tail.next; // tail now points to the last node
-		}
-
-		size++; // Increase size
-	}
-
 	public String removeFirst() {
-		if (size == 0) {
+		if (isEmpty()) {
 			return null;
 		}
 		if (head == null)
@@ -229,66 +117,9 @@ public class PostLinkedList<String> {
 		}
 	}
 
-	public String removeLast() {
-		if (size == 0) {
-			return null;
-		} else if (size == 1) {
-			Node<String> temp = head;
-			head = tail = null;
-			size = 0;
-			return temp.content;
-		} else {
-			Node<String> current = head;
-
-			for (int i = 0; i < size - 2; i++) {
-				current = current.next;
-			}
-
-			Node<String> temp = tail;
-			tail = current;
-			tail.next = null;
-			size--;
-			return temp.content;
-		}
-	}
-
-	public String remove(int index) {
-		if (index < 0 || index >= size) {
-			return null;
-		} else if (index == 0) {
-			return removeFirst();
-		} else if (index == size - 1) {
-			return removeLast();
-		} else {
-			Node<String> previous = head;
-
-			for (int i = 1; i < index; i++) {
-				previous = previous.next;
-			}
-
-			Node<String> current = previous.next;
-			previous.next = current.next;
-			size--;
-			return current.content;
-		}
-	}
-
 	public void clear() {
 		size = 0;
 		head = tail = null;
-		index = 0;
-	}
-
-	public void print() {
-		if (head == null)
-			return;
-		Node<String> current = head;
-		for (int i = 0; i < this.size; i++) {
-			System.out.println(current.username);
-			System.out.println("   " + current.content);
-                        System.out.println("--");
-			current = current.next;
-		}
 	}
 
 	private static class Node<String> {
