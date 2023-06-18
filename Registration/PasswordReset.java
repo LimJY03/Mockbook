@@ -4,11 +4,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import MainProgram.MainProgram;
+import TraceBack.TraceBack;
 
+import java.awt.AWTException;
 import java.nio.charset.StandardCharsets;
 
-public class PasswordReset {
+public class PasswordReset extends TraceBack{
     
+	
+	public TraceBack Main() throws InterruptedException, AWTException {
+        System.out.println("Enter your username");
+        String username = MainProgram.sc.nextLine();
+		resetPassword(username);
+		this.previous.isPrevious = true;
+        return this.previous;
+}
+	
     private static boolean matchPrivateKey(String username, String privateKey) {
 
         // Hash private key

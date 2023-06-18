@@ -1,4 +1,5 @@
 package AccessControl;
+
 import java.sql.*;
 import MyHashMap.MyHashMap;
 import Registration.PasswordEncrypt;
@@ -135,7 +136,20 @@ public class Admin extends User{
 		return 0;
 	}
 	
-	
-	
+	public static String getEmail(String selectedAttribute, String value) {
+	    try {
+	        String query = "SELECT Email FROM User WHERE " + selectedAttribute + " = ?";
+	        PreparedStatement stmt = MainProgram.connection.prepareStatement(query);
+	        stmt.setString(1, value);
 
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getString("Email");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return null;
+	}
 }

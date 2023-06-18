@@ -39,10 +39,9 @@ public class EditRegularUserAccount extends TraceBack {
 			System.out.println("4)  Edit Hobbies");
 			System.out.println("5)  Edit Phone Number");
 			System.out.println("6)  Edit Gender");
-			System.out.println("7)  Edit Age");
-			System.out.println("8)  Edit Password");
-			System.out.println("9)  Edit Birthday");
-			System.out.println("10) Exit");
+			System.out.println("7)  Edit Password");
+			System.out.println("8)  Edit Birthday");
+			System.out.println("9)  Exit");
 
 			System.out.println("Enter your option");
 			String option = sc.nextLine();
@@ -145,22 +144,6 @@ public class EditRegularUserAccount extends TraceBack {
 				break;
 
 			case "7":
-				optionLoop7: while (true) {
-					System.out.println("Current age: " + me.getAge());
-					System.out.println("Would you like to edit your age? Enter 1 for yes, 2 for no.");
-					String yesOrNo = sc.nextLine();
-					switch (yesOrNo) {
-					case "1":
-						updateAge();
-					case "2":
-						break optionLoop7;
-					default:
-						System.out.println("Invalid option. Choose 1 or 2.");
-					}
-				}
-				break;
-
-			case "8":
 				optionLoop8: while (true) {
 					System.out.println("Would you like to change your password? Enter 1 for yes, 2 for no.");
 					String yesOrNo = sc.nextLine();
@@ -175,7 +158,7 @@ public class EditRegularUserAccount extends TraceBack {
 				}
 				break;
 
-			case "9":
+			case "8":
 				optionLoop10: while (true) {
 					System.out.println("Current birthday: " + me.getBirthday());
 					System.out.println("Do you want to change your birthday? Enter 1 for yes, 2 for no.");
@@ -191,7 +174,7 @@ public class EditRegularUserAccount extends TraceBack {
 				}
 				break;
 
-			case "10":
+			case "9":
 				break outerLoop;
 
 			default:
@@ -433,41 +416,10 @@ public class EditRegularUserAccount extends TraceBack {
 		}
 	}
 
-	private static void updateAge() {
-		System.out.println("Enter your new age: ");
-		String newAge = sc.nextLine();
-
-		while (!isValidAge(newAge)) {
-			System.out.println("Please enter your new age");
-			newAge = sc.nextLine();
-		}
-
-		int integerAge = Integer.parseInt(newAge);
-
-		try {
-			String query = "UPDATE User SET Age = ? WHERE Username = ?";
-
-			PreparedStatement stmt = connection.prepareStatement(query);
-			stmt.setString(1, newAge);
-			stmt.setString(2, MainPageFeature.me.getUsername());
-
-			int rowAffected = stmt.executeUpdate();
-
-			if (rowAffected > 0) {
-				MainPageFeature.me.setAge(Integer.parseInt(newAge));
-				System.out.println("Successfully changed to new age");
-				System.out.println("Your current age is: " + MainPageFeature.me.getAge());
-			} else
-				System.out.println("Error updating age. Please try again");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private static void updateBirthday() {
 
 		new AccountSetUp(MainPageFeature.me.getUsername()).setBirthday();
-		System.out.println("This is your current birthday and age: " + MainPageFeature.me.getBirthday() + " "
+		System.out.println("This is your current birthday "+ MainPageFeature.me.getBirthday() + " and age: "
 				+ MainPageFeature.me.getAge());
 	}
 
@@ -577,7 +529,7 @@ public class EditRegularUserAccount extends TraceBack {
 	private static boolean isValidPhoneNumber(String phoneNumber) {
 
 		boolean isValid = true;
-		final Pattern textPattern = Pattern.compile("\\d{10}");
+		final Pattern textPattern = Pattern.compile("\\d{10,11}");
 
 		if (MainProgram.db.searchTable("PhoneNumber", phoneNumber)) {
 
@@ -622,40 +574,6 @@ public class EditRegularUserAccount extends TraceBack {
 		} else if (gender.isEmpty()) {
 
 			System.out.println("Invalid input.");
-			isValid = false;
-
-		}
-
-		return isValid;
-
-	}
-
-	private static boolean isValidAge(String age) {
-		boolean isValid = true;
-
-		if (!age.matches("^-?\\d+$")) {
-
-			System.out.println("Age must be a valid integer");
-			isValid = false;
-
-		} else if (age.matches("[a-zA-Z]+")) {
-
-			System.out.println("Age cannot contain alphabetic characters.");
-			isValid = false;
-
-		} else if (age.contains(" ")) {
-
-			System.out.println("Age can't contain empty space");
-			isValid = false;
-
-		} else if (age.isEmpty()) {
-
-			System.out.println("Invalid input.");
-			isValid = false;
-
-		} else if (!(Integer.parseInt(age) >= 1 && Integer.parseInt(age) <= 100)) {
-
-			System.out.println("Age must be 1-100 years old only");
 			isValid = false;
 
 		}

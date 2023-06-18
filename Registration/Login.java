@@ -1,7 +1,7 @@
 package Registration;
 
 import java.awt.AWTException;
-import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,7 +9,6 @@ import java.sql.Statement;
 import Display.Display;
 import MainProgram.MainPageFeature;
 import MainProgram.MainProgram;
-import MyDataBase.MyDataBase;
 import TraceBack.TraceBack;
 
 
@@ -126,6 +125,12 @@ public class Login extends TraceBack{
         MainProgram.GlobalDataStore.username = name;
         System.out.println("You have Logged in Successfully!");
         
+        if(getPrivateKey(name)==null)
+        {
+        	PrivateKey.createPrivateKey(name);
+        	PasswordReset.resetPassword(name);
+        }
+        
         return true;
     }
     
@@ -151,6 +156,12 @@ public class Login extends TraceBack{
         this.password = pass;
         MainProgram.GlobalDataStore.username = this.username;
         System.out.println("You have Logged in Successfully!");
+        
+        if(getPrivateKey(this.username)==null)
+        {
+        	PrivateKey.createPrivateKey(this.username);
+        	PasswordReset.resetPassword(this.username);
+        }
         return true;
     }
     
@@ -199,4 +210,22 @@ public class Login extends TraceBack{
         
         return false;
     }
+    
+    public static String getPrivateKey(String username) {
+        String privateKey = null;
+        try {
+            PreparedStatement stmt = MainProgram.connection.prepareStatement("SELECT PrivateKey FROM User WHERE Username = ?");
+            stmt.setString(1, username);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                privateKey = rs.getString("PrivateKey");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return privateKey;
+    }
+
 }

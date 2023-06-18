@@ -183,7 +183,7 @@ public class AddNewFriend extends TraceBack {
 
 		int p = 1;
 		
-		System.out.printf("%-5s| %-25s| %-20s|\n","No.","Username","Connection Degree");
+		System.out.printf("%-5s| %-25s| %-20s|\n","No.","Username","Mutual Friend");
 		System.out.printf(String.format("%-45s", "").replace("", "-"));
 		System.out.println();
 		while (!recommendationPq.isEmpty()) {

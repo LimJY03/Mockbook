@@ -43,17 +43,4 @@ public class PasswordEncrypt {
 
         return combinedBytes;
     }
-
-    // Test
-    public static void main(String args[]) {
-
-        String s1 = "data_Structureisc00L";
-        System.out.println("\n" + s1 + ": " + encryptSHA256(s1, "Wia1002Datastructure"));
-
-        String s2 = "data_Structureisc00L";
-        System.out.println("\n" + s2 + ": " + encryptSHA256(s2, "1002Datastructure"));
-
-        // String s3 = "my-pAssword1";
-        // System.out.println("\n" + s3 + ": " + encryptSHA256(s3));
-    }
 }

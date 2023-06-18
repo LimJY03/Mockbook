@@ -18,9 +18,7 @@ public abstract class User {
 	{
 		return this.username;
 	}
-	
-	
-	
+
 	public void setUsername(String username)
 	{
 		this.username=username;
@@ -37,6 +35,4 @@ public abstract class User {
 		return this.password;
 	}
 
-	
-	
 }

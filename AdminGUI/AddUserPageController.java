@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import Email.SendEmail;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,7 +14,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
 
 import MainProgram.MainProgram;
-import Registration.PrivateKey;
 
 public class AddUserPageController implements Initializable {
 
@@ -62,7 +62,6 @@ public class AddUserPageController implements Initializable {
 			String userContact = userContactText.getText();
 			String userPassword = userPasswordText.getText();
 
-			boolean isValidate = true;
 
 			// Clear previous error messages
 			usernameLabel.setText("");
@@ -70,19 +69,25 @@ public class AddUserPageController implements Initializable {
 			userContactLabel.setText("");
 			userPasswordLabel.setText("");
 
-			isValidate = isValidUsername(username);
-			isValidate = isValidEmail(userEmail);
-			isValidate = isValidPhoneNumber(userContact);
-			isValidate = isValidPassword(userPassword);
+			boolean isValidUsername = isValidUsername(username);
+			boolean isValidEmail = isValidEmail(userEmail);
+			boolean isValidContact = isValidPhoneNumber(userContact);
+			boolean isValidPassword = isValidPassword(userPassword);
 
-			if (isValidate) {
+			if (isValidUsername&&isValidEmail&&isValidContact&&isValidPassword) {
 				int rowAffected = AdminLoginController.admin.guiAddUser(username, userEmail, userContact, userPassword);
 
 				if (rowAffected > 0) {
-					String privateKey = PrivateKey.createPrivateKey(username);
 
 					MainApplication.generateAlert("Information", "Success", "User added Successfully",
-							"" + "Here is the user's private Key:" + privateKey + " Store it somewhere");
+							"" + "Please kindly refresh the database");
+					
+					String emailSubject = "Added you to MockBook Application";
+					String emailText = 
+							String.format("MockBook admin have added you to their application."
+									+ "Please kindly login with\nUsername: %s\nPassword: %s\n",username,userPassword);
+					
+					SendEmail.sendEmail(userEmail,emailSubject,emailText);
 
 				} else
 					MainApplication.generateAlert("Error", "Error", "Failed to add user",
@@ -114,10 +119,10 @@ public class AddUserPageController implements Initializable {
 				isValid = false;
 			}
 			// Check Upper Case Match
-			else if (!textPattern.matcher(Username).matches()) {
+			if (!textPattern.matcher(Username).matches()) {
 				usernameLabel.setText("Must have atleast one uppercase/ one lowercase character");
 				isValid = false;
-			} else if (Username.contains(" ")) {
+			}if (Username.contains(" ")) {
 				usernameLabel.setText("Username Should NOT Contain Spaces!");
 				isValid = false;
 			}
@@ -185,7 +190,7 @@ public class AddUserPageController implements Initializable {
 
 	private boolean isValidPhoneNumber(String number) {
 
-		String regex = "\\d{10}";
+		String regex = "\\d{10,11}";
 
 		if (!number.matches(regex)) {
 			userContactLabel.setText("Invalid input");

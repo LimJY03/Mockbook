@@ -1,5 +1,8 @@
 package MockDataCreation;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.YearMonth;
@@ -8,7 +11,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import AccessControl.Admin;
 import AccessControl.RegularUser;
+import MainProgram.MainProgram;
+import Registration.PasswordEncrypt;
 
 public class MockDataCreator {
     public static final List<String> NAMES1 = Arrays.asList(
@@ -56,10 +62,40 @@ public class MockDataCreator {
         "Lower East Side", "Chelsea", "Greenwich Village",
         "Harlem", "Soho", "Tribeca"
     );
+    
+    
+    public static void createTwoAdmin()
+    {
+    	while(true)
+    	{
+    		System.out.println("Please enter prefixed Admin_id (0 to quit)");
+    		System.out.print("Admin_id: ");
+    		String prefixedAdminId = MainProgram.sc.nextLine();
+    		if(prefixedAdminId.equals("0")) return;
+    		
+    		System.out.println("Enter the password");
+    		String prefixedPassword = PasswordEncrypt.encryptSHA256(MainProgram.sc.nextLine(), prefixedAdminId);
+    		
+    		if(isValidAdminPassword(prefixedPassword))
+    			break;
+    		else
+    			System.out.println("Wrong information. Try again");
+    	}
+    	
+    	for(int i=1;i<=2;i++)
+    	{
+            String firstName = getRandomElement(NAMES1);
+            String lastName = getRandomElement(NAMES2);
+            String name = firstName + " " + lastName;
+            String username = generateUsername(name);
+            String password = generateRandomPassword();
+            Admin admin = new Admin(username,password);
+            MockDataStore.saveAdmin(admin);
+    	}
+    }
 
-    public static void createMockUser() {
+    public static void createMockUser(boolean toPopulateUser) {
         Random random = new Random();
-//        int id = random.nextInt(1000) + 1; // Random ID between 1 and 1000
         String firstName = getRandomElement(NAMES1);
         String lastName = getRandomElement(NAMES2);
         String name = firstName + " " + lastName;
@@ -74,8 +110,17 @@ public class MockDataCreator {
         String password = generateRandomPassword();
         
         RegularUser mockUser = new RegularUser(username,email,phoneNumber,gender,password,job,hobbies,address,birthday);
-        MockDataStore.saveUser(mockUser);
+        MockDataStore.saveUser(mockUser,toPopulateUser);
     
+    }
+    
+    
+    public static void createThirtyMockUser()
+    {
+    	for(int i=1;i<=30;i++)
+    		createMockUser(true);
+    	
+        System.out.println("User populated Sucessfully");
     }
     
 
@@ -173,8 +218,26 @@ public class MockDataCreator {
     public static int calculateAge(LocalDate birthday) {
         LocalDate currentDate = LocalDate.now();
         Period period = Period.between(birthday, currentDate);
-    return period.getYears();
+        return period.getYears();
     }
 
+    
+    private static boolean isValidAdminPassword(String password)
+    {
+    	String query = "SELECT * FROM Admin WHERE Admin_id = 'Admin'";
+        try {
+        	PreparedStatement statement = MainProgram.connection.prepareStatement(query);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return password.equals(resultSet.getString("Password"));
+                }
+            }
+        }
+        catch(SQLException e)
+        {
+        	e.printStackTrace();
+        }
+        return false;
+    }
     
 }

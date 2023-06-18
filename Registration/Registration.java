@@ -108,7 +108,7 @@ public class Registration extends TraceBack{
             System.out.print("\nEnter your phone number : ");
             number = MainProgram.sc.nextLine();
 
-            String numRegex = "\\d{10}";
+            String numRegex = "\\d{10,11}";
 
             if (!number.matches(numRegex)) {
                 System.out.println("Phone Number Should Contain Only 10 Digits!!");

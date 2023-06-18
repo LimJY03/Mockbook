@@ -64,9 +64,7 @@ public class Search extends TraceBack {
 				break;
 
 			case "5":
-				System.out.print("Enter the Gender: ");
 				viewAccount("Gender");
-
 				break;
 				
 			case "6":
@@ -96,13 +94,14 @@ public class Search extends TraceBack {
 
 	}
 
-	private static ArrayList<RegularUser> prepareSearchList(String toSearch, String type) {
+	private static ArrayList<RegularUser> prepareSearchList(String valueToSearch, String type) {
 
 		ArrayList<RegularUser> list = new ArrayList<>();
 
 		try {
 
-			String query = String.format("SELECT * FROM User WHERE %s LIKE '%%%s%%' ORDER BY %s", type, toSearch, type);
+			String query = type.equals("Gender")? String.format("SELECT * FROM User WHERE Gender ='%s'",valueToSearch): 
+				String.format("SELECT * FROM User WHERE %s LIKE '%%%s%%' ORDER BY %s", type, valueToSearch, type);
 			PreparedStatement stmt = MainProgram.connection.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();
 
@@ -133,7 +132,33 @@ public class Search extends TraceBack {
 	
 	private static void viewAccount(String optionType)
 	{
-		ArrayList<RegularUser> list = prepareSearchList(MainProgram.sc.nextLine().trim(),optionType);
+		String valueToSearch;
+		
+		if(optionType.equals("Gender"))
+		{
+			outerLoop: while(true)
+			{
+				System.out.println("Enter the gender option: \nType 1 for Male\nType 2 for Female\nType 3 for Other: ");
+				String genderOption = MainProgram.sc.nextLine();
+				switch(genderOption)
+				{
+					case "1": valueToSearch ="Male";
+					break outerLoop;
+					case "2": valueToSearch ="Female";
+					break outerLoop;
+					case "3": valueToSearch ="Other";
+					break outerLoop;
+					
+					default: System.out.println("Invalid option. Try again");
+				}
+			}
+		}
+		else
+			valueToSearch = MainProgram.sc.nextLine().trim();
+		
+		
+		
+		ArrayList<RegularUser> list = prepareSearchList(valueToSearch,optionType);
 		Display.displaySearchResult(list,optionType);
 		
 		if(list.isEmpty())

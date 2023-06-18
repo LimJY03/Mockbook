@@ -3,6 +3,9 @@ package AdminGUI;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import Email.SendEmail;
+import AccessControl.Admin;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -50,12 +53,19 @@ public class DeleteUserPageController implements Initializable {
 				else
 				{
 					String value = attributeValue.getText();
+					String deletedEmail = Admin.getEmail(selectedAttribute,value);
 					int rowAffected = AdminLoginController.admin.guiDeleteUser(selectedAttribute,value);
 					
 					if(rowAffected>0)
 					{
 						MainApplication.generateAlert
 						("Success","Success","User Deleted Successfully","User is deleted. Please kindly refresh the table");
+						
+						String emailSubject = "You have been removed from MockBook Application";
+						String emailText = "The MockBook Admin realized you have some inappropriate activities or comment towards others. "
+								+ "Therefore your account has been permanently removed";
+						
+						SendEmail.sendEmail(deletedEmail,emailSubject,emailText);
 					}
 					else
 					{

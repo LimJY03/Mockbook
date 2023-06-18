@@ -21,7 +21,9 @@ public class EnterMockBook extends TraceBack{
         Entring: while(true)
         {
         	Display.displayUserOption("Login","Register","Admin");
-        	System.out.println("Type 4 to Create Mock Data");
+        	System.out.println("Type 4 to Create Mock User");
+        	System.out.println("Type 5 to Populate 30 Mock Users");
+        	System.out.println("Type 6 to Populate 2 Admin Users");
             String getOption = MainProgram.sc.nextLine();
             switch(getOption)
             {
@@ -47,8 +49,17 @@ public class EnterMockBook extends TraceBack{
                      }
                      break;
                 case "4":
-                	MockDataCreator.createMockUser();
+                	MockDataCreator.createMockUser(false);;
                 	break;
+                	
+                case "5":
+                	MockDataCreator.createThirtyMockUser();
+                	break;
+                
+                case "6":
+                	MockDataCreator.createTwoAdmin();
+                	break;
+                
                 	
                 case "0":
                     System.out.println("Closing ....");
