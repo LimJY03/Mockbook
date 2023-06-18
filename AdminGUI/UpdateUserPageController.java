@@ -130,10 +130,10 @@ public class UpdateUserPageController implements Initializable {
 							}
 						}
 
-						String emailSubject = "Updated attributed in MockBook";
+						String emailSubject = "Updated attribute in MockBook";
 						String emailText = "The MockBook Admin have changed your account attributes : \n";
 						for (String attribute : map.keySet())
-							emailText += attribute + " : " + map.get(attribute);
+							emailText += attribute + " : " + map.get(attribute)+"\n";
 						emailText += "Please kindly look through it and contact us if any issue.";
 
 						alteredUserEmail = map.get("Email") == null ? originalUserEmail : map.get("Email");
